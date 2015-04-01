@@ -124,22 +124,34 @@ textarea {
 }
 
 .item {
-    height: 44px;
-    width: 100px;
-    background-color: blue;
+    height: 60px;
+    width: 250px;
+    vertical-align: middle;
+    display: block;
+    margin: 0;
+    padding: 0;
 }
 
+td {
+    height: 75px;
+}
 
+.droppable {
+    width: 100px;
+    height: 40px;
+    float: right;
+    display: inline-block;
+    background-color: red;
+    margin: 10px 10px 0 0;
+}
 
+.if {
+    background-color: aqua;
+}
 
-
-
-
-
-
-
-
-
+.while {
+    background-color: lightcoral;
+}
 
 /* ==========================================================================
    Helper classes
