@@ -13,6 +13,12 @@ public class SetCommand implements Expression<Void> {
   private String varname;
   private Expression<?> value;
 
+  /**
+   * Creates a new set command, for the given variables set, variable name, and new value
+   * @param vars The set of variables to update
+   * @param name The name of the specific variable to modify
+   * @param val The new value of the variable
+   */
   public SetCommand(Map<String, Object> vars, String name, Expression<?> val){
     this.variables = vars;
     this.varname = name;
