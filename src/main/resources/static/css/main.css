@@ -94,10 +94,40 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+#header {
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    z-index: -1;
+    background-color: lightgray;
+}
 
+#menu {
+    width: 300px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-right: 1px solid darkgray;
+    padding-top: 50px;
+    box-sizing: border-box;
+}
 
+#playground {
+    width: calc(100% - 300px);
+    height: 100%;
+    position: absolute;
+    left: 300px;
+    top: 0;
+    padding-top: 50px;
+    box-sizing: border-box;
+}
 
-
+.item {
+    height: 44px;
+    width: 100px;
+    background-color: blue;
+}
 
 
 
