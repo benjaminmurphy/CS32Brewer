@@ -1,4 +1,4 @@
-package edu.brown.cs.brewer.commands;
+package edu.brown.cs.brewer.expression;
 
 public interface Expression<R> {
   /**

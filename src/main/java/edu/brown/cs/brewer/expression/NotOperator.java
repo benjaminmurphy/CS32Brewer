@@ -1,4 +1,4 @@
-package edu.brown.cs.brewer.commands;
+package edu.brown.cs.brewer.expression;
 
 /**
  * Implements the Not operator. This class Takes a boolean expression as an

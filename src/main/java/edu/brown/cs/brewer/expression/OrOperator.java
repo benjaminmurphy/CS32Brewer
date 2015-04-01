@@ -1,4 +1,4 @@
-package edu.brown.cs.brewer.commands;
+package edu.brown.cs.brewer.expression;
 
 /**
  * Implements the Or operator, takes two boolean expressions and returns their
