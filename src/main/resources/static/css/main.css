@@ -110,16 +110,30 @@ textarea {
     top: 0;
     border-right: 1px solid darkgray;
     padding-top: 50px;
+    padding-left: 25px;
     box-sizing: border-box;
 }
 
 #playground {
-    width: calc(100% - 300px);
+    width: calc(100% - 600px);
     height: 100%;
     position: absolute;
     left: 300px;
     top: 0;
+    padding-top: 60px;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+#console {
+    width: 300px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-left: 1px solid darkgray;
     padding-top: 50px;
+    padding-left: 5px;
     box-sizing: border-box;
 }
 
@@ -133,7 +147,7 @@ textarea {
 }
 
 td {
-    height: 75px;
+    height: 70px;
 }
 
 .droppable {

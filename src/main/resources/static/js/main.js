@@ -5,9 +5,13 @@ var menu = document.getElementById("menu");
 
 var droppableWidth = 100;
 
+// Allows elements to be dropped.
+
 function allowDrop(event) {
     event.preventDefault();
 }
+
+// Drop handler.
 
 function drop(event) {
 
@@ -31,13 +35,15 @@ function drop(event) {
     }
 }
 
+// Starting drag handler. Copies elements.
+
 function startDrag(event) {
     var original = document.getElementById(event.target.id);
     var copy = null;
-    
+
     if (original.classList.contains("shrinkable")) {
-            original.classList.remove("shrinkable");
-            shrinkParents(original);
+        original.classList.remove("shrinkable");
+        shrinkParents(original);
     }
 
     if (playground.contains(original)) {
@@ -53,15 +59,7 @@ function startDrag(event) {
     event.dataTransfer.setData("text", copy.id);
 }
 
-function isInDroppable(element) {
-    var currentElement = element.parentNode;
-    while (currentElement != document.body && currentElement.id !== "playground" && currentElement.id !== "menu") {
-        if (currentElement.classList.contains("droppable")) {
-            return true;
-        }
-    }
-    return false;
-}
+// Grow or shrink all parent elements.
 
 function growParents(element) {
     var currentElement = element.parentNode;
@@ -79,6 +77,8 @@ function shrinkParents(element) {
     }
 }
 
+// Grow or shrink one element.
+
 HTMLDivElement.prototype.grow = function(width) {    
     var newHeight = this.offsetHeight + 20;
     this.style.height = newHeight + 'px';
@@ -95,10 +95,10 @@ HTMLDivElement.prototype.shrink = function(width) {
     var newHeight = this.scrollHeight - 20;
     this.style.height = newHeight + 'px';
     var newWidth = this.offsetWidth  - width;
-    
+
     if (this.classList.contains("droppable")) {
         newWidth += droppableWidth;
     }
-    
+
     this.style.width = newWidth + 'px';
 }
