@@ -1,5 +1,11 @@
 package edu.brown.cs.brewer.expression;
 
+/**
+ *An expression that divides two numerical arguments
+ *
+ * @author raphaelkargon
+ *
+ */
 public class DivisionOperator implements Expression<Number> {
 
   private Expression<Number> arg1, arg2;

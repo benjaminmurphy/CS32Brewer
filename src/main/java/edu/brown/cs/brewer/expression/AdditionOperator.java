@@ -1,5 +1,12 @@
 package edu.brown.cs.brewer.expression;
 
+/**
+ * An expression that adds two numbers.
+ * Currently, each number is added as a double value.
+ *
+ * @author raphaelkargon
+ *
+ */
 public class AdditionOperator implements Expression<Number> {
 
   private Expression<Number> arg1, arg2;
