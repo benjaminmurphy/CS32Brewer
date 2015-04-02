@@ -31,7 +31,9 @@
 
                     <tr>
 
-                        <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">While</div></td>
+                        <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">
+                            <h3 class="itemHeader">While</h3>
+                        </div></td>
 
                     </tr>
 
@@ -39,7 +41,7 @@
 
                         <td>
                             <div class="item if" draggable="true" ondragstart="startDrag(event)" id="if">
-                                If
+                                <h3 class="itemHeader">If</h3>
                                 <div class="droppable boolean"></div>
                             </div>
                         </td>
@@ -49,7 +51,7 @@
 
                         <td>
                             <div class="item set" draggable="true" ondragstart="startDrag(event)" id="set">
-                                Set
+                                <h3 class="itemHeader">Set</h3>
                                 <div class="droppable boolean"></div>
                                 <div class="droppable boolean"></div>
                             </div>
@@ -71,6 +73,7 @@
         <div id="console">
         <h2>console</h2>
         </div>
+        <button id="consoleButton" onclick="setConsole()">Console</button>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="static/js/interact-1.2.4.js"></script>

@@ -98,7 +98,7 @@ textarea {
     height: 50px;
     width: 100%;
     position: fixed;
-    z-index: 1;
+    z-index: 3;
     background-image: -webkit-linear-gradient(gray, gray);
 }
 
@@ -140,13 +140,20 @@ textarea {
     height: 100%;
     position: absolute;
     right: 0;
-    top: 0;
+    bottom: 0;
     padding-top: 50px;
     padding-left: 5px;
     background: rgba(127,127,127,.3);
     box-shadow: 0 0 5px #999;
     box-sizing: border-box;
 }
+
+#consoleButton {
+    position: absolute;
+    right: 0.2em;
+    bottom: 0.2em;
+}
+
 
 .item {
     height: 60px;
@@ -159,22 +166,28 @@ textarea {
 }
 
 td {
-    height: 70px;
+    padding-bottom: 2px;
 }
 
 h2 {
     font-family: monospace;
 }
 
+h3.itemHeader {
+    margin: 0 0 0 0;
+    height: 10px;
+}
+
 .droppable {
     width: 100px;
     height: 40px;
-    float: right;
-    display: inline-block;
+    float: left;
+    display: block;
     background: rgba(255,0,0,0.7);
-    margin: 10px 10px 0 0;
+    margin: 00px 10px 0 10px;
     border-radius: 5px;
     box-shadow: inset 0 0 5px #999;
+    z-index: -1;
 }
 
 .if {

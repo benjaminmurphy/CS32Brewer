@@ -64,7 +64,7 @@ function startDrag(event) {
 function growParents(element) {
     var currentElement = element.parentNode;
     while (currentElement.id !== "playground" && currentElement.id !== "menu") {
-        currentElement.grow(element.scrollWidth);
+        currentElement.resize();
         currentElement = currentElement.parentNode;
     }
 }
@@ -72,14 +72,14 @@ function growParents(element) {
 function shrinkParents(element) {
     var currentElement = element.parentNode;
     while (currentElement.id !== "playground" && currentElement.id !== "menu") {
-        currentElement.shrink(element.scrollWidth);
+        currentElement.resize();
         currentElement = currentElement.parentNode;
     }
 }
 
 // Grow or shrink one element.
 
-HTMLDivElement.prototype.grow = function(width) {    
+HTMLDivElement.prototype.grow = function(width, height) {    
     var newHeight = this.offsetHeight + 20;
     this.style.height = newHeight + 'px';
     var newWidth = width;
@@ -91,14 +91,60 @@ HTMLDivElement.prototype.grow = function(width) {
     this.style.width = newWidth + 'px';
 }
 
-HTMLDivElement.prototype.shrink = function(width) {
+HTMLDivElement.prototype.shrink = function(width, height) {
     var newHeight = this.scrollHeight - 20;
     this.style.height = newHeight + 'px';
     var newWidth = this.offsetWidth  - width;
 
-    if (this.classList.contains("droppable")) {
+    if (!this.classList.contains("droppable")) {
         newWidth += droppableWidth;
     }
 
     this.style.width = newWidth + 'px';
 }
+
+
+var itemPadding = 10;
+
+HTMLDivElement.prototype.resize = function() {    
+    var sumHeight = 0;
+    var maxWidth = 0;
+
+    var children = this.children;
+    for(var i = 0; i < children.length; i++) {
+        console.log(i);
+        var child = children[i];
+        console.log(child);
+        if ((child.classList.contains("droppable") 
+            || child.classList.contains("item"))
+            && child !== this) {
+
+            if (child.offsetWidth > maxWidth) {
+                maxWidth = child.offsetWidth;
+            }
+            sumHeight += child.offsetHeight + itemPadding;
+        }
+    }
+
+    var newHeight = sumHeight + itemPadding*2;
+    var newWidth = maxWidth 
+    if (!this.classList.contains("droppable")) {
+        newWidth += itemPadding*2;
+    }
+    this.style.height = newHeight + 'px';
+    this.style.width = newWidth + 'px';
+}
+
+/*function setConsole() {
+    console.log("clicked!");
+    var consoleBox = ${"console"};
+    if (consoleBox.style.display == "none") {
+        consoleBox.style.display = "block";
+    } else {
+        consoleBox.style.display = "none";
+    }
+}*/
+
+
+
+
