@@ -148,7 +148,7 @@ textarea {
     box-sizing: border-box;
 }
 
-#consoleButton {
+#buttonTab {
     position: absolute;
     right: 0.2em;
     bottom: 0.2em;

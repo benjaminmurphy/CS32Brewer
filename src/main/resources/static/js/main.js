@@ -145,6 +145,37 @@ function setConsole() {
         playground.style.width = "calc(100% - 300px";
     }
 }
+var programRunning = false;
+function runProgram() {
+    if (consoleBox.style.display == "none") {
+        setConsole();
+    }
+    if (programRunning) {
+        alert("Program is already running! Press Kill to cease execution");
+        return 1;
+    }
+
+    console.log("Running program!");
+    programRunning = true;
+
+
+
+}
+
+HTMLDivElement.prototype.getJSONFormat = function() {
+    console.log("This is where we recursively make each json thing");
+}
+
+function killProgram() {
+    if (!programRunning) {
+        alert("Program is not running! Press Run to start execution");
+        return 1;
+    }
+
+    console.log("Killing program!");
+    programRunning = false;
+    
+}
 
 
 
