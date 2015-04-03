@@ -28,21 +28,21 @@
             <table>
 
                 <table>
+                     <tr>
 
-                    <tr>
-
-                        <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">
-                            <h3 class="itemHeader">While</h3>
+                        <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
+                            <h3 class="itemHeader">Var</h3>
                         </div></td>
 
                     </tr>
-
                     <tr>
 
                         <td>
-                            <div class="item if" draggable="true" ondragstart="startDrag(event)" id="if">
-                                <h3 class="itemHeader">If</h3>
-                                <div class="droppable boolean"></div>
+                            <div class="item get" draggable="true" ondragstart="startDrag(event)" id="get">
+                                <h3 class="itemHeader">Get</h3>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Variable</h3>
+                                </div>
                             </div>
                         </td>
 
@@ -52,13 +52,62 @@
                         <td>
                             <div class="item set" draggable="true" ondragstart="startDrag(event)" id="set">
                                 <h3 class="itemHeader">Set</h3>
-                                <div class="droppable boolean"></div>
-                                <div class="droppable boolean"></div>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Variable</h3>
+                                </div>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Value</h3>
+                                </div>
                             </div>
                         </td>
 
                     </tr>
+                    <tr>
 
+                        <td>
+                            <div class="item if" draggable="true" ondragstart="startDrag(event)" id="if">
+                                <h3 class="itemHeader">If</h3>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Boolean</h3>
+                                </div>
+                                <div class="droppable">
+                                    <h3 class="droppableHeader">Instructions</h3>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div class="item ifElse" draggable="true" ondragstart="startDrag(event)" id="ifElse">
+                                <h3 class="itemHeader">If/Else</h3>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Boolean</h3>
+                                </div>
+                                <div class="droppable">
+                                    <h3 class="droppableHeader">Instructions</h3>
+                                </div>
+                                <div class="droppable">
+                                    <h3 class="droppableHeader">Instructions</h3>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">
+                            <h3 class="itemHeader">While</h3>
+                            <div class="droppable boolean">
+                                <h3 class="droppableHeader">Boolean</h3>
+                            </div>
+                            <div class="droppable">
+                                <h3 class="droppableHeader">Instructions</h3>
+                            </div>
+                        </div></td>
+
+                    </tr>
 
                 </table>
 

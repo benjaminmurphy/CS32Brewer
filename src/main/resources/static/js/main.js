@@ -2,6 +2,7 @@ var copynum = 0;
 
 var playground = document.getElementById("playground");
 var menu = document.getElementById("menu");
+var consoleBox = document.getElementById("console");
 
 var droppableWidth = 100;
 
@@ -135,15 +136,15 @@ HTMLDivElement.prototype.resize = function() {
     this.style.width = newWidth + 'px';
 }
 
-/*function setConsole() {
-    console.log("clicked!");
-    var consoleBox = ${"console"};
+function setConsole() {
     if (consoleBox.style.display == "none") {
         consoleBox.style.display = "block";
+        playground.style.width = "calc(80% - 300px)";
     } else {
         consoleBox.style.display = "none";
+        playground.style.width = "calc(100% - 300px";
     }
-}*/
+}
 
 
 
