@@ -13,13 +13,14 @@ import com.google.gson.Gson;
 
 import edu.brown.cs.brewer.expression.Expression;
 import edu.brown.cs.brewer.expression.Literal;
+import edu.brown.cs.brewer.expression.*;
 
 public class Main {
 
   private static final Gson GSON = new Gson();
 
   // A Print interface represents the types "log" and "error"
-  private static List<Log> toPrint;
+  private static BrewerRuntime runtime;
 
   public static void main(String[] args) throws IOException {
     runSparkServer();
@@ -37,8 +38,6 @@ public class Main {
       String requests = req.params("exps");
 
       Object[] exps = GSON.fromJson(requests);
-
-      toPrint = new ArrayList<Log>();
 
       List<Expression<?>> comms = parse(exps);
 
@@ -75,8 +74,7 @@ public class Main {
    *
    * Approach 2
    *
-   * @param exp
-   *          the expression
+   * @param exp the expression
    */
   public static Expression<?> evaluateR(Object exp) {
     // TODO This should be transported to an evaluation class so that it can be
@@ -103,16 +101,17 @@ public class Main {
       case "get":
         comm = new Get(variables, exp.name);
       case "while":
-        comm = new While(variables, evaluateR(exp.condition),
-            parse(exp.commands));
+        comm =
+        new While(variables, evaluateR(exp.condition), parse(exp.commands));
       case "if":
-        comm = new If(variables, evaluateR(exp.condition),
-            parse(exp.commands));
+        comm = new If(variables, evaluateR(exp.condition), parse(exp.commands));
       case "numeric_operator":
-        comm = new NumOp(variables, exp.name, evaluateR(exp.arg1),
+        comm =
+        new NumOp(variables, exp.name, evaluateR(exp.arg1),
             evaluateR(exp.arg2));
       case "binary_operator":
-        comm = new BinOp(variables, exp.name, evaluateR(exp.arg1),
+        comm =
+        new BinOp(variables, exp.name, evaluateR(exp.arg1),
             evaluateR(exp.arg2));
 
       default:
@@ -139,8 +138,7 @@ public class Main {
    *
    * Approach1
    *
-   * @param exp
-   *          the expression
+   * @param exp the expression
    */
   public static void evaluate(Object exp) {
     // TODO This should be transported to an evaluation class so that it can be
@@ -156,7 +154,7 @@ public class Main {
       // interface
 
       case "set":
-        comm = new Set(variables, exp.name, exp.value);
+        comm = new SetCommand(variables, exp.name, exp.value);
       case "get":
         comm = new Get(variables, exp.name);
       case "while":
