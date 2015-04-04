@@ -117,7 +117,8 @@ HTMLDivElement.prototype.resize = function() {
         var child = children[i];
         console.log(child);
         if ((child.classList.contains("droppable") 
-            || child.classList.contains("item"))
+            || child.classList.contains("item")
+            || child.classList.contains("functionSelect"))
             && child !== this) {
 
             if (child.offsetWidth > maxWidth) {
@@ -127,10 +128,11 @@ HTMLDivElement.prototype.resize = function() {
         }
     }
 
-    var newHeight = sumHeight + itemPadding*2;
+    var newHeight = sumHeight + itemPadding;
     var newWidth = maxWidth 
     if (!this.classList.contains("droppable")) {
         newWidth += itemPadding*2;
+        newHeight += itemPadding;
     }
     this.style.height = newHeight + 'px';
     this.style.width = newWidth + 'px';
