@@ -117,7 +117,8 @@ HTMLDivElement.prototype.resize = function() {
         var child = children[i];
         console.log(child);
         if ((child.classList.contains("droppable") 
-            || child.classList.contains("item"))
+            || child.classList.contains("item")
+            || child.classList.contains("functionSelect"))
             && child !== this) {
 
             if (child.offsetWidth > maxWidth) {
@@ -127,10 +128,11 @@ HTMLDivElement.prototype.resize = function() {
         }
     }
 
-    var newHeight = sumHeight + itemPadding*2;
+    var newHeight = sumHeight + itemPadding;
     var newWidth = maxWidth 
     if (!this.classList.contains("droppable")) {
         newWidth += itemPadding*2;
+        newHeight += itemPadding;
     }
     this.style.height = newHeight + 'px';
     this.style.width = newWidth + 'px';
@@ -144,6 +146,37 @@ function setConsole() {
         consoleBox.style.display = "none";
         playground.style.width = "calc(100% - 300px";
     }
+}
+var programRunning = false;
+function runProgram() {
+    if (consoleBox.style.display == "none") {
+        setConsole();
+    }
+    if (programRunning) {
+        alert("Program is already running! Press Kill to cease execution");
+        return 1;
+    }
+
+    console.log("Running program!");
+    programRunning = true;
+
+
+
+}
+
+HTMLDivElement.prototype.getJSONFormat = function() {
+    console.log("This is where we recursively make each json thing");
+}
+
+function killProgram() {
+    if (!programRunning) {
+        alert("Program is not running! Press Run to start execution");
+        return 1;
+    }
+
+    console.log("Killing program!");
+    programRunning = false;
+    
 }
 
 
