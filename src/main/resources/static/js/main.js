@@ -42,13 +42,21 @@ function startDrag(event) {
     var original = document.getElementById(event.target.id);
     var copy = null;
 
-    if (original.classList.contains("shrinkable")) {
-        original.classList.remove("shrinkable");
-        shrinkParents(original);
-    }
-
     if (playground.contains(original)) {
-        copy = original;
+
+        copy = original.cloneNode(true);
+        /*copy.id = "copy_" + copynum.toString();
+        copynum += 1;
+        copy.style.display = "none";
+        original.appendChild(copy);*/
+
+        if (original.classList.contains("shrinkable")) {
+            original.classList.remove("shrinkable");
+            var parent = original.parentNode;
+            //parent.removeChild(original);
+            shrinkParentsAndThis(parent);
+        }
+
     } else if (menu.contains(original)) {
         copy = original.cloneNode(true);
         copy.id = "copy_" + copynum.toString();
@@ -65,15 +73,15 @@ function startDrag(event) {
 function growParents(element) {
     var currentElement = element.parentNode;
     while (currentElement.id !== "playground" && currentElement.id !== "menu") {
-        currentElement.resize();
+        currentElement.resize([]);
         currentElement = currentElement.parentNode;
     }
 }
 
-function shrinkParents(element) {
-    var currentElement = element.parentNode;
+function shrinkParentsAndThis(element) {
+    var currentElement = element;
     while (currentElement.id !== "playground" && currentElement.id !== "menu") {
-        currentElement.resize();
+        currentElement.resize([element]);
         currentElement = currentElement.parentNode;
     }
 }
@@ -106,6 +114,8 @@ HTMLDivElement.prototype.shrink = function(width, height) {
 
 
 var itemPadding = 10;
+var minHeight = 40;
+var minWidth = 100;
 
 HTMLDivElement.prototype.resize = function() {    
     var sumHeight = 0;
@@ -134,8 +144,16 @@ HTMLDivElement.prototype.resize = function() {
         newWidth += itemPadding*2;
         newHeight += itemPadding;
     }
-    this.style.height = newHeight + 'px';
-    this.style.width = newWidth + 'px';
+    if (newHeight > minHeight) {
+        this.style.height = newHeight + 'px';
+    } else {
+        this.style.height = minHeight + 'px';
+    }
+    if (newWidth > minWidth) {
+        this.style.width = newWidth + 'px';
+    } else {
+        this.style.width = minWidth + 'px';
+    }
 }
 
 function setConsole() {
@@ -144,7 +162,7 @@ function setConsole() {
         playground.style.width = "calc(80% - 300px)";
     } else {
         consoleBox.style.display = "none";
-        playground.style.width = "calc(100% - 300px";
+        playground.style.width = "calc(100% - 300px)";
     }
 }
 var programRunning = false;
@@ -160,13 +178,16 @@ function runProgram() {
     console.log("Running program!");
     programRunning = true;
 
-
+    var programString = playground.getJSONFormat();
 
 }
 
 HTMLDivElement.prototype.getJSONFormat = function() {
-    console.log("This is where we recursively make each json thing");
+    return "This element did not have formatting"
 }
+/*HTMLDivElement.prototype.getJSONFormat = function() {
+    return "This element did not have formatting"
+}*/
 
 function killProgram() {
     if (!programRunning) {

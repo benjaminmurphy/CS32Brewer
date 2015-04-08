@@ -33,9 +33,11 @@
                         <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
                             <h3 class="itemHeader">Var</h3>
                             <select class="functionSelect" name="equalityType">
-                                    <option value="eq">=</option>
-                                    <option value="less">&lt</option>
-                                    <option value="greater">&gt</option>
+                                    <option value="a">a</option>
+                                    <option value="b">b</option>
+                                    <option value="c">c</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
                                 </select>
                         </div></td>
 
@@ -110,6 +112,27 @@
                                 <select class="functionSelect" name="andOrType">
                                     <option value="and">AND</option>
                                     <option value="or">OR</option>
+                                </select>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Boolean</h3>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div class="item tallItem arithmetic" draggable="true" ondragstart="startDrag(event)" id="arithmetic">
+                                <h3 class="itemHeader">Arithmetic</h3>
+                                <div class="droppable boolean">
+                                    <h3 class="droppableHeader">Boolean</h3>
+                                </div>
+                                <select class="functionSelect" name="andOrType">
+                                    <option value="add">+</option>
+                                    <option value="sub">-</option>
+                                    <option value="mul">*</option>
+                                    <option value="div">/</option>
                                 </select>
                                 <div class="droppable boolean">
                                     <h3 class="droppableHeader">Boolean</h3>
