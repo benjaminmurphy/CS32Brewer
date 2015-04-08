@@ -2,29 +2,29 @@ package edu.brown.cs.brewer.expression;
 
 import java.util.Map;
 
+import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.Variable;
+
 /**
  * A statement that, when executed, returns the value of a given variable.
- *
- * As the variable type is not known until evaluation, it returns an object.
- *
- * Use o.getClass().cast(o) to cast the object to its proper type.
  *
  * @author raphaelkargon
  *
  */
-public class GetCommand implements Expression<Object> {
-
-  private Map<String, Object> variables;
+public class GetCommand<T> extends Expression<T> {
   private String varname;
+  private Class<T> vartype;
 
-  public GetCommand(Map<String, Object> vars, String name){
-    this.variables = vars;
+  public GetCommand(BrewerRuntime _runtime, String name, Class<T> _vartype){
+    super(_runtime);
     this.varname = name;
+    this.vartype = _vartype;
   }
 
   @Override
-  public Object evaluate() {
-    return variables.get(varname);
+  public T evaluate() {
+    Variable<?> var = runtime.getVariables().get(varname);
+    return vartype.cast(var.getValue());
   }
 
 }

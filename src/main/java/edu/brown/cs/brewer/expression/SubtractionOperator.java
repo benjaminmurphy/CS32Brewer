@@ -1,17 +1,20 @@
 package edu.brown.cs.brewer.expression;
 
-public class SubtractionOperator implements Expression<Number> {
+import edu.brown.cs.brewer.BrewerRuntime;
 
-  private Expression<Number> arg1, arg2;
+public class SubtractionOperator extends Expression<Double> {
 
-  public SubtractionOperator(Expression<Number> _arg1, Expression<Number> _arg2) {
+  private Expression<Double> arg1, arg2;
+
+  public SubtractionOperator(BrewerRuntime _runtime, Expression<Double> _arg1, Expression<Double> _arg2) {
+    super(_runtime);
     this.arg1 = _arg1;
     this.arg2 = _arg2;
   }
 
   @Override
-  public Number evaluate() {
-    return (arg1.evaluate().doubleValue() - arg2.evaluate().doubleValue());
+  public Double evaluate() {
+    return (arg1.evaluate() - arg2.evaluate());
   }
 
 }

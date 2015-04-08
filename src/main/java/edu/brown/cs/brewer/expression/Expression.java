@@ -1,9 +1,18 @@
 package edu.brown.cs.brewer.expression;
 
-public interface Expression<R> {
+import edu.brown.cs.brewer.BrewerRuntime;
+
+public abstract class Expression<R> {
+
+  protected BrewerRuntime runtime;
+
+  public Expression(final BrewerRuntime _runtime){
+    this.runtime = _runtime;
+  }
+
   /**
    * Evaluate the expression, and return a value of the appropriate type
    * @return
    */
-  public R evaluate();
+  public abstract R evaluate();
 }

@@ -1,14 +1,25 @@
 package edu.brown.cs.brewer.expression;
 
-public class WhileCommand implements Expression<Void> {
+import java.util.List;
+
+import edu.brown.cs.brewer.BrewerRuntime;
+
+public class WhileCommand extends Expression<Void> {
 
   private Expression<Boolean> condition;
-  private Expression<Void> commands[];
+  private List<Expression<?>> commands;
+
+  public WhileCommand(BrewerRuntime _runtime, Expression<Boolean> _condition,
+      List<Expression<?>> _commands) {
+    super(_runtime);
+    this.condition = _condition;
+    this.commands = _commands;
+  }
 
   @Override
   public Void evaluate() {
-    while(condition.evaluate()){
-      for(Expression<Void> c : commands){
+    while (condition.evaluate()) {
+      for (Expression<?> c : commands) {
         c.evaluate();
       }
     }

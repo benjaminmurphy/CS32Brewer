@@ -2,17 +2,29 @@ package edu.brown.cs.brewer.expression;
 
 import java.util.Map;
 
-public class PrintExpression implements Expression<Void> {
+import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.Variable;
 
-  private Map<String, Object> variables;
+public class PrintExpression extends Expression<Void> {
+
   private String varname;
-  //TODO private Log/Printable log;
 
+  public PrintExpression(final BrewerRuntime _runtime,
+      final String _varname) {
+    super(_runtime);
+    this.varname = _varname;
+  }
 
   @Override
   public Void evaluate() {
-    // TODO log.update(variables.get(varname))
-    variables.get(varname);
+    String msg = varname + ": ";
+    Variable<?> v = runtime.getVariables().get(varname);
+    if (v == null) {
+      msg += "null";
+    } else{
+      msg += v.getValue();
+    }
+    runtime.addLog(msg, true);
     return null;
   }
 
