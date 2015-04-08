@@ -11,7 +11,8 @@ public abstract class Expression<R> {
   }
 
   /**
-   * Evaluate the expression, and return a value of the appropriate type
+   * Evaluate the expression, and return a value of the appropriate type.
+   *
    * @return
    */
   public abstract R evaluate();
