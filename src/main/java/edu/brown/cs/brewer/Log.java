@@ -27,7 +27,7 @@ public class Log {
    * @param msg
    * @param isError
    */
-  private Log(String _msg, boolean _isError) {
+  public Log(String _msg, boolean _isError) {
     super();
     this.msg = _msg;
     this.isError = _isError;

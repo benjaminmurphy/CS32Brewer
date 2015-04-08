@@ -1,24 +1,28 @@
 package edu.brown.cs.brewer.expression;
 
+import edu.brown.cs.brewer.BrewerRuntime;
+
 /**
- * An expression that adds two numbers.
- * Currently, each number is added as a double value.
+ * An expression that adds two numbers. Currently, each number is added as a
+ * double value.
  *
  * @author raphaelkargon
  *
  */
-public class AdditionOperator implements Expression<Number> {
+public class AdditionOperator extends Expression<Double> {
 
-  private Expression<Number> arg1, arg2;
+  private Expression<Double> arg1, arg2;
 
-  public AdditionOperator(Expression<Number> _arg1, Expression<Number> _arg2) {
+  public AdditionOperator(BrewerRuntime _runtime, Expression<Double> _arg1,
+      Expression<Double> _arg2) {
+    super(_runtime);
     this.arg1 = _arg1;
     this.arg2 = _arg2;
   }
 
   @Override
-  public Number evaluate() {
-    return (arg1.evaluate().doubleValue() + arg2.evaluate().doubleValue());
+  public Double evaluate() {
+    return (arg1.evaluate() + arg2.evaluate());
   }
 
 }

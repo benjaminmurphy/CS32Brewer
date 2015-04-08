@@ -2,13 +2,16 @@ package edu.brown.cs.brewer.expression;
 
 import java.util.Arrays;
 
+import edu.brown.cs.brewer.BrewerRuntime;
 
-public class IfElseCommand implements Expression<Void> {
+
+public class IfElseCommand extends Expression<Void> {
 
   private Expression<Boolean> condition;
   private Expression<Void> commandsIfTrue[], commandsIfFalse[];
 
-  public IfElseCommand(Expression<Boolean> _condition, Expression<Void> _commandsIfTrue[], Expression<Void> _commandsIfFalse[]){
+  public IfElseCommand(BrewerRuntime _runtime, Expression<Boolean> _condition, Expression<Void> _commandsIfTrue[], Expression<Void> _commandsIfFalse[]){
+    super(_runtime);
     this.condition = _condition;
 
     if(_commandsIfTrue == null){
