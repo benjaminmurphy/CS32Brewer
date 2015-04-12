@@ -46,6 +46,7 @@ public class SetCommand<T> extends Expression<Void> {
     } else {
       String msg = "ERROR: Could not assign value of type "+vartype.getName()+" to variable "+varname+" of type" + oldval.getType().getName();
       runtime.addLog(msg, true);
+      runtime.kill();
     }
 
     return null;
