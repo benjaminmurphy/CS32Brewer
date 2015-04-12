@@ -12,6 +12,8 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.brewer.handlers.Server;
+
 public class Main {
 
   private static final int DEFAULT_PORT = 4567;
@@ -49,28 +51,8 @@ public class Main {
   // }
 
   public static void main(String[] args) throws IOException {
-    runSparkServer();
-  }
-
-  private static void runSparkServer() {
-    // TODO Auto-generated method stub
-    Spark.setPort(DEFAULT_PORT);
-    Spark.externalStaticFileLocation("src/main/resources/static");
-    Spark.get("/brewer", new GetHandler(), new FreeMarkerEngine());
-  }
-
-  /**
-   * This class serves the GUI to the client via a webserver.
-   *
-   * @author raphaelkargon
-   *
-   */
-  private static class GetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(final Request req, final Response res) {
-      Map<String, Object> variables = ImmutableMap.of();
-      return new ModelAndView(variables, "index.ftl");
-    }
+    Server server = new Server(DEFAULT_PORT);
+    server.runSparkServer();
   }
 
 }
