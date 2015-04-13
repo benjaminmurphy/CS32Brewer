@@ -18,6 +18,9 @@ public class Main {
 
   private static final int DEFAULT_PORT = 4567;
 
+  // Number of threads, change to null or 1 for single threading
+  private static final int NUM_THREADS = 4;
+
   // public static void main(String[] args) {
   // Map<String, Variable<?>> vars = new HashMap<>();
   // List<Log> logs = new ArrayList<Log>();
@@ -51,7 +54,7 @@ public class Main {
   // }
 
   public static void main(String[] args) throws IOException {
-    Server server = new Server(DEFAULT_PORT);
+    Server server = new Server(DEFAULT_PORT, NUM_THREADS);
     server.runSparkServer();
   }
 
