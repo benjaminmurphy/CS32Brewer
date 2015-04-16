@@ -1,11 +1,9 @@
 package edu.brown.cs.brewer;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.concurrent.ConcurrentException;
-import org.apache.commons.lang3.concurrent.ConcurrentRuntimeException;
 
 import edu.brown.cs.brewer.expression.Expression;
 
@@ -22,10 +20,9 @@ public class BrewerRuntime implements Runnable {
   private List<Expression<?>> program = null;
   private boolean isRunning = false;
 
-  public BrewerRuntime(final Map<String, Variable<?>> _variables,
-      final List<Log> _logs) {
-    this.variables = _variables;
-    this.logs = _logs;
+  public BrewerRuntime() {
+    this.variables = new HashMap<String, Variable<?>>();
+    this.logs = new ArrayList<Log>();
   }
 
   // TODO what if fails?

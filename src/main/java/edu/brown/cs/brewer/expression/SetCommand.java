@@ -44,9 +44,9 @@ public class SetCommand<T> extends Expression<Void> {
     } else if (oldval.getType().isAssignableFrom(vartype)) {
       oldval.setValue(eval);
     } else {
-      System.out.println(oldval.getType().getName());
-      System.out.println(vartype.getName());
-      // TODO emit error
+      String msg = "ERROR: Could not assign value of type "+vartype.getName()+" to variable "+varname+" of type" + oldval.getType().getName();
+      runtime.addLog(msg, true);
+      runtime.kill();
     }
 
     return null;

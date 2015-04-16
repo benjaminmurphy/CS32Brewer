@@ -1,46 +1,45 @@
 package edu.brown.cs.brewer.expression;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.brown.cs.brewer.BrewerRuntime;
-
 
 public class IfElseCommand extends Expression<Void> {
 
   private Expression<Boolean> condition;
-  private Expression<Void> commandsIfTrue[], commandsIfFalse[];
+  private List<Expression<?>> commandsIfTrue, commandsIfFalse;
 
-  public IfElseCommand(BrewerRuntime _runtime, Expression<Boolean> _condition, Expression<Void> _commandsIfTrue[], Expression<Void> _commandsIfFalse[]){
+  public IfElseCommand(BrewerRuntime _runtime,
+    Expression<Boolean> _condition, List<Expression<?>> _commandsIfTrue,
+    List<Expression<?>> _commandsIfFalse) {
     super(_runtime);
     this.condition = _condition;
 
-    if(_commandsIfTrue == null){
+    if (_commandsIfTrue == null) {
       this.commandsIfTrue = null;
-    }
-    else{
-      this.commandsIfTrue = Arrays.copyOf(_commandsIfTrue, _commandsIfTrue.length);
+    } else {
+      this.commandsIfTrue = new ArrayList<Expression<?>>(_commandsIfTrue);
     }
 
-    if(_commandsIfFalse == null){
+    if (_commandsIfFalse == null) {
       this.commandsIfFalse = null;
-    }
-    else{
-      this.commandsIfFalse = Arrays.copyOf(_commandsIfFalse, _commandsIfFalse.length);
+    } else {
+      this.commandsIfFalse = new ArrayList<Expression<?>>(_commandsIfFalse);
     }
   }
 
   @Override
   public Void evaluate() {
-    if(condition.evaluate()){
-      if(commandsIfTrue != null){
-        for(Expression<Void> c : commandsIfTrue){
+    if (condition.evaluate()) {
+      if (commandsIfTrue != null) {
+        for (Expression<?> c : commandsIfTrue) {
           c.evaluate();
         }
       }
-    }
-    else{
-      if(commandsIfFalse != null){
-        for(Expression<Void> c : commandsIfFalse){
+    } else {
+      if (commandsIfFalse != null) {
+        for (Expression<?> c : commandsIfFalse) {
           c.evaluate();
         }
       }
