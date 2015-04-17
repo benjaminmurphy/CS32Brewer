@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.brown.cs.brewer.expression.Expression;
+import edu.brown.cs.brewer.handlers.Stream.Runner;
 
 /**
  * This class represents a Brewer program, as well its environment, ie the
@@ -19,6 +20,7 @@ public class BrewerRuntime implements Runnable {
   private List<Log> logs;
   private List<Expression<?>> program = null;
   private boolean isRunning = false;
+  private Runner thread;
 
   public BrewerRuntime() {
     this.variables = new HashMap<String, Variable<?>>();
@@ -31,6 +33,10 @@ public class BrewerRuntime implements Runnable {
       this.program = newprog;
     }
   }
+  
+  public void setRunner(Runner runner) {
+    this.thread = runner;
+  }
 
   @Override
   public void run() {
@@ -42,6 +48,7 @@ public class BrewerRuntime implements Runnable {
           break;
         }
       }
+      thread.close();
     }
   }
 
@@ -56,6 +63,7 @@ public class BrewerRuntime implements Runnable {
   public void addLog(String msg, boolean isError) {
     Log l = new Log(msg, isError);
     logs.add(l);
+    thread.message(msg, isError);
   }
 
   public void kill() {

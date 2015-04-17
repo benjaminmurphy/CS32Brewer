@@ -18,7 +18,13 @@ public class Parser {
   public static BrewerRuntime parseJSONProgram(String json, Stream.Runner runner) {
     Gson GSON = new Gson();// TODO make this static
     JsonParser parser = new JsonParser();
+    
+    System.out.println(json);
+    
     JsonObject mainprog = parser.parse(json).getAsJsonObject();
+    
+    System.out.println(mainprog);
+    
     JsonArray mainprogArr = mainprog.getAsJsonArray("main");
 
     BrewerRuntime runtime = new BrewerRuntime();
@@ -29,6 +35,7 @@ public class Parser {
       programCommands.add(parseJSONExpression(expressionObj, runtime));
     }
     runtime.setProgram(programCommands);
+    runtime.setRunner(runner);
     return runtime;
   }
 
