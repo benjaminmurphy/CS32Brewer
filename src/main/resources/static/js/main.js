@@ -8,6 +8,8 @@ var droppableWidth = 100;
 
 var lineNumber = 0;
 
+var socket = null;
+
 // Allows elements to be dropped.
 
 function allowDrop(event) {
@@ -129,8 +131,8 @@ HTMLDivElement.prototype.resize = function() {
         var child = children[i];
         console.log(child);
         if ((child.classList.contains("droppable") 
-            || child.classList.contains("item")
-            || child.classList.contains("functionSelect"))
+             || child.classList.contains("item")
+             || child.classList.contains("functionSelect"))
             && child !== this) {
 
             if (child.offsetWidth > maxWidth) {
@@ -181,8 +183,7 @@ function runProgram() {
     console.log("Running program!");
     programRunning = true;
 
-    var programString = playground.getJSONFormat();
-
+    openStream();
 }
 
 HTMLDivElement.prototype.getJSONFormat = function() {
@@ -200,6 +201,10 @@ function killProgram() {
 
     console.log("Killing program!");
     programRunning = false;
+
+    if (socket != null) {
+        socket.send("kill");
+    }
     
 }
 
@@ -207,21 +212,21 @@ function log(msg) {
     var line = document.createElement("p");
     var text = document.createTextNode(lineNumber.toString() + ": " + msg);
     line.appendChild(text);
-    
+
     consoleBox.appendChild(line);
 }
 
 function openStream() {
-    var socket = new WebSocket('ws://localhost:1000');
-    
+    socket = new WebSocket('ws://localhost:1000');
+
     socket.onopen = function(event) {
-        var request = JSON.stringify( { main: null } ); // Convert program and put it in here.
+        var request = compile(); // Convert program and put it in here.
         socket.send(request);
     }
-    
+
     socket.onmessage = function(event) {
         var message = JSON.parse(event.data);
-        
+
         if (message.type === "done") {
             socket.close();
             programRunning = false;
@@ -233,11 +238,51 @@ function openStream() {
             programRunning = false;
         }   
     }
-    
+
     socket.onclose = function(event) {
         log("Execution complete.");
+        socket = null;
     }
 }
 
+HTMLDivElement.prototype.compile = function() {
 
+    var block = {};
 
+    if (this.classList.contains("set")) {
+
+        block.type = "set";
+
+        var firstDropZone = this.children[1];
+        var secondDropZone = this.children[2];
+
+        block.name = firstDropZone.getElementsByClassName("var")[0].compile();
+        block.value = secondDropZone.children[1].compile();
+
+    } else if (this.classList.contains("get")) {
+        block.type = "get";
+        
+        var dropZone = this.children[1];
+        
+        block.name = dropZone.getElementsByClassName("var")[0].compile();
+        
+    } else if (this.classList.contains("var")) {
+        block.type = "var";
+        
+        block.name = this.getElementsByTagName("select")[0].value;
+        
+    }
+    
+    return block;
+}
+
+function compile() {
+    
+    var request = {main : []};
+    
+    for (var idx = 0; idx < playground.children.length; idx++) {
+        code.push(playground.children[idx].compile());
+    }
+    
+    return JSON.stringify(request);
+}
