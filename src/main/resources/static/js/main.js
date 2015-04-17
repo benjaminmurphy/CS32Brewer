@@ -117,6 +117,39 @@ HTMLDivElement.prototype.shrink = function(width, height) {
 }
 
 
+$(".typeSelect").bind("change", function(event){
+  var myType = this.options[this.selectedIndex].value;
+  var par = this.parentNode;
+  if ($(par).hasClass("literal")) {
+  par.getElementsByClassName("litVal")[0].remove();
+    var newField;
+    if (myType == "number") {
+        newField = document.createElement('input');
+        $(newField).addClass("litVal");
+        newField.type = "number";
+        newField.placeholder ="-0.0";
+    } else if (myType == "string") {
+        newField = document.createElement('input');
+        $(newField).addClass("litVal");
+        newField.type = "text";
+        newField.placeholder ="Text";
+    } else if (myType == "bool") {
+        newField = document.createElement('input');
+        $(newField).addClass("litVal");
+        newField.type = "number";
+        newField.placeholder ="-0.0";
+    }
+    par.appendChild(newField);
+  }
+  $(par).attr("valType", myType);
+});
+
+HTMLDivElement.prototype.getValue = function() {
+    return this.getElementsByClassName("litVal")[0].value;
+}
+
+
+
 var itemPadding = 10;
 var minHeight = 40;
 var minWidth = 100;
