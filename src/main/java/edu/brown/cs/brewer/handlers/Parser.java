@@ -15,7 +15,7 @@ import edu.brown.cs.brewer.expression.*;
 
 public class Parser {
 
-  public static BrewerRuntime parseJSONProgram(String json) {
+  public static BrewerRuntime parseJSONProgram(String json, Stream.Runner runner) {
     Gson GSON = new Gson();// TODO make this static
     JsonParser parser = new JsonParser();
     JsonObject mainprog = parser.parse(json).getAsJsonObject();
