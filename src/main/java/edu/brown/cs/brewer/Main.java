@@ -54,7 +54,7 @@ public class Main {
   // }
 
   public static void main(String[] args) throws IOException {
-    Server server = new Server(DEFAULT_PORT, NUM_THREADS);
+    Server server = new Server(DEFAULT_PORT);
     server.runSparkServer();
   }
 
