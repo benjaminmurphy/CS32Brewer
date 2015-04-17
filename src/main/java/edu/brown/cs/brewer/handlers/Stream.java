@@ -6,7 +6,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Map;
+
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.codec.binary.Base64;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
@@ -60,14 +66,39 @@ public class Stream {
             new BufferedReader(new InputStreamReader(client.getInputStream()));
         this.outgoing = out;
 
+        boolean handshakeComplete = false;
         while (!client.isClosed()) {
           String input = in.readLine();
           
+          if (input == null) {
+            client.close();
+          }
           
+          if (!handshakeComplete && input.startsWith("Sec-WebSocket-Key")) {
+            
+            String key = input.substring(19) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+            
+            MessageDigest md = null;
+            try {
+              md = MessageDigest.getInstance("SHA-1");
+            } catch (NoSuchAlgorithmException e) {
+              e.printStackTrace();
+            }
+            
+            byte[] handshake = md.digest(key.getBytes());
+            
+            String accept = StringUtils.newStringUtf8(Base64.encodeBase64(handshake, false));            
+            
+            outgoing.println("HTTP/1.1 101 Switching Protocols");
+            outgoing.println("Upgrade: websocket");
+            outgoing.println("Connection: Upgrade");
+            outgoing.println("Sec-Websocket-Accept: " + accept);
+            outgoing.println();
+            
+            handshakeComplete = true;
+          }
           
-          
-          
-          BrewerRuntime runtime = Parser.parseJSONProgram(input, this);
+          //BrewerRuntime runtime = Parser.parseJSONProgram(input, this);
         }
 
       } catch (IOException e) {

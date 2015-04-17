@@ -144,8 +144,10 @@ $(".typeSelect").bind("change", function(event){
   $(par).attr("valType", myType);
 });
 
+
 HTMLDivElement.prototype.getValue = function() {
-    return this.getElementsByClassName("litVal")[0].value;
+    var type = this.getElementsByTagName("select")[0].value;
+    return parseFloat(this.getElementsByClassName("litVal")[0].value);
 }
 
 
@@ -251,9 +253,12 @@ function log(msg) {
 
 function openStream() {
     socket = new WebSocket('ws://localhost:2567');
-
+    
+    
+    var request = JSON.stringify(compile());
+    console.log(request)
+    
     socket.onopen = function(event) {
-        var request = JSON.stringify(compile()); // Convert program and put it in here.
         socket.send(request);
     }
 
@@ -275,6 +280,7 @@ function openStream() {
     socket.onclose = function(event) {
         log("Execution complete.");
         socket = null;
+        programRunning = false;
     }
 }
 
@@ -313,16 +319,15 @@ HTMLDivElement.prototype.compile = function() {
     } else if (this.classList.contains("var")) {
         block.type = "var";
         
-        block.name = this.getElementsByTagName("select")[0].value;
-        
-        block.class = this.getAttribute("valType");
+        block.class = this.getElementsByTagName("select")[0].value;
+        block.name = this.getElementsByTagName("select")[1].value;
         
     } else if (this.classList.contains("literal")) {
         block.type = "literal";
         
         block.value = this.getValue();
         
-        block.class = this.getAttribute("valType");
+        block.class = this.getElementsByTagName("select")[0].value;
 
     } else if (this.classList.contains("print")) {
         block.type = "print";
@@ -357,8 +362,7 @@ HTMLDivElement.prototype.compile = function() {
                 block.commands.push(secondDropZone.children[idx].compile());
             }
         }
-        
-        
+
     } else if (this.classList.contains("equality")) {
         block.type = "comparison";
         
