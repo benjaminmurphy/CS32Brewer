@@ -63,6 +63,10 @@ public class Stream {
         while (!client.isClosed()) {
           String input = in.readLine();
           
+          
+          
+          
+          
           BrewerRuntime runtime = Parser.parseJSONProgram(input, this);
         }
 

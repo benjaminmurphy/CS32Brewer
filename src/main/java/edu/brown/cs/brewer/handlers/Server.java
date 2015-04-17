@@ -12,8 +12,8 @@ public class Server {
 
   public Server(int portNum) {
     this.portNum = portNum;
+    this.runSparkServer();
     new Stream(2567);
-    runSparkServer();
   }
 
   // Server Handling
