@@ -18,13 +18,13 @@ public class Parser {
   public static BrewerRuntime parseJSONProgram(String json, Stream.Runner runner) {
     Gson GSON = new Gson();// TODO make this static
     JsonParser parser = new JsonParser();
-    
+
     System.out.println(json);
-    
+
     JsonObject mainprog = parser.parse(json).getAsJsonObject();
-    
+
     System.out.println(mainprog);
-    
+
     JsonArray mainprogArr = mainprog.getAsJsonArray("main");
 
     BrewerRuntime runtime = new BrewerRuntime();
@@ -46,7 +46,9 @@ public class Parser {
 
     switch (exprType) {
       case "set": {
-        String varname = obj.getAsJsonPrimitive("name").getAsString();
+        // String varname = obj.getAsJsonPrimitive("name").getAsString();
+        JsonObject variableObj = obj.getAsJsonObject("name");
+        String varname = variableObj.getAsJsonPrimitive("name").getAsString();
         Expression<?> value =
             parseJSONExpression(obj.getAsJsonObject("value"), runtime);
         Class<?> valuetype = value.getType();
