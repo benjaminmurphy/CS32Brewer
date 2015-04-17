@@ -70,9 +70,7 @@ public class Server {
 
       Command[] comms = GSON.fromJson(requests, Command[].class);
 
-      List<Expression<?>> exprs = Parser.parse(comms);
-      runtime = new BrewerRuntime();
-      runtime.setProgram(exprs);
+      BrewerRuntime runtime = Parser.parseJSONProgram(requests);
       // TODO make runtime fields instance variables so they can be used in a
       // multithreaded purpose
       Future<?> status = pool.submit(runtime);
