@@ -8,166 +8,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import edu.brown.cs.brewer.BrewerRuntime;
-import edu.brown.cs.brewer.Command;
-import edu.brown.cs.brewer.Variable;
-import edu.brown.cs.brewer.expression.AdditionOperator;
-import edu.brown.cs.brewer.expression.AndOperator;
-import edu.brown.cs.brewer.expression.DivisionOperator;
-import edu.brown.cs.brewer.expression.EqualityOperator;
-import edu.brown.cs.brewer.expression.Expression;
-import edu.brown.cs.brewer.expression.GetCommand;
-import edu.brown.cs.brewer.expression.GreaterThanOperator;
-import edu.brown.cs.brewer.expression.IfElseCommand;
-import edu.brown.cs.brewer.expression.LessThanOperator;
-import edu.brown.cs.brewer.expression.Literal;
-import edu.brown.cs.brewer.expression.MultiplicationOperator;
-import edu.brown.cs.brewer.expression.NotOperator;
-import edu.brown.cs.brewer.expression.OrOperator;
-import edu.brown.cs.brewer.expression.PrintExpression;
-import edu.brown.cs.brewer.expression.SetCommand;
-import edu.brown.cs.brewer.expression.SubtractionOperator;
-import edu.brown.cs.brewer.expression.WhileCommand;
+import edu.brown.cs.brewer.expression.*;
 
 public class Parser {
-
-  // public static List<Expression<?>> parse(Command[] comms) {
-  // List<Expression<?>> exprs = new ArrayList<Expression<?>>(comms.length);
-  //
-  // for (Command comm : comms) {
-  // exprs.add(evaluateR(comm));
-  // }
-  //
-  // return exprs;
-  // }
-
-  /**
-   * Recursively parses an expression into a command / commands and returns the
-   * commands
-   *
-   * Further inner parsing is already done
-   *
-   * Approach 2
-   *
-   * @param comm the expression
-   */
-  // // TODO(1) fix typing on raw types
-  // @SuppressWarnings({"unchecked", "rawtypes"})
-  // public static Expression<?> evaluateR(Command comm) {
-  // Expression<?> expr = null;
-  //
-  // String type = comm.type;
-  // Object value = comm.value;
-  // String name = comm.name;
-  //
-  // // TODO Reform the Command class to incorporate all possible values and
-  // // interpret null as no value. Then assign the values beforehand to
-  // condense
-  // // switch statements
-  //
-  // // TODO First evaluate for literal value, null is currently a placeholder
-  // // for type checking
-  // if (type == null) {
-  // // TODO add typing
-  // return new Literal<>(runtime, comm.value);
-  // }
-  // Class<?> valueType = comm.value.getClass();
-  //
-  // switch (type) {
-  //
-  // // TODO Add this as default factory constructor in some superclass using a
-  // // HashMap
-  //
-  // case "set":
-  // expr = new SetCommand(runtime, comm.name, comm.value, valueType);
-  // case "get":
-  // expr = new GetCommand(runtime, comm.name, comm.value.getClass());
-  //
-  // case "log":
-  // expr = new PrintExpression(runtime, name);
-  //
-  // case "binary_operator":
-  // switch (name) {
-  //
-  // case "eq":
-  // expr =
-  // new EqualityOperator(runtime, evaluateR(comm.arg1),
-  // evaluateR(comm.arg2));
-  // case "less":
-  // expr =
-  // new LessThanOperator(runtime, evaluateR(comm.arg1),
-  // evaluateR(comm.arg2));
-  // case "greater":
-  // expr =
-  // new GreaterThanOperator(runtime, evaluateR(comm.arg1),
-  // evaluateR(comm.arg2));
-  // }
-  //
-  // case "logic_operator":
-  // switch (name) {
-  //
-  // case "and":
-  // expr =
-  // new AndOperator(runtime,
-  // (Expression<Boolean>) evaluateR(comm.arg1),
-  // (Expression<Boolean>) evaluateR(comm.arg2));
-  // case "or":
-  // expr =
-  // new OrOperator(runtime,
-  // (Expression<Boolean>) evaluateR(comm.arg1),
-  // (Expression<Boolean>) evaluateR(comm.arg2));
-  // }
-  //
-  // case "numeric_operator":
-  // switch (name) {
-  //
-  // case "add":
-  // expr =
-  // new AdditionOperator(runtime,
-  // (Expression<Double>) evaluateR(comm.arg1),
-  // (Expression<Double>) evaluateR(comm.arg2));
-  // case "sub":
-  // expr =
-  // new SubtractionOperator(runtime,
-  // (Expression<Double>) evaluateR(comm.arg1),
-  // (Expression<Double>) evaluateR(comm.arg2));
-  // case "mul":
-  // expr =
-  // new MultiplicationOperator(runtime,
-  // (Expression<Double>) evaluateR(comm.arg1),
-  // (Expression<Double>) evaluateR(comm.arg2));
-  // case "div":
-  // expr =
-  // new DivisionOperator(runtime,
-  // (Expression<Double>) evaluateR(comm.arg1),
-  // (Expression<Double>) evaluateR(comm.arg2));
-  // }
-  //
-  // case "unary_operator":
-  // switch (name) {
-  //
-  // case "not":
-  // expr =
-  // new NotOperator(runtime,
-  // (Expression<Boolean>) evaluateR(comm.arg1));
-  // }
-  //
-  // case "if":
-  // case "ifelse":
-  // expr =
-  // new IfElseCommand(runtime,
-  // (Expression<Boolean>) evaluateR(comm.condition),
-  // parse(comm.commands), parse(comm.elseCommands));
-  //
-  // case "while":
-  // expr =
-  // new WhileCommand(runtime,
-  // (Expression<Boolean>) evaluateR(comm.condition),
-  // parse(comm.commands));
-  // }
-  // return expr;
-  // }
 
   public static BrewerRuntime parseJSONProgram(String json) {
     Gson GSON = new Gson();// TODO make this static
@@ -189,7 +35,7 @@ public class Parser {
   public static Expression<?> parseJSONExpression(JsonObject obj,
       BrewerRuntime runtime) {
     String exprType = obj.getAsJsonPrimitive("type").getAsString();
-    Expression<?> expr;
+    Expression<?> expr = null;
 
     switch (exprType) {
       case "set": {
@@ -231,8 +77,213 @@ public class Parser {
         }
         break;
       }
+      case "print": {
+        String varname = obj.getAsJsonPrimitive("name").getAsString();
+        expr = new PrintExpression(runtime, varname);
+        break;
+      }
+      case "literal": {
+        String vartype = obj.getAsJsonPrimitive("class").getAsString();
+        JsonPrimitive valuePrim = obj.getAsJsonPrimitive("value");
+
+        switch (vartype) {
+          case "string":
+            expr = new Literal<String>(runtime, valuePrim.getAsString());
+            break;
+          case "number":
+            expr = new Literal<Double>(runtime, valuePrim.getAsDouble());
+            break;
+          case "boolean":
+            expr = new Literal<Boolean>(runtime, valuePrim.getAsBoolean());
+            break;
+        }
+        break;
+      }
+      case "comparison": {
+        String opname = obj.getAsJsonArray("name").getAsString();
+        Expression<?> arg1 =
+            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+        Expression<?> arg2 =
+            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+        switch (opname) {
+          case "eq":
+            expr = new EqualityOperator(runtime, arg1, arg2);
+            break;
+          case "less": {
+            Class<?> type1 = arg1.getType();
+            Class<?> type2 = arg2.getType();
+            if (!type1.isAssignableFrom(type2)
+                || !type2.isAssignableFrom(type1)) {
+              ;// TODO
+            }
+            if (Double.class.isAssignableFrom(type1)) {
+              expr =
+                  new LessThanOperator<Double>(runtime,
+                      (Expression<Double>) arg1, (Expression<Double>) arg2);
+            } else if (String.class.isAssignableFrom(type1)) {
+              expr =
+                  new LessThanOperator<String>(runtime,
+                      (Expression<String>) arg1, (Expression<String>) arg2);
+            } else {
+              // TODO
+            }
+            break;
+          }
+          case "greater": {
+            Class<?> type1 = arg1.getType();
+            Class<?> type2 = arg2.getType();
+            if (!type1.isAssignableFrom(type2)
+                || !type2.isAssignableFrom(type1)) {
+              ;// TODO
+            }
+            if (Double.class.isAssignableFrom(type1)) {
+              expr =
+                  new GreaterThanOperator<Double>(runtime,
+                      (Expression<Double>) arg1, (Expression<Double>) arg2);
+            } else if (String.class.isAssignableFrom(type1)) {
+              expr =
+                  new GreaterThanOperator<String>(runtime,
+                      (Expression<String>) arg1, (Expression<String>) arg2);
+            } else {
+              // TODO
+            }
+            break;
+          }
+          default:
+            // TODO
+        }
+        break;
+      }
+      case "logic_operator": {
+        String opname = obj.getAsJsonArray("name").getAsString();
+        Expression<?> arg1 =
+            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+        Expression<?> arg2 =
+            parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+        if (!Boolean.class.isAssignableFrom(arg1.getType())
+            || !Boolean.class.isAssignableFrom(arg2.getType())) {
+          ;// TODO
+        }
+
+        switch (opname) {
+          case "and":
+            expr =
+                new AndOperator(runtime, (Expression<Boolean>) arg1,
+                    (Expression<Boolean>) arg2);
+            break;
+          case "or":
+            expr =
+                new OrOperator(runtime, (Expression<Boolean>) arg1,
+                    (Expression<Boolean>) arg2);
+            break;
+          default:
+            // TODO
+        }
+      }
+      case "numeric_operator": {
+        String opname = obj.getAsJsonArray("name").getAsString();
+        Expression<?> arg1 =
+            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+        Expression<?> arg2 =
+            parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+        if (!Double.class.isAssignableFrom(arg1.getType())
+            || !Double.class.isAssignableFrom(arg2.getType())) {
+          ;// TODO
+        }
+
+        switch (opname) {
+          case "add":
+            expr =
+                new AdditionOperator(runtime, (Expression<Double>) arg1,
+                    (Expression<Double>) arg2);
+            break;
+          case "sub":
+            expr =
+                new SubtractionOperator(runtime, (Expression<Double>) arg1,
+                    (Expression<Double>) arg2);
+            break;
+          case "mul":
+            expr =
+                new MultiplicationOperator(runtime, (Expression<Double>) arg1,
+                    (Expression<Double>) arg2);
+            break;
+          case "div":
+            expr =
+                new DivisionOperator(runtime, (Expression<Double>) arg1,
+                    (Expression<Double>) arg2);
+            break;
+          default:
+            ;// TODO
+        }
+        break;
+      }
+      case "unary_operator": {
+        String opname = obj.getAsJsonArray("name").getAsString();
+        Expression<?> arg1 =
+            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+        if (!Boolean.class.isAssignableFrom(arg1.getType())) {
+          // TODO
+        }
+        switch (opname) {
+          case "not":
+            expr = new NotOperator(runtime, (Expression<Boolean>) arg1);
+            break;
+          default:
+            ;// TODO
+        }
+        break;
+      }
+      case "while": {
+        Expression<?> cond =
+            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
+        if (!Boolean.class.isAssignableFrom(cond.getType())) {
+          ;// TODO
+        }
+        List<Expression<?>> commands = new ArrayList<Expression<?>>();
+        for (JsonElement e : obj.getAsJsonArray("commands")) {
+          commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+        }
+        expr = new WhileCommand(runtime, (Expression<Boolean>) cond, commands);
+        break;
+      }
+      case "if": {
+        Expression<?> cond =
+            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
+        if (!Boolean.class.isAssignableFrom(cond.getType())) {
+          ;// TODO
+        }
+        List<Expression<?>> commands = new ArrayList<Expression<?>>();
+        for (JsonElement e : obj.getAsJsonArray("commands")) {
+          commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+        }
+        expr =
+            new IfElseCommand(runtime, (Expression<Boolean>) cond, commands,
+                null);
+        break;
+      }
+      case "ifelse": {
+        Expression<?> cond =
+            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
+        if (!Boolean.class.isAssignableFrom(cond.getType())) {
+          ;// TODO
+        }
+        List<Expression<?>> commands = new ArrayList<Expression<?>>();
+        List<Expression<?>> commandsElse = new ArrayList<Expression<?>>();
+        for (JsonElement e : obj.getAsJsonArray("commands")) {
+          commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+        }
+        for (JsonElement e : obj.getAsJsonArray("else")) {
+          commandsElse.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+        }
+        expr =
+            new IfElseCommand(runtime, (Expression<Boolean>) cond, commands,
+                commandsElse);
+        break;
+      }
+      default:
+        ;// TODO
     }
 
-    return null;
+    return expr;
   }
 }
