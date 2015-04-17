@@ -220,7 +220,7 @@ function openStream() {
     socket = new WebSocket('ws://localhost:1000');
 
     socket.onopen = function(event) {
-        var request = compile(); // Convert program and put it in here.
+        var request = JSON.stringify(compile()); // Convert program and put it in here.
         socket.send(request);
     }
 
@@ -243,6 +243,17 @@ function openStream() {
         log("Execution complete.");
         socket = null;
     }
+}
+
+function compile() {
+    
+    var request = {main : []};
+    
+    for (var idx = 0; idx < playground.children.length; idx++) {
+        request.main.push(playground.children[idx].compile());
+    }
+    
+    return request;
 }
 
 HTMLDivElement.prototype.compile = function() {
@@ -271,18 +282,62 @@ HTMLDivElement.prototype.compile = function() {
         
         block.name = this.getElementsByTagName("select")[0].value;
         
+        block.class = this.getAttribute("valType");
+        
+    } else if (this.classList.contains("literal")) {
+        block.type = "literal";
+        
+        block.value = this.getValue();
+        
+        block.class = this.getAttribute("valType");
+
+    } else if (this.classList.contains("print")) {
+        block.type = "print";
+        
+        var firstDropZone = this.children[1];
+        block.name = firstDropZone.getElementsByClassName("var")[0].compile();
+        
+    } else if (this.classList.contains("arithmetic")) {
+        block.type = "numeric_operator";
+        
+        var firstDropZone = this.children[1];
+        var operator = this.children[2];
+        var secondDropZone = this.children[3];
+        
+        block.arg1 = firstDropZone.children[1].compile();
+        block.arg2 = secondDropZone.children[1].compile();
+        
+        block.name = operator.value;
+        
+    } else if (this.classList.contains("while")) {
+        block.type = "while";
+        
+        var firstDropZone = this.children[1];
+        var secondDropZone = this.children[2];
+        
+        block.condition = firstDropZone.children[1].compile();
+        
+        block.commands = [];
+        
+        for (var idx = 0; idx < secondDropZone.children.length; idx++) {
+            if (secondDropZone.children[idx].tagName === "DIV") {
+                block.commands.push(secondDropZone.children[idx].compile());
+            }
+        }
+        
+        
+    } else if (this.classList.contains("equality")) {
+        block.type = "comparison";
+        
+        var firstDropZone = this.children[1];
+        var operator = this.children[2];
+        var secondDropZone = this.children[3];
+        
+        block.arg1 = firstDropZone.children[1].compile();
+        block.arg2 = secondDropZone.children[1].compile();
+        
+        block.name = operator.value;
     }
     
     return block;
-}
-
-function compile() {
-    
-    var request = {main : []};
-    
-    for (var idx = 0; idx < playground.children.length; idx++) {
-        code.push(playground.children[idx].compile());
-    }
-    
-    return JSON.stringify(request);
 }
