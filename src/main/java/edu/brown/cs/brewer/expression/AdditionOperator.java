@@ -25,4 +25,9 @@ public class AdditionOperator extends Expression<Double> {
     return (arg1.evaluate() + arg2.evaluate());
   }
 
+  @Override
+  public Class<?> getType() {
+    return Double.class;
+  }
+
 }

@@ -6,7 +6,7 @@ public abstract class Expression<R> {
 
   protected BrewerRuntime runtime;
 
-  public Expression(final BrewerRuntime _runtime){
+  public Expression(final BrewerRuntime _runtime) {
     this.runtime = _runtime;
   }
 
@@ -16,4 +16,6 @@ public abstract class Expression<R> {
    * @return
    */
   public abstract R evaluate();
+
+  public abstract Class<?> getType();
 }

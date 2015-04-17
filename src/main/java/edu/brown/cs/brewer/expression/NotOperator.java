@@ -17,7 +17,8 @@ public class NotOperator extends Expression<Boolean> {
    */
   private Expression<Boolean> arg1;
 
-  public NotOperator(final BrewerRuntime _runtime, final Expression<Boolean> _arg1) {
+  public NotOperator(final BrewerRuntime _runtime,
+      final Expression<Boolean> _arg1) {
     super(_runtime);
     this.arg1 = _arg1;
   }
@@ -27,4 +28,9 @@ public class NotOperator extends Expression<Boolean> {
     return !arg1.evaluate();
   }
 
+
+  @Override
+  public Class<?> getType() {
+    return Boolean.class;
+  }
 }

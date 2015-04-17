@@ -15,7 +15,7 @@ public class GetCommand<T> extends Expression<T> {
   private String varname;
   private Class<T> vartype;
 
-  public GetCommand(BrewerRuntime _runtime, String name, Class<T> _vartype){
+  public GetCommand(BrewerRuntime _runtime, String name, Class<T> _vartype) {
     super(_runtime);
     this.varname = name;
     this.vartype = _vartype;
@@ -27,4 +27,8 @@ public class GetCommand<T> extends Expression<T> {
     return vartype.cast(var.getValue());
   }
 
+  @Override
+  public Class<?> getType() {
+    return vartype;
+  }
 }

@@ -10,9 +10,8 @@ public class IfElseCommand extends Expression<Void> {
   private Expression<Boolean> condition;
   private List<Expression<?>> commandsIfTrue, commandsIfFalse;
 
-  public IfElseCommand(BrewerRuntime _runtime,
-    Expression<Boolean> _condition, List<Expression<?>> _commandsIfTrue,
-    List<Expression<?>> _commandsIfFalse) {
+  public IfElseCommand(BrewerRuntime _runtime, Expression<Boolean> _condition,
+      List<Expression<?>> _commandsIfTrue, List<Expression<?>> _commandsIfFalse) {
     super(_runtime);
     this.condition = _condition;
 
@@ -48,4 +47,9 @@ public class IfElseCommand extends Expression<Void> {
     return null;
   }
 
+
+  @Override
+  public Class<?> getType() {
+    return Void.class;
+  }
 }

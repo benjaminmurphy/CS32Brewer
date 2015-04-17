@@ -6,7 +6,8 @@ public class MultiplicationOperator extends Expression<Double> {
 
   private Expression<Double> arg1, arg2;
 
-  public MultiplicationOperator(BrewerRuntime _runtime, Expression<Double> _arg1, Expression<Double> _arg2) {
+  public MultiplicationOperator(BrewerRuntime _runtime,
+      Expression<Double> _arg1, Expression<Double> _arg2) {
     super(_runtime);
     this.arg1 = _arg1;
     this.arg2 = _arg2;
@@ -17,4 +18,8 @@ public class MultiplicationOperator extends Expression<Double> {
     return (arg1.evaluate() * arg2.evaluate());
   }
 
+  @Override
+  public Class<?> getType() {
+    return Double.class;
+  }
 }

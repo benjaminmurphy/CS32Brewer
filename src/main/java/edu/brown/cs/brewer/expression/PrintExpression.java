@@ -9,8 +9,7 @@ public class PrintExpression extends Expression<Void> {
 
   private String varname;
 
-  public PrintExpression(final BrewerRuntime _runtime,
-      final String _varname) {
+  public PrintExpression(final BrewerRuntime _runtime, final String _varname) {
     super(_runtime);
     this.varname = _varname;
   }
@@ -21,11 +20,15 @@ public class PrintExpression extends Expression<Void> {
     Variable<?> v = runtime.getVariables().get(varname);
     if (v == null) {
       msg += "null";
-    } else{
+    } else {
       msg += v.getValue();
     }
     runtime.addLog(msg, true);
     return null;
   }
 
+  @Override
+  public Class<?> getType() {
+    return Void.class;
+  }
 }

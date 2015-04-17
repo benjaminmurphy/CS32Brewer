@@ -26,4 +26,8 @@ public class WhileCommand extends Expression<Void> {
     return null;
   }
 
+  @Override
+  public Class<?> getType() {
+    return Void.class;
+  }
 }
