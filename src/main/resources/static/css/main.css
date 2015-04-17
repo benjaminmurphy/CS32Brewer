@@ -201,11 +201,26 @@ h3.droppableHeader {
     -ms-user-select: none;
     user-select: none;
 }
-.functionSelect {
+.functionSelect, .typeSelect {
     float:left;
     margin:0.6em;
     margin-right: 2em;
     margin-left: 2em;
+}
+
+.typeSelect {
+    float:left;
+    margin:0.6em;
+    margin-right: 0.2em;
+    margin-left: 1em;
+}
+
+.litVal {
+    float:left;
+    width: 50%;
+    margin:0.6em;
+    margin-right: 0.2em;
+    margin-left: 0.2em;
 }
 
 .droppable {
@@ -224,7 +239,7 @@ h3.droppableHeader {
 }
 
 .var {
-    width: 100px;
+    /*width: 100px;*/
     background-color: lavender;
 }
 
@@ -262,6 +277,10 @@ h3.droppableHeader {
 
 .while {
     background-color: forestgreen;
+}
+
+.literal {
+    background-color: #882233;
 }
 
 

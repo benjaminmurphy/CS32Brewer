@@ -28,17 +28,35 @@
             <table>
 
                 <table>
+                    <tr>
+
+                        <td><div class="item literal" draggable="true" ondragstart="startDrag(event)" id="literal">
+                            <h3 class="itemHeader">Literal</h3>
+                            <select class="typeSelect" name="litType">
+                                <option value="number">number</option>
+                                <option value="string">string</option>
+                                <option value="bool">bool</option>
+                            </select>
+                            <input class="litVal litValNumber" name="litVal" type="number" placeholder="-0.0">
+                        </div></td>
+
+                    </tr>
                      <tr>
 
                         <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
                             <h3 class="itemHeader">Var</h3>
+                            <select class="typeSelect" name="litType">
+                                <option value="number">number</option>
+                                <option value="string">string</option>
+                                <option value="bool">bool</option>
+                            </select>
                             <select class="functionSelect" name="equalityType">
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                </select>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                            </select>
                         </div></td>
 
                     </tr>
