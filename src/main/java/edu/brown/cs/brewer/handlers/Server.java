@@ -47,10 +47,9 @@ public class Server {
 
   // Server Handling
   public void runSparkServer() throws IOException {
-    Spark.externalStaticFileLocation("src/main/resources/static");
+    Spark.externalStaticFileLocation("src/main/resources");
     Spark.setPort(portNum);
     Spark.get("/brewer", new GetHandler(), new FreeMarkerEngine());
-
     Spark.get("/evaluate", new ProgramHandler());
   }
 
@@ -58,7 +57,7 @@ public class Server {
     @Override
     public ModelAndView handle(final Request req, final Response res) {
       Map<String, Object> variables = ImmutableMap.of();
-      return new ModelAndView(variables, "index.ftl");
+      return new ModelAndView(variables, "main.ftl");
     }
   }
 
