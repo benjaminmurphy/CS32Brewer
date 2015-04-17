@@ -188,135 +188,50 @@ public class Parser {
 
   public static Expression<?> parseJSONExpression(JsonObject obj,
       BrewerRuntime runtime) {
-    // String exprType = obj.getAsJsonPrimitive("type").getAsString();
-    // Expression<?> expr;
-    //
-    // switch (exprType) {
-    // case "set": {
-    // String varname = obj.getAsJsonPrimitive("name").getAsString();
-    // Expression<?> value =
-    // parseJSONExpression(obj.getAsJsonObject("value"), runtime);
-    // Class<?> valuetype = value.getType();
-    // if (Double.class.isAssignableFrom(valuetype)) {
-    // expr =
-    // new SetCommand<Double>(runtime, varname,
-    // (Expression<Double>) value, Double.class);
-    // } else if (String.class.isAssignableFrom(valuetype)) {
-    // expr =
-    // new SetCommand<String>(runtime, varname,
-    // (Expression<String>) value, String.class);
-    // } else if (Boolean.class.isAssignableFrom(valuetype)) {
-    // expr =
-    // new SetCommand<Boolean>(runtime, varname,
-    // (Expression<Boolean>) value, Boolean.class);
-    // } else {
-    // // TODO
-    // }
-    // break;
-    // }
-    // case "get": {
-    // String varname = obj.getAsJsonPrimitive("name").getAsString();
-    // epr = new GetCommand<T>(_runtime, name, _vartype)
-    // if (Double.class.isAssignableFrom(valuetype)) {
-    // expr =
-    // new SetCommand<Double>(runtime, varname,
-    // (Expression<Double>) value, Double.class);
-    // } else if (String.class.isAssignableFrom(valuetype)) {
-    // expr =
-    // new SetCommand<String>(runtime, varname,
-    // (Expression<String>) value, String.class);
-    // } else if (Boolean.class.isAssignableFrom(valuetype)) {
-    // expr =
-    // new SetCommand<Boolean>(runtime, varname,
-    // (Expression<Boolean>) value, Boolean.class);
-    // } else {
-    // // TODO
-    // }
-    // break;
-    // }
-    //
-    // case "log":
-    // expr = new PrintExpression(runtime, name);
-    //
-    // case "binary_operator":
-    // switch (name) {
-    //
-    // case "eq":
-    // expr =
-    // new EqualityOperator(runtime, evaluateR(comm.arg1),
-    // evaluateR(comm.arg2));
-    // case "less":
-    // expr =
-    // new LessThanOperator(runtime, evaluateR(comm.arg1),
-    // evaluateR(comm.arg2));
-    // case "greater":
-    // expr =
-    // new GreaterThanOperator(runtime, evaluateR(comm.arg1),
-    // evaluateR(comm.arg2));
-    // }
-    //
-    // case "logic_operator":
-    // switch (name) {
-    //
-    // case "and":
-    // expr =
-    // new AndOperator(runtime,
-    // (Expression<Boolean>) evaluateR(comm.arg1),
-    // (Expression<Boolean>) evaluateR(comm.arg2));
-    // case "or":
-    // expr =
-    // new OrOperator(runtime,
-    // (Expression<Boolean>) evaluateR(comm.arg1),
-    // (Expression<Boolean>) evaluateR(comm.arg2));
-    // }
-    //
-    // case "numeric_operator":
-    // switch (name) {
-    //
-    // case "add":
-    // expr =
-    // new AdditionOperator(runtime,
-    // (Expression<Double>) evaluateR(comm.arg1),
-    // (Expression<Double>) evaluateR(comm.arg2));
-    // case "sub":
-    // expr =
-    // new SubtractionOperator(runtime,
-    // (Expression<Double>) evaluateR(comm.arg1),
-    // (Expression<Double>) evaluateR(comm.arg2));
-    // case "mul":
-    // expr =
-    // new MultiplicationOperator(runtime,
-    // (Expression<Double>) evaluateR(comm.arg1),
-    // (Expression<Double>) evaluateR(comm.arg2));
-    // case "div":
-    // expr =
-    // new DivisionOperator(runtime,
-    // (Expression<Double>) evaluateR(comm.arg1),
-    // (Expression<Double>) evaluateR(comm.arg2));
-    // }
-    //
-    // case "unary_operator":
-    // switch (name) {
-    //
-    // case "not":
-    // expr =
-    // new NotOperator(runtime,
-    // (Expression<Boolean>) evaluateR(comm.arg1));
-    // }
-    //
-    // case "if":
-    // case "ifelse":
-    // expr =
-    // new IfElseCommand(runtime,
-    // (Expression<Boolean>) evaluateR(comm.condition),
-    // parse(comm.commands), parse(comm.elseCommands));
-    //
-    // case "while":
-    // expr =
-    // new WhileCommand(runtime,
-    // (Expression<Boolean>) evaluateR(comm.condition),
-    // parse(comm.commands));
-    // }
+    String exprType = obj.getAsJsonPrimitive("type").getAsString();
+    Expression<?> expr;
+
+    switch (exprType) {
+      case "set": {
+        String varname = obj.getAsJsonPrimitive("name").getAsString();
+        Expression<?> value =
+            parseJSONExpression(obj.getAsJsonObject("value"), runtime);
+        Class<?> valuetype = value.getType();
+        if (Double.class.isAssignableFrom(valuetype)) {
+          expr =
+              new SetCommand<Double>(runtime, varname,
+                  (Expression<Double>) value, Double.class);
+        } else if (String.class.isAssignableFrom(valuetype)) {
+          expr =
+              new SetCommand<String>(runtime, varname,
+                  (Expression<String>) value, String.class);
+        } else if (Boolean.class.isAssignableFrom(valuetype)) {
+          expr =
+              new SetCommand<Boolean>(runtime, varname,
+                  (Expression<Boolean>) value, Boolean.class);
+        } else {
+          // TODO
+        }
+        break;
+      }
+      case "get": {
+        String varname = obj.getAsJsonPrimitive("name").getAsString();
+        String vartype = obj.getAsJsonPrimitive("class").getAsString();
+
+        switch (vartype) {
+          case "string":
+            expr = new GetCommand<String>(runtime, varname, String.class);
+            break;
+          case "number":
+            expr = new GetCommand<Double>(runtime, varname, Double.class);
+            break;
+          case "boolean":
+            expr = new GetCommand<Boolean>(runtime, varname, Boolean.class);
+            break;
+        }
+        break;
+      }
+    }
 
     return null;
   }
