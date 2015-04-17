@@ -12,6 +12,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import edu.brown.cs.brewer.BrewerRuntime;
+
 public class Stream {
   private int port;
   private int clientCount;
@@ -38,7 +40,7 @@ public class Stream {
     }
   }
 
-  private static class Runner extends Thread {
+  public static class Runner extends Thread {
     private Socket client;
     private int num;
     private final Gson gson;
@@ -60,14 +62,8 @@ public class Stream {
 
         while (!client.isClosed()) {
           String input = in.readLine();
-
-          Map<String, Object> information = gson.fromJson(input, Map.class);
-
-          // Parse code in some fashion. Pass parser/runner this object;
-          // "message" should be called for
-          // log or error events, which will then be sent back to the server.
-          // Call "close" on this thread
-          // when the program is complete.
+          
+          BrewerRuntime runtime = Parser.parseJSONProgram(input, this);
         }
 
       } catch (IOException e) {

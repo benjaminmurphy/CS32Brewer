@@ -217,7 +217,7 @@ function log(msg) {
 }
 
 function openStream() {
-    socket = new WebSocket('ws://localhost:1000');
+    socket = new WebSocket('ws://localhost:2567');
 
     socket.onopen = function(event) {
         var request = JSON.stringify(compile()); // Convert program and put it in here.
