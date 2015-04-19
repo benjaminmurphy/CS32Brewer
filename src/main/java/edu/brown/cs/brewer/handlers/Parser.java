@@ -37,53 +37,17 @@ public class Parser {
   }
 
   @SuppressWarnings("unchecked")
-  public static Expression<?> parseJSONExpression(JsonObject obj,
+  private static Expression<?> parseJSONExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String exprType = obj.getAsJsonPrimitive("type").getAsString();
     Expression<?> expr = null;
 
     switch (exprType) {
       case "set": {
-        JsonObject variableObj = obj.getAsJsonObject("name");
-        String varname = variableObj.getAsJsonPrimitive("name").getAsString();
-        Expression<?> value =
-            parseJSONExpression(obj.getAsJsonObject("value"), runtime);
-        Class<?> valuetype = value.getType();
-        if (Double.class.isAssignableFrom(valuetype)) {
-          expr =
-              new SetCommand<Double>(runtime, varname,
-                  (Expression<Double>) value, Double.class);
-        } else if (String.class.isAssignableFrom(valuetype)) {
-          expr =
-              new SetCommand<String>(runtime, varname,
-                  (Expression<String>) value, String.class);
-        } else if (Boolean.class.isAssignableFrom(valuetype)) {
-          expr =
-              new SetCommand<Boolean>(runtime, varname,
-                  (Expression<Boolean>) value, Boolean.class);
-        } else {
-          throw new TypeErrorException(
-              "Variables of this type are not supported.");
-        }
-        break;
+        expr = parseSetExpression(obj, runtime);
       }
       case "get": {
-        JsonObject variableObj = obj.getAsJsonObject("name");
-        String varname = variableObj.getAsJsonPrimitive("name").getAsString();
-        String vartype = variableObj.getAsJsonPrimitive("class").getAsString();
-
-        switch (vartype) {
-          case "string":
-            expr = new GetCommand<String>(runtime, varname, String.class);
-            break;
-          case "number":
-            expr = new GetCommand<Double>(runtime, varname, Double.class);
-            break;
-          case "boolean":
-            expr = new GetCommand<Boolean>(runtime, varname, Boolean.class);
-            break;
-        }
-        break;
+        expr = parseGetExpression(obj, runtime);
       }
       case "print": {
         String varname = obj.getAsJsonPrimitive("name").getAsString();
@@ -324,6 +288,47 @@ public class Parser {
     }
 
     return expr;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static SetCommand<?> parseSetExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    JsonObject variableObj = obj.getAsJsonObject("name");
+    String varname = variableObj.getAsJsonPrimitive("name").getAsString();
+    Expression<?> value =
+        parseJSONExpression(obj.getAsJsonObject("value"), runtime);
+    Class<?> valuetype = value.getType();
+    if (Double.class.isAssignableFrom(valuetype)) {
+      return new SetCommand<Double>(runtime, varname,
+          (Expression<Double>) value, Double.class);
+    } else if (String.class.isAssignableFrom(valuetype)) {
+      return new SetCommand<String>(runtime, varname,
+          (Expression<String>) value, String.class);
+    } else if (Boolean.class.isAssignableFrom(valuetype)) {
+      return new SetCommand<Boolean>(runtime, varname,
+          (Expression<Boolean>) value, Boolean.class);
+    } else {
+      throw new TypeErrorException("Variables of this type are not supported.");
+    }
+  }
+
+  private static GetCommand<?> parseGetExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    JsonObject variableObj = obj.getAsJsonObject("name");
+    String varname = variableObj.getAsJsonPrimitive("name").getAsString();
+    String vartype = variableObj.getAsJsonPrimitive("class").getAsString();
+
+    switch (vartype) {
+      case "string":
+        return new GetCommand<String>(runtime, varname, String.class);
+      case "number":
+        return new GetCommand<Double>(runtime, varname, Double.class);
+      case "boolean":
+        return new GetCommand<Boolean>(runtime, varname, Boolean.class);
+      default:
+        throw new TypeErrorException("Variables of the type \"" + vartype
+            + "\" are not supported.");
+    }
   }
 
   public static class BrewerParseException extends Exception {

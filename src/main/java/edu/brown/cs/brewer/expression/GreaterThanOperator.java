@@ -20,6 +20,6 @@ public class GreaterThanOperator<T extends Comparable<T>> extends
 
   @Override
   public Class<?> getType() {
-    return arg1.getType();
+    return Boolean.class;
   }
 }

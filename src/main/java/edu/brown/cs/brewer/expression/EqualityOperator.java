@@ -19,6 +19,6 @@ public class EqualityOperator extends Expression<Boolean> {
 
   @Override
   public Class<?> getType() {
-    return arg1.getType();
+    return Boolean.class;
   }
 }
