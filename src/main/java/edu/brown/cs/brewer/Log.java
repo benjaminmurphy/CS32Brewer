@@ -1,7 +1,9 @@
 package edu.brown.cs.brewer;
 
 /**
- * Represents a log message, with a String message and a boolean indicating whether or not this message is an error
+ * Represents a log message, with a String message and a boolean indicating
+ * whether or not this message is an error
+ *
  * @author raphaelkargon
  *
  */
@@ -31,5 +33,18 @@ public class Log {
     super();
     this.msg = _msg;
     this.isError = _isError;
+  }
+
+  @Override
+  public String toString() {
+    // TODO Auto-generated method stub
+    String out = "Log: ";
+    if (isError) {
+      out += "ERROR: ";
+    } else {
+      out += "MESSAGE: ";
+    }
+
+    return out + this.msg;
   }
 }

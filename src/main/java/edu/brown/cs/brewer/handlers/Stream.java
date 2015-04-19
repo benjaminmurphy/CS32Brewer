@@ -69,36 +69,39 @@ public class Stream {
         boolean handshakeComplete = false;
         while (!client.isClosed()) {
           String input = in.readLine();
-          
+
           if (input == null) {
             client.close();
           }
-          
+
           if (!handshakeComplete && input.startsWith("Sec-WebSocket-Key")) {
-            
-            String key = input.substring(19) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-            
+
+            String key =
+                input.substring(19) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
             MessageDigest md = null;
             try {
               md = MessageDigest.getInstance("SHA-1");
             } catch (NoSuchAlgorithmException e) {
               e.printStackTrace();
             }
-            
+
             byte[] handshake = md.digest(key.getBytes());
-            
-            String accept = StringUtils.newStringUtf8(Base64.encodeBase64(handshake, false));            
-            
+
+            String accept =
+                StringUtils
+                    .newStringUtf8(Base64.encodeBase64(handshake, false));
+
             outgoing.println("HTTP/1.1 101 Switching Protocols");
             outgoing.println("Upgrade: websocket");
             outgoing.println("Connection: Upgrade");
             outgoing.println("Sec-Websocket-Accept: " + accept);
             outgoing.println();
-            
+
             handshakeComplete = true;
           }
-          
-          //BrewerRuntime runtime = Parser.parseJSONProgram(input, this);
+
+          // BrewerRuntime runtime = Parser.parseJSONProgram(input, this);
         }
 
       } catch (IOException e) {
@@ -122,12 +125,16 @@ public class Stream {
         variables.put("type", "log");
       }
 
-      outgoing.println(gson.toJson(variables.build()));
+      if (outgoing != null) {
+        outgoing.println(gson.toJson(variables.build()));
+      }
     }
 
     public void close() {
       try {
-        client.close();
+        if (client != null) {
+          client.close();
+        }
       } catch (IOException e) {
         System.out.println("ERROR: Client connection couldn't be closed.");
       }

@@ -33,7 +33,7 @@ public class BrewerRuntime implements Runnable {
       this.program = newprog;
     }
   }
-  
+
   public void setRunner(Runner runner) {
     this.thread = runner;
   }
@@ -48,7 +48,9 @@ public class BrewerRuntime implements Runnable {
           break;
         }
       }
-      thread.close();
+      if (thread != null) {
+        thread.close();
+      }
     }
   }
 
@@ -63,7 +65,9 @@ public class BrewerRuntime implements Runnable {
   public void addLog(String msg, boolean isError) {
     Log l = new Log(msg, isError);
     logs.add(l);
-    thread.message(msg, isError);
+    if (thread != null) {
+      thread.message(msg, isError);
+    }
   }
 
   public void kill() {

@@ -19,11 +19,7 @@ public class Parser {
     Gson GSON = new Gson();// TODO make this static
     JsonParser parser = new JsonParser();
 
-    System.out.println(json);
-
     JsonObject mainprog = parser.parse(json).getAsJsonObject();
-
-    System.out.println(mainprog);
 
     JsonArray mainprogArr = mainprog.getAsJsonArray("main");
 
@@ -46,7 +42,6 @@ public class Parser {
 
     switch (exprType) {
       case "set": {
-        // String varname = obj.getAsJsonPrimitive("name").getAsString();
         JsonObject variableObj = obj.getAsJsonObject("name");
         String varname = variableObj.getAsJsonPrimitive("name").getAsString();
         Expression<?> value =
@@ -70,8 +65,9 @@ public class Parser {
         break;
       }
       case "get": {
-        String varname = obj.getAsJsonPrimitive("name").getAsString();
-        String vartype = obj.getAsJsonPrimitive("class").getAsString();
+        JsonObject variableObj = obj.getAsJsonObject("name");
+        String varname = variableObj.getAsJsonPrimitive("name").getAsString();
+        String vartype = variableObj.getAsJsonPrimitive("class").getAsString();
 
         switch (vartype) {
           case "string":
@@ -105,15 +101,17 @@ public class Parser {
           case "boolean":
             expr = new Literal<Boolean>(runtime, valuePrim.getAsBoolean());
             break;
+          default:
+            ;// TODO
         }
         break;
       }
       case "comparison": {
-        String opname = obj.getAsJsonArray("name").getAsString();
+        String opname = obj.getAsJsonPrimitive("name").getAsString();
         Expression<?> arg1 =
             parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
         Expression<?> arg2 =
-            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+            parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
         switch (opname) {
           case "eq":
             expr = new EqualityOperator(runtime, arg1, arg2);
@@ -164,7 +162,7 @@ public class Parser {
         break;
       }
       case "logic_operator": {
-        String opname = obj.getAsJsonArray("name").getAsString();
+        String opname = obj.getAsJsonPrimitive("name").getAsString();
         Expression<?> arg1 =
             parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
         Expression<?> arg2 =
@@ -190,7 +188,7 @@ public class Parser {
         }
       }
       case "numeric_operator": {
-        String opname = obj.getAsJsonArray("name").getAsString();
+        String opname = obj.getAsJsonPrimitive("name").getAsString();
         Expression<?> arg1 =
             parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
         Expression<?> arg2 =
@@ -227,7 +225,7 @@ public class Parser {
         break;
       }
       case "unary_operator": {
-        String opname = obj.getAsJsonArray("name").getAsString();
+        String opname = obj.getAsJsonPrimitive("name").getAsString();
         Expression<?> arg1 =
             parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
         if (!Boolean.class.isAssignableFrom(arg1.getType())) {

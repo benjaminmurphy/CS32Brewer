@@ -23,7 +23,7 @@ public class PrintExpression extends Expression<Void> {
     } else {
       msg += v.getValue();
     }
-    runtime.addLog(msg, true);
+    runtime.addLog(msg, false);
     return null;
   }
 
