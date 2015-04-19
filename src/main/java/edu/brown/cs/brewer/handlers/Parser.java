@@ -55,176 +55,19 @@ public class Parser {
         break;
       }
       case "literal": {
-        String vartype = obj.getAsJsonPrimitive("class").getAsString();
-        JsonPrimitive valuePrim = obj.getAsJsonPrimitive("value");
-
-        switch (vartype) {
-          case "string":
-            expr = new Literal<String>(runtime, valuePrim.getAsString());
-            break;
-          case "number":
-            expr = new Literal<Double>(runtime, valuePrim.getAsDouble());
-            break;
-          case "boolean":
-            expr = new Literal<Boolean>(runtime, valuePrim.getAsBoolean());
-            break;
-          default:
-            new TypeErrorException("Literals of the type \"" + vartype + "\"");
-        }
-        break;
+        expr = parseLiteralExpression(obj, runtime);
       }
       case "comparison": {
-        String opname = obj.getAsJsonPrimitive("name").getAsString();
-        Expression<?> arg1 =
-            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
-        Expression<?> arg2 =
-            parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
-        switch (opname) {
-          case "eq":
-            expr = new EqualityOperator(runtime, arg1, arg2);
-            break;
-          case "less": {
-            Class<?> type1 = arg1.getType();
-            Class<?> type2 = arg2.getType();
-            if (!type1.isAssignableFrom(type2)
-                || !type2.isAssignableFrom(type1)) {
-              throw new TypeErrorException("The types \"(" + type1 + ", "
-                  + type2 + "\" cannot be compared.");
-            }
-            if (Double.class.isAssignableFrom(type1)) {
-              expr =
-                  new LessThanOperator<Double>(runtime,
-                      (Expression<Double>) arg1, (Expression<Double>) arg2);
-            } else if (String.class.isAssignableFrom(type1)) {
-              expr =
-                  new LessThanOperator<String>(runtime,
-                      (Expression<String>) arg1, (Expression<String>) arg2);
-            } else {
-              throw new TypeErrorException("Comparisons of the type \"("
-                  + type1 + ", " + type2 + "\" are not supported.");
-            }
-            break;
-          }
-          case "greater": {
-            Class<?> type1 = arg1.getType();
-            Class<?> type2 = arg2.getType();
-            if (!type1.isAssignableFrom(type2)
-                || !type2.isAssignableFrom(type1)) {
-              throw new TypeErrorException("The types \"(" + type1 + ", "
-                  + type2 + "\" cannot be compared.");
-            }
-            if (Double.class.isAssignableFrom(type1)) {
-              expr =
-                  new GreaterThanOperator<Double>(runtime,
-                      (Expression<Double>) arg1, (Expression<Double>) arg2);
-            } else if (String.class.isAssignableFrom(type1)) {
-              expr =
-                  new GreaterThanOperator<String>(runtime,
-                      (Expression<String>) arg1, (Expression<String>) arg2);
-            } else {
-              throw new TypeErrorException("Comparisons of the type \"("
-                  + type1 + ", " + type2 + "\" are not supported.");
-            }
-            break;
-          }
-          default:
-            throw new SyntaxErrorException("Unrecognized comparison of type \""
-                + opname + "\"");
-        }
-        break;
+        expr = parseComparisonExpression(obj, runtime);
       }
       case "logic_operator": {
-        String opname = obj.getAsJsonPrimitive("name").getAsString();
-        Expression<?> arg1 =
-            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
-        Class<?> arg1type = arg1.getType();
-        Expression<?> arg2 =
-            parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
-        Class<?> arg2type = arg2.getType();
-        if (!Boolean.class.isAssignableFrom(arg1type)
-            || !Boolean.class.isAssignableFrom(arg2type)) {
-          throw new TypeErrorException("Either argument 1 of type \""
-              + arg1type + "\" or argument 2 of type \"" + arg2type
-              + "\" of logic_operator \"" + opname
-              + "\"is not of type Boolean.");
-        }
-
-        switch (opname) {
-          case "and":
-            expr =
-                new AndOperator(runtime, (Expression<Boolean>) arg1,
-                    (Expression<Boolean>) arg2);
-            break;
-          case "or":
-            expr =
-                new OrOperator(runtime, (Expression<Boolean>) arg1,
-                    (Expression<Boolean>) arg2);
-            break;
-          default:
-            throw new SyntaxErrorException("Unrecognized logic_operator");
-        }
+        expr = parseLogicalExpression(obj, runtime);
       }
       case "numeric_operator": {
-        String opname = obj.getAsJsonPrimitive("name").getAsString();
-        Expression<?> arg1 =
-            parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
-        Class<?> arg1type = arg1.getType();
-        Expression<?> arg2 =
-            parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
-        Class<?> arg2type = arg2.getType();
-        if (!Double.class.isAssignableFrom(arg1type)
-            || !Double.class.isAssignableFrom(arg2type)) {
-          throw new TypeErrorException("Either argument 1 of type \""
-              + arg1type + "\" or argument 2 of type \"" + arg2type
-              + "\" of numeric_operator of type \"" + opname
-              + "\" is not of type Double.");
-        }
-
-        switch (opname) {
-          case "add":
-            expr =
-                new AdditionOperator(runtime, (Expression<Double>) arg1,
-                    (Expression<Double>) arg2);
-            break;
-          case "sub":
-            expr =
-                new SubtractionOperator(runtime, (Expression<Double>) arg1,
-                    (Expression<Double>) arg2);
-            break;
-          case "mul":
-            expr =
-                new MultiplicationOperator(runtime, (Expression<Double>) arg1,
-                    (Expression<Double>) arg2);
-            break;
-          case "div":
-            expr =
-                new DivisionOperator(runtime, (Expression<Double>) arg1,
-                    (Expression<Double>) arg2);
-            break;
-          default:
-            throw new SyntaxErrorException("Unrecognized numeric_operator \""
-                + opname + "\".");
-        }
-        break;
+        expr = parseNumericalExpression(obj, runtime);
       }
       case "unary_operator": {
-        String opname = obj.getAsJsonPrimitive("name").getAsString();
-        Expression<?> arg1 =
-            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
-        Class<?> argtype = arg1.getType();
-        if (!Boolean.class.isAssignableFrom(argtype)) {
-          throw new TypeErrorException("Condition for " + opname
-              + " operator is not Boolean, its type is " + argtype);
-        }
-        switch (opname) {
-          case "not":
-            expr = new NotOperator(runtime, (Expression<Boolean>) arg1);
-            break;
-          default:
-            throw new SyntaxErrorException("Unrecognized unary_operator \""
-                + opname + "\".");
-        }
-        break;
+        expr = parseUnaryExpression(obj, runtime);
       }
       case "while": {
         Expression<?> cond =
@@ -328,6 +171,157 @@ public class Parser {
       default:
         throw new TypeErrorException("Variables of the type \"" + vartype
             + "\" are not supported.");
+    }
+  }
+
+  private static Literal<?> parseLiteralExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    String vartype = obj.getAsJsonPrimitive("class").getAsString();
+    JsonPrimitive valuePrim = obj.getAsJsonPrimitive("value");
+
+    switch (vartype) {
+      case "string":
+        return new Literal<String>(runtime, valuePrim.getAsString());
+      case "number":
+        return new Literal<Double>(runtime, valuePrim.getAsDouble());
+      case "boolean":
+        return new Literal<Boolean>(runtime, valuePrim.getAsBoolean());
+      default:
+        throw new TypeErrorException("Literals of the type \"" + vartype + "\"");
+    }
+  }
+
+  private static Expression<Boolean> parseComparisonExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    String opname = obj.getAsJsonPrimitive("name").getAsString();
+    Expression<?> arg1 =
+        parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+    Expression<?> arg2 =
+        parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    switch (opname) {
+      case "eq":
+        return new EqualityOperator(runtime, arg1, arg2);
+      case "less": {
+        Class<?> type1 = arg1.getType();
+        Class<?> type2 = arg2.getType();
+        if (!type1.isAssignableFrom(type2) || !type2.isAssignableFrom(type1)) {
+          throw new TypeErrorException("The types \"(" + type1 + ", " + type2
+              + "\" cannot be compared.");
+        }
+        if (Double.class.isAssignableFrom(type1)) {
+          return new LessThanOperator<Double>(runtime,
+              (Expression<Double>) arg1, (Expression<Double>) arg2);
+        } else if (String.class.isAssignableFrom(type1)) {
+          return new LessThanOperator<String>(runtime,
+              (Expression<String>) arg1, (Expression<String>) arg2);
+        } else {
+          throw new TypeErrorException("Comparisons of the type \"(" + type1
+              + ", " + type2 + "\" are not supported.");
+        }
+      }
+      case "greater": {
+        Class<?> type1 = arg1.getType();
+        Class<?> type2 = arg2.getType();
+        if (!type1.isAssignableFrom(type2) || !type2.isAssignableFrom(type1)) {
+          throw new TypeErrorException("The types \"(" + type1 + ", " + type2
+              + "\" cannot be compared.");
+        }
+        if (Double.class.isAssignableFrom(type1)) {
+          return new GreaterThanOperator<Double>(runtime,
+              (Expression<Double>) arg1, (Expression<Double>) arg2);
+        } else if (String.class.isAssignableFrom(type1)) {
+          return new GreaterThanOperator<String>(runtime,
+              (Expression<String>) arg1, (Expression<String>) arg2);
+        } else {
+          throw new TypeErrorException("Comparisons of the type \"(" + type1
+              + ", " + type2 + "\" are not supported.");
+        }
+      }
+      default:
+        throw new SyntaxErrorException("Unrecognized comparison of type \""
+            + opname + "\"");
+    }
+  }
+
+  private static Expression<Boolean> parseLogicalExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    String opname = obj.getAsJsonPrimitive("name").getAsString();
+    Expression<?> arg1 =
+        parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+    Class<?> arg1type = arg1.getType();
+    Expression<?> arg2 =
+        parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    Class<?> arg2type = arg2.getType();
+    if (!Boolean.class.isAssignableFrom(arg1type)
+        || !Boolean.class.isAssignableFrom(arg2type)) {
+      throw new TypeErrorException("Either argument 1 of type \"" + arg1type
+          + "\" or argument 2 of type \"" + arg2type
+          + "\" of logic_operator \"" + opname + "\"is not of type Boolean.");
+    }
+    switch (opname) {
+      case "and":
+        return new AndOperator(runtime, (Expression<Boolean>) arg1,
+            (Expression<Boolean>) arg2);
+      case "or":
+        return new OrOperator(runtime, (Expression<Boolean>) arg1,
+            (Expression<Boolean>) arg2);
+      default:
+        throw new SyntaxErrorException("Unrecognized logic_operator");
+    }
+  }
+
+  private static Expression<Double> parseNumericalExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    String opname = obj.getAsJsonPrimitive("name").getAsString();
+    Expression<?> arg1 =
+        parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+    Class<?> arg1type = arg1.getType();
+    Expression<?> arg2 =
+        parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    Class<?> arg2type = arg2.getType();
+    if (!Double.class.isAssignableFrom(arg1type)
+        || !Double.class.isAssignableFrom(arg2type)) {
+      throw new TypeErrorException("Either argument 1 of type \"" + arg1type
+          + "\" or argument 2 of type \"" + arg2type
+          + "\" of numeric_operator of type \"" + opname
+          + "\" is not of type Double.");
+    }
+
+    switch (opname) {
+      case "add":
+        return new AdditionOperator(runtime, (Expression<Double>) arg1,
+            (Expression<Double>) arg2);
+      case "sub":
+        return new SubtractionOperator(runtime, (Expression<Double>) arg1,
+            (Expression<Double>) arg2);
+      case "mul":
+        return new MultiplicationOperator(runtime, (Expression<Double>) arg1,
+            (Expression<Double>) arg2);
+      case "div":
+        return new DivisionOperator(runtime, (Expression<Double>) arg1,
+            (Expression<Double>) arg2);
+      default:
+        throw new SyntaxErrorException("Unrecognized numeric_operator \""
+            + opname + "\".");
+    }
+  }
+
+  private static Expression<Boolean> parseUnaryExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    String opname = obj.getAsJsonPrimitive("name").getAsString();
+    Expression<?> arg1 =
+        parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
+    Class<?> argtype = arg1.getType();
+    if (!Boolean.class.isAssignableFrom(argtype)) {
+      throw new TypeErrorException("Argument for " + opname
+          + " operator is not Boolean, its type is " + argtype);
+    }
+    switch (opname) {
+      case "not":
+        return new NotOperator(runtime, (Expression<Boolean>) arg1);
+      default:
+        throw new SyntaxErrorException("Unrecognized unary_operator \""
+            + opname + "\".");
     }
   }
 
