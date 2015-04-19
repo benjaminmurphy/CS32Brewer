@@ -40,97 +40,45 @@ public class Parser {
   private static Expression<?> parseJSONExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String exprType = obj.getAsJsonPrimitive("type").getAsString();
-    Expression<?> expr = null;
 
     switch (exprType) {
       case "set": {
-        expr = parseSetExpression(obj, runtime);
+        return parseSetExpression(obj, runtime);
       }
       case "get": {
-        expr = parseGetExpression(obj, runtime);
+        return parseGetExpression(obj, runtime);
       }
       case "print": {
-        String varname = obj.getAsJsonPrimitive("name").getAsString();
-        expr = new PrintExpression(runtime, varname);
-        break;
+        return parsePrintExpression(obj, runtime);
       }
       case "literal": {
-        expr = parseLiteralExpression(obj, runtime);
+        return parseLiteralExpression(obj, runtime);
       }
       case "comparison": {
-        expr = parseComparisonExpression(obj, runtime);
+        return parseComparisonExpression(obj, runtime);
       }
       case "logic_operator": {
-        expr = parseLogicalExpression(obj, runtime);
+        return parseLogicalExpression(obj, runtime);
       }
       case "numeric_operator": {
-        expr = parseNumericalExpression(obj, runtime);
+        return parseNumericalExpression(obj, runtime);
       }
       case "unary_operator": {
-        expr = parseUnaryExpression(obj, runtime);
+        return parseUnaryExpression(obj, runtime);
       }
       case "while": {
-        Expression<?> cond =
-            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
-        Class<?> condtype = cond.getType();
-        if (!Boolean.class.isAssignableFrom(condtype)) {
-          throw new TypeErrorException(
-              "Condition for while statement is not Boolean, its type is "
-                  + condtype);
-        }
-        List<Expression<?>> commands = new ArrayList<Expression<?>>();
-        for (JsonElement e : obj.getAsJsonArray("commands")) {
-          commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
-        }
-        expr = new WhileCommand(runtime, (Expression<Boolean>) cond, commands);
-        break;
+        return parseWhileExpression(obj, runtime);
       }
       case "if": {
-        Expression<?> cond =
-            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
-        Class<?> condtype = cond.getType();
-        if (!Boolean.class.isAssignableFrom(condtype)) {
-          throw new TypeErrorException(
-              "Condition for if statement is not Boolean, its type is "
-                  + condtype);
-        }
-        List<Expression<?>> commands = new ArrayList<Expression<?>>();
-        for (JsonElement e : obj.getAsJsonArray("commands")) {
-          commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
-        }
-        expr =
-            new IfElseCommand(runtime, (Expression<Boolean>) cond, commands,
-                null);
-        break;
+        return parseIfElseExpression(obj, runtime);
       }
       case "ifelse": {
-        Expression<?> cond =
-            parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
-        Class<?> condtype = cond.getType();
-        if (!Boolean.class.isAssignableFrom(condtype)) {
-          throw new TypeErrorException(
-              "Condition for ifelse statement is not Boolean, its type is "
-                  + condtype);
-        }
-        List<Expression<?>> commands = new ArrayList<Expression<?>>();
-        List<Expression<?>> commandsElse = new ArrayList<Expression<?>>();
-        for (JsonElement e : obj.getAsJsonArray("commands")) {
-          commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
-        }
-        for (JsonElement e : obj.getAsJsonArray("else")) {
-          commandsElse.add(parseJSONExpression(e.getAsJsonObject(), runtime));
-        }
-        expr =
-            new IfElseCommand(runtime, (Expression<Boolean>) cond, commands,
-                commandsElse);
-        break;
+        return parseIfElseExpression(obj, runtime);
       }
       default:
         throw new SyntaxErrorException("Expression type \"" + exprType
             + "\" is not recognized.");
     }
-
-    return expr;
   }
 
   @SuppressWarnings("unchecked")
@@ -172,6 +120,12 @@ public class Parser {
         throw new TypeErrorException("Variables of the type \"" + vartype
             + "\" are not supported.");
     }
+  }
+
+  private static PrintExpression parsePrintExpression(JsonObject obj,
+      BrewerRuntime runtime) {
+    String varname = obj.getAsJsonPrimitive("name").getAsString();
+    return new PrintExpression(runtime, varname);
   }
 
   private static Literal<?> parseLiteralExpression(JsonObject obj,
@@ -323,6 +277,47 @@ public class Parser {
         throw new SyntaxErrorException("Unrecognized unary_operator \""
             + opname + "\".");
     }
+  }
+
+  private static WhileCommand parseWhileExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    Expression<?> cond =
+        parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
+    Class<?> condtype = cond.getType();
+    if (!Boolean.class.isAssignableFrom(condtype)) {
+      throw new TypeErrorException(
+          "Condition for while statement is not Boolean, its type is "
+              + condtype);
+    }
+    List<Expression<?>> commands = new ArrayList<Expression<?>>();
+    for (JsonElement e : obj.getAsJsonArray("commands")) {
+      commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+    }
+    return new WhileCommand(runtime, (Expression<Boolean>) cond, commands);
+  }
+
+  private static IfElseCommand parseIfElseExpression(JsonObject obj,
+      BrewerRuntime runtime) throws BrewerParseException {
+    Expression<?> cond =
+        parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
+    Class<?> condtype = cond.getType();
+    if (!Boolean.class.isAssignableFrom(condtype)) {
+      throw new TypeErrorException(
+          "Condition for ifelse statement is not Boolean, its type is "
+              + condtype);
+    }
+    List<Expression<?>> commands = new ArrayList<Expression<?>>();
+    List<Expression<?>> commandsElse = new ArrayList<Expression<?>>();
+    for (JsonElement e : obj.getAsJsonArray("commands")) {
+      commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+    }
+    if (obj.has("else")) {
+      for (JsonElement e : obj.getAsJsonArray("else")) {
+        commandsElse.add(parseJSONExpression(e.getAsJsonObject(), runtime));
+      }
+    }
+    return new IfElseCommand(runtime, (Expression<Boolean>) cond, commands,
+        commandsElse);
   }
 
   public static class BrewerParseException extends Exception {
