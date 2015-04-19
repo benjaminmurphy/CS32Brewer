@@ -10,22 +10,21 @@ import edu.brown.cs.brewer.BrewerRuntime;
  * @author raphaelkargon
  *
  */
-public class NotOperator extends Expression<Boolean> {
+public class NotOperator extends Expression {
 
   /**
    * The expression passed to Not
    */
-  private Expression<Boolean> arg1;
+  private Expression arg1;
 
-  public NotOperator(final BrewerRuntime _runtime,
-      final Expression<Boolean> _arg1) {
+  public NotOperator(final BrewerRuntime _runtime, final Expression _arg1) {
     super(_runtime);
     this.arg1 = _arg1;
   }
 
   @Override
   public Boolean evaluate() {
-    return !arg1.evaluate();
+    return !(Boolean) arg1.evaluate();
   }
 
 

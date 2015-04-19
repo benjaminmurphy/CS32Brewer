@@ -2,12 +2,12 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 
-public class MultiplicationOperator extends Expression<Double> {
+public class MultiplicationOperator extends Expression {
 
-  private Expression<Double> arg1, arg2;
+  private Expression arg1, arg2;
 
-  public MultiplicationOperator(BrewerRuntime _runtime,
-      Expression<Double> _arg1, Expression<Double> _arg2) {
+  public MultiplicationOperator(BrewerRuntime _runtime, Expression _arg1,
+      Expression _arg2) {
     super(_runtime);
     this.arg1 = _arg1;
     this.arg2 = _arg2;
@@ -15,7 +15,7 @@ public class MultiplicationOperator extends Expression<Double> {
 
   @Override
   public Double evaluate() {
-    return (arg1.evaluate() * arg2.evaluate());
+    return ((Double) arg1.evaluate() * (Double) arg2.evaluate());
   }
 
   @Override

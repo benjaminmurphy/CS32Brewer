@@ -11,19 +11,19 @@ import edu.brown.cs.brewer.Variable;
  * @author raphaelkargon
  *
  */
-public class GetCommand<T> extends Expression<T> {
+public class GetCommand extends Expression {
   private String varname;
-  private Class<T> vartype;
+  private Class<?> vartype;
 
-  public GetCommand(BrewerRuntime _runtime, String name, Class<T> _vartype) {
+  public GetCommand(BrewerRuntime _runtime, String name, Class<?> _vartype) {
     super(_runtime);
     this.varname = name;
     this.vartype = _vartype;
   }
 
   @Override
-  public T evaluate() {
-    Variable<?> var = runtime.getVariables().get(varname);
+  public Object evaluate() {
+    Variable var = runtime.getVariables().get(varname);
     return vartype.cast(var.getValue());
   }
 

@@ -26,7 +26,7 @@ public class Parser {
 
     BrewerRuntime runtime = new BrewerRuntime();
 
-    List<Expression<?>> programCommands = new ArrayList<Expression<?>>();
+    List<Expression> programCommands = new ArrayList<Expression>();
     for (JsonElement e : mainprogArr) {
       JsonObject expressionObj = e.getAsJsonObject();
       programCommands.add(parseJSONExpression(expressionObj, runtime));
@@ -36,8 +36,7 @@ public class Parser {
     return runtime;
   }
 
-  @SuppressWarnings("unchecked")
-  private static Expression<?> parseJSONExpression(JsonObject obj,
+  private static Expression parseJSONExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String exprType = obj.getAsJsonPrimitive("type").getAsString();
 
@@ -81,45 +80,30 @@ public class Parser {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  private static SetCommand<?> parseSetExpression(JsonObject obj,
+  private static SetCommand parseSetExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     JsonObject variableObj = obj.getAsJsonObject("name");
     String varname = variableObj.getAsJsonPrimitive("name").getAsString();
-    Expression<?> value =
+    Class<?> vartype =
+        parseTypeFromString(variableObj.getAsJsonPrimitive("class")
+            .getAsString());
+    Expression value =
         parseJSONExpression(obj.getAsJsonObject("value"), runtime);
-    Class<?> valuetype = value.getType();
-    if (Double.class.isAssignableFrom(valuetype)) {
-      return new SetCommand<Double>(runtime, varname,
-          (Expression<Double>) value, Double.class);
-    } else if (String.class.isAssignableFrom(valuetype)) {
-      return new SetCommand<String>(runtime, varname,
-          (Expression<String>) value, String.class);
-    } else if (Boolean.class.isAssignableFrom(valuetype)) {
-      return new SetCommand<Boolean>(runtime, varname,
-          (Expression<Boolean>) value, Boolean.class);
-    } else {
-      throw new TypeErrorException("Variables of this type are not supported.");
+    Class<?> valtype = value.getType();
+    if (!vartype.isAssignableFrom(valtype)) {
+      throw new TypeErrorException("Cannot assign expression of type \""
+          + valtype + "\" to variable of type \"" + vartype + "\".");
     }
+    return new SetCommand(runtime, varname, value, vartype);
   }
 
-  private static GetCommand<?> parseGetExpression(JsonObject obj,
+  private static GetCommand parseGetExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     JsonObject variableObj = obj.getAsJsonObject("name");
     String varname = variableObj.getAsJsonPrimitive("name").getAsString();
-    String vartype = variableObj.getAsJsonPrimitive("class").getAsString();
-
-    switch (vartype) {
-      case "string":
-        return new GetCommand<String>(runtime, varname, String.class);
-      case "number":
-        return new GetCommand<Double>(runtime, varname, Double.class);
-      case "boolean":
-        return new GetCommand<Boolean>(runtime, varname, Boolean.class);
-      default:
-        throw new TypeErrorException("Variables of the type \"" + vartype
-            + "\" are not supported.");
-    }
+    String vartypename = variableObj.getAsJsonPrimitive("class").getAsString();
+    Class<?> vartype = parseTypeFromString(vartypename);
+    return new GetCommand(runtime, varname, vartype);
   }
 
   private static PrintExpression parsePrintExpression(JsonObject obj,
@@ -128,83 +112,54 @@ public class Parser {
     return new PrintExpression(runtime, varname);
   }
 
-  private static Literal<?> parseLiteralExpression(JsonObject obj,
+  private static Literal parseLiteralExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
-    String vartype = obj.getAsJsonPrimitive("class").getAsString();
+    String vartypename = obj.getAsJsonPrimitive("class").getAsString();
     JsonPrimitive valuePrim = obj.getAsJsonPrimitive("value");
 
-    switch (vartype) {
+    switch (vartypename) {
       case "string":
-        return new Literal<String>(runtime, valuePrim.getAsString());
+        return new Literal(runtime, valuePrim.getAsString(), String.class);
       case "number":
-        return new Literal<Double>(runtime, valuePrim.getAsDouble());
+        return new Literal(runtime, valuePrim.getAsDouble(), Double.class);
       case "boolean":
-        return new Literal<Boolean>(runtime, valuePrim.getAsBoolean());
+        return new Literal(runtime, valuePrim.getAsBoolean(), Boolean.class);
       default:
-        throw new TypeErrorException("Literals of the type \"" + vartype + "\"");
+        throw new TypeErrorException("Literals of the type \"" + vartypename
+            + "\" are unsupported.");
     }
   }
 
-  private static Expression<Boolean> parseComparisonExpression(JsonObject obj,
+  private static Expression parseComparisonExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = obj.getAsJsonPrimitive("name").getAsString();
-    Expression<?> arg1 =
-        parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
-    Expression<?> arg2 =
-        parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    Expression arg1 = parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+    Expression arg2 = parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    Class<?> type1 = arg1.getType();
+    Class<?> type2 = arg2.getType();
+    if (!type1.isAssignableFrom(type2) || !type2.isAssignableFrom(type1)) {
+      throw new TypeErrorException("The types \"(" + type1 + ", " + type2
+          + "\" cannot be compared.");
+    }
     switch (opname) {
       case "eq":
         return new EqualityOperator(runtime, arg1, arg2);
-      case "less": {
-        Class<?> type1 = arg1.getType();
-        Class<?> type2 = arg2.getType();
-        if (!type1.isAssignableFrom(type2) || !type2.isAssignableFrom(type1)) {
-          throw new TypeErrorException("The types \"(" + type1 + ", " + type2
-              + "\" cannot be compared.");
-        }
-        if (Double.class.isAssignableFrom(type1)) {
-          return new LessThanOperator<Double>(runtime,
-              (Expression<Double>) arg1, (Expression<Double>) arg2);
-        } else if (String.class.isAssignableFrom(type1)) {
-          return new LessThanOperator<String>(runtime,
-              (Expression<String>) arg1, (Expression<String>) arg2);
-        } else {
-          throw new TypeErrorException("Comparisons of the type \"(" + type1
-              + ", " + type2 + "\" are not supported.");
-        }
-      }
-      case "greater": {
-        Class<?> type1 = arg1.getType();
-        Class<?> type2 = arg2.getType();
-        if (!type1.isAssignableFrom(type2) || !type2.isAssignableFrom(type1)) {
-          throw new TypeErrorException("The types \"(" + type1 + ", " + type2
-              + "\" cannot be compared.");
-        }
-        if (Double.class.isAssignableFrom(type1)) {
-          return new GreaterThanOperator<Double>(runtime,
-              (Expression<Double>) arg1, (Expression<Double>) arg2);
-        } else if (String.class.isAssignableFrom(type1)) {
-          return new GreaterThanOperator<String>(runtime,
-              (Expression<String>) arg1, (Expression<String>) arg2);
-        } else {
-          throw new TypeErrorException("Comparisons of the type \"(" + type1
-              + ", " + type2 + "\" are not supported.");
-        }
-      }
+      case "less":
+        return new LessThanOperator(runtime, arg1, arg2);
+      case "greater":
+        return new GreaterThanOperator(runtime, arg1, arg2);
       default:
         throw new SyntaxErrorException("Unrecognized comparison of type \""
             + opname + "\"");
     }
   }
 
-  private static Expression<Boolean> parseLogicalExpression(JsonObject obj,
+  private static Expression parseLogicalExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = obj.getAsJsonPrimitive("name").getAsString();
-    Expression<?> arg1 =
-        parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+    Expression arg1 = parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
     Class<?> arg1type = arg1.getType();
-    Expression<?> arg2 =
-        parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    Expression arg2 = parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
     Class<?> arg2type = arg2.getType();
     if (!Boolean.class.isAssignableFrom(arg1type)
         || !Boolean.class.isAssignableFrom(arg2type)) {
@@ -214,24 +169,20 @@ public class Parser {
     }
     switch (opname) {
       case "and":
-        return new AndOperator(runtime, (Expression<Boolean>) arg1,
-            (Expression<Boolean>) arg2);
+        return new AndOperator(runtime, arg1, arg2);
       case "or":
-        return new OrOperator(runtime, (Expression<Boolean>) arg1,
-            (Expression<Boolean>) arg2);
+        return new OrOperator(runtime, arg1, arg2);
       default:
         throw new SyntaxErrorException("Unrecognized logic_operator");
     }
   }
 
-  private static Expression<Double> parseNumericalExpression(JsonObject obj,
+  private static Expression parseNumericalExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = obj.getAsJsonPrimitive("name").getAsString();
-    Expression<?> arg1 =
-        parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
+    Expression arg1 = parseJSONExpression(obj.getAsJsonObject("arg1"), runtime);
     Class<?> arg1type = arg1.getType();
-    Expression<?> arg2 =
-        parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
+    Expression arg2 = parseJSONExpression(obj.getAsJsonObject("arg2"), runtime);
     Class<?> arg2type = arg2.getType();
     if (!Double.class.isAssignableFrom(arg1type)
         || !Double.class.isAssignableFrom(arg2type)) {
@@ -243,27 +194,23 @@ public class Parser {
 
     switch (opname) {
       case "add":
-        return new AdditionOperator(runtime, (Expression<Double>) arg1,
-            (Expression<Double>) arg2);
+        return new AdditionOperator(runtime, arg1, arg2);
       case "sub":
-        return new SubtractionOperator(runtime, (Expression<Double>) arg1,
-            (Expression<Double>) arg2);
+        return new SubtractionOperator(runtime, arg1, arg2);
       case "mul":
-        return new MultiplicationOperator(runtime, (Expression<Double>) arg1,
-            (Expression<Double>) arg2);
+        return new MultiplicationOperator(runtime, arg1, arg2);
       case "div":
-        return new DivisionOperator(runtime, (Expression<Double>) arg1,
-            (Expression<Double>) arg2);
+        return new DivisionOperator(runtime, arg1, arg2);
       default:
         throw new SyntaxErrorException("Unrecognized numeric_operator \""
             + opname + "\".");
     }
   }
 
-  private static Expression<Boolean> parseUnaryExpression(JsonObject obj,
+  private static Expression parseUnaryExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = obj.getAsJsonPrimitive("name").getAsString();
-    Expression<?> arg1 =
+    Expression arg1 =
         parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
     Class<?> argtype = arg1.getType();
     if (!Boolean.class.isAssignableFrom(argtype)) {
@@ -272,7 +219,7 @@ public class Parser {
     }
     switch (opname) {
       case "not":
-        return new NotOperator(runtime, (Expression<Boolean>) arg1);
+        return new NotOperator(runtime, arg1);
       default:
         throw new SyntaxErrorException("Unrecognized unary_operator \""
             + opname + "\".");
@@ -281,7 +228,7 @@ public class Parser {
 
   private static WhileCommand parseWhileExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
-    Expression<?> cond =
+    Expression cond =
         parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
     Class<?> condtype = cond.getType();
     if (!Boolean.class.isAssignableFrom(condtype)) {
@@ -289,16 +236,16 @@ public class Parser {
           "Condition for while statement is not Boolean, its type is "
               + condtype);
     }
-    List<Expression<?>> commands = new ArrayList<Expression<?>>();
+    List<Expression> commands = new ArrayList<Expression>();
     for (JsonElement e : obj.getAsJsonArray("commands")) {
       commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
     }
-    return new WhileCommand(runtime, (Expression<Boolean>) cond, commands);
+    return new WhileCommand(runtime, cond, commands);
   }
 
   private static IfElseCommand parseIfElseExpression(JsonObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
-    Expression<?> cond =
+    Expression cond =
         parseJSONExpression(obj.getAsJsonObject("condition"), runtime);
     Class<?> condtype = cond.getType();
     if (!Boolean.class.isAssignableFrom(condtype)) {
@@ -306,8 +253,8 @@ public class Parser {
           "Condition for ifelse statement is not Boolean, its type is "
               + condtype);
     }
-    List<Expression<?>> commands = new ArrayList<Expression<?>>();
-    List<Expression<?>> commandsElse = new ArrayList<Expression<?>>();
+    List<Expression> commands = new ArrayList<Expression>();
+    List<Expression> commandsElse = new ArrayList<Expression>();
     for (JsonElement e : obj.getAsJsonArray("commands")) {
       commands.add(parseJSONExpression(e.getAsJsonObject(), runtime));
     }
@@ -316,8 +263,36 @@ public class Parser {
         commandsElse.add(parseJSONExpression(e.getAsJsonObject(), runtime));
       }
     }
-    return new IfElseCommand(runtime, (Expression<Boolean>) cond, commands,
-        commandsElse);
+    return new IfElseCommand(runtime, cond, commands, commandsElse);
+  }
+
+  /**
+   * Given a string type name, returns the corresponding type. This function is
+   * tied to the Brewer specification, so types not mentioned by the specs will
+   * throw an error, and "number" returns the Double type.
+   *
+   * @param typename The string name of the type
+   * @return The Class object representing the corresponding type
+   * @throws TypeErrorException When the string does not represent a type
+   *         supported by Brewer
+   */
+  private static Class<?> parseTypeFromString(String typename)
+      throws TypeErrorException {
+    switch (typename) {
+      case "string":
+        return String.class;
+      case "number":
+        return Double.class;
+      case "boolean":
+        return Boolean.class;
+      default:
+        try {
+          return Class.forName(typename);
+        } catch (ClassNotFoundException e) {
+          throw new TypeErrorException("The type \"" + typename
+              + "\" is unsupported.");
+        }
+    }
   }
 
   public static class BrewerParseException extends Exception {

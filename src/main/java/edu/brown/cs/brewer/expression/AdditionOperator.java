@@ -9,12 +9,12 @@ import edu.brown.cs.brewer.BrewerRuntime;
  * @author raphaelkargon
  *
  */
-public class AdditionOperator extends Expression<Double> {
+public class AdditionOperator extends Expression {
 
-  private Expression<Double> arg1, arg2;
+  private Expression arg1, arg2;
 
-  public AdditionOperator(BrewerRuntime _runtime, Expression<Double> _arg1,
-      Expression<Double> _arg2) {
+  public AdditionOperator(BrewerRuntime _runtime, Expression _arg1,
+      Expression _arg2) {
     super(_runtime);
     this.arg1 = _arg1;
     this.arg2 = _arg2;
@@ -22,7 +22,7 @@ public class AdditionOperator extends Expression<Double> {
 
   @Override
   public Double evaluate() {
-    return (arg1.evaluate() + arg2.evaluate());
+    return ((Double) arg1.evaluate() + (Double) arg2.evaluate());
   }
 
   @Override

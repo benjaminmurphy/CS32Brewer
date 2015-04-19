@@ -2,7 +2,7 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 
-public abstract class Expression<R> {
+public abstract class Expression {
 
   protected BrewerRuntime runtime;
 
@@ -15,7 +15,7 @@ public abstract class Expression<R> {
    *
    * @return
    */
-  public abstract R evaluate();
+  public abstract Object evaluate();
 
   public abstract Class<?> getType();
 }

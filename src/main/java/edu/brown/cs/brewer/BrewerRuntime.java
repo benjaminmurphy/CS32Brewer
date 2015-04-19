@@ -16,19 +16,19 @@ import edu.brown.cs.brewer.handlers.Stream.Runner;
  *
  */
 public class BrewerRuntime implements Runnable {
-  private Map<String, Variable<?>> variables;
+  private Map<String, Variable> variables;
   private List<Log> logs;
-  private List<Expression<?>> program = null;
+  private List<Expression> program = null;
   private boolean isRunning = false;
   private Runner thread;
 
   public BrewerRuntime() {
-    this.variables = new HashMap<String, Variable<?>>();
+    this.variables = new HashMap<String, Variable>();
     this.logs = new ArrayList<Log>();
   }
 
   // TODO what if fails?
-  public void setProgram(List<Expression<?>> newprog) {
+  public void setProgram(List<Expression> newprog) {
     if (!isRunning && program == null) {
       this.program = newprog;
     }
@@ -42,7 +42,7 @@ public class BrewerRuntime implements Runnable {
   public void run() {
     if (!isRunning) {
       isRunning = true;
-      for (Expression<?> e : program) {
+      for (Expression e : program) {
         e.evaluate();
         if (!isRunning) {
           break;
@@ -54,7 +54,7 @@ public class BrewerRuntime implements Runnable {
     }
   }
 
-  public Map<String, Variable<?>> getVariables() {
+  public Map<String, Variable> getVariables() {
     return variables;
   }
 

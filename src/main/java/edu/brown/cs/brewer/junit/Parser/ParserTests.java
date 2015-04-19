@@ -39,7 +39,7 @@ public class ParserTests {
     BrewerRuntime runtime;
     try {
       runtime = Parser.parseJSONProgram(t1, null);
-      Map<String, Variable<?>> vars = runtime.getVariables();
+      Map<String, Variable> vars = runtime.getVariables();
       Object value = vars.get("\"x\"").getValue();
       assertTrue((int) value == 5);
     } catch (BrewerParseException e) {

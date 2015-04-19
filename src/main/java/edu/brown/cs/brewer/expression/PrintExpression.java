@@ -1,11 +1,9 @@
 package edu.brown.cs.brewer.expression;
 
-import java.util.Map;
-
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.Variable;
 
-public class PrintExpression extends Expression<Void> {
+public class PrintExpression extends Expression {
 
   private String varname;
 
@@ -17,7 +15,7 @@ public class PrintExpression extends Expression<Void> {
   @Override
   public Void evaluate() {
     String msg = varname + ": ";
-    Variable<?> v = runtime.getVariables().get(varname);
+    Variable v = runtime.getVariables().get(varname);
     if (v == null) {
       msg += "null";
     } else {

@@ -4,13 +4,13 @@ import java.util.List;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 
-public class WhileCommand extends Expression<Void> {
+public class WhileCommand extends Expression {
 
-  private Expression<Boolean> condition;
-  private List<Expression<?>> commands;
+  private Expression condition;
+  private List<Expression> commands;
 
-  public WhileCommand(BrewerRuntime _runtime, Expression<Boolean> _condition,
-      List<Expression<?>> _commands) {
+  public WhileCommand(BrewerRuntime _runtime, Expression _condition,
+      List<Expression> _commands) {
     super(_runtime);
     this.condition = _condition;
     this.commands = _commands;
@@ -18,8 +18,8 @@ public class WhileCommand extends Expression<Void> {
 
   @Override
   public Void evaluate() {
-    while (condition.evaluate()) {
-      for (Expression<?> c : commands) {
+    while ((Boolean) condition.evaluate()) {
+      for (Expression c : commands) {
         c.evaluate();
       }
     }

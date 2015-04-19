@@ -6,7 +6,7 @@ public abstract class Command {
 
   public String type;
   public String name;
-  public Expression<?> value;
+  public Expression value;
 
   // Control statement fields
   public Command condition;

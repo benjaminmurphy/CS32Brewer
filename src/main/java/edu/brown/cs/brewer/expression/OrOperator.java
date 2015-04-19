@@ -9,12 +9,12 @@ import edu.brown.cs.brewer.BrewerRuntime;
  * @author raphaelkargon
  *
  */
-public class OrOperator extends Expression<Boolean> {
+public class OrOperator extends Expression {
 
-  private Expression<Boolean> arg1, arg2;
+  private Expression arg1, arg2;
 
-  public OrOperator(final BrewerRuntime _runtime,
-      final Expression<Boolean> _arg1, final Expression<Boolean> _arg2) {
+  public OrOperator(final BrewerRuntime _runtime, final Expression _arg1,
+      final Expression _arg2) {
     super(_runtime);
     this.arg1 = _arg1;
     this.arg2 = _arg2;
@@ -22,7 +22,7 @@ public class OrOperator extends Expression<Boolean> {
 
   @Override
   public Boolean evaluate() {
-    return arg1.evaluate() || arg2.evaluate();
+    return (Boolean) arg1.evaluate() || (Boolean) arg2.evaluate();
   }
 
   @Override
