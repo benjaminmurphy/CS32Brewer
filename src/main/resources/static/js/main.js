@@ -8,7 +8,7 @@ var droppableWidth = 100;
 
 var lineNumber = 0;
 
-var socket = null;
+var logger = null;
 
 // Allows elements to be dropped.
 
@@ -206,6 +206,7 @@ function setConsole() {
 }
 
 var programRunning = false;
+
 function runProgram() {
     if (consoleBox.style.display == "none") {
         setConsole();
@@ -218,29 +219,48 @@ function runProgram() {
     console.log("Running program!");
     programRunning = true;
 
-    openStream();
+    var request = JSON.stringify(compile());
+    
+    $.post("/run", request, function(response) {
+        response = JSON.parse(response);
+        
+        if (response.status == "failure") {
+            console.log("Run failed.");
+            programRunning = false;
+        } else {
+            logger = setInterval(getLogs, 50);
+        }
+    })
 }
 
-HTMLDivElement.prototype.getJSONFormat = function() {
-    return "This element did not have formatting"
+function getLogs() {
+    $.post("/logs", function(response) {
+        response = JSON.parse(response);
+        
+        for (var i = 0; i < response.messages.length; i++) {
+            log(response.messages[i]);
+        }
+        
+        if (!response.running) {
+            clearInterval(logger);
+            programRunning = false;
+            log("Execution complete.");
+        }
+    });
 }
-/*HTMLDivElement.prototype.getJSONFormat = function() {
-    return "This element did not have formatting"
-}*/
 
 function killProgram() {
-    if (!programRunning) {
-        alert("Program is not running! Press Run to start execution.");
-        return 1;
-    }
-
-    console.log("Killing program!");
-    programRunning = false;
-
-    if (socket != null) {
-        socket.send("kill");
-    }
-    
+    $.post("/kill", function(response) {
+        response = JSON.parse(response);
+        
+        if (response.status == "failure") {
+            console.log("Kill failed.");
+        } else {
+            clearInterval(logger);
+            programRunning = false;
+            log("Program killed.");
+        }
+    });
 }
 
 function log(msg) {
@@ -251,47 +271,11 @@ function log(msg) {
     consoleBox.appendChild(line);
 }
 
-function openStream() {
-    socket = new WebSocket('ws://localhost:2567');
-    
-    
-    var request = JSON.stringify(compile());
-    console.log(request)
-    
-    socket.onopen = function(event) {
-        socket.send(request);
-    }
-
-    socket.onmessage = function(event) {
-        var message = JSON.parse(event.data);
-
-        if (message.type === "done") {
-            socket.close();
-            programRunning = false;
-        } else if (message.type === "log") {
-            log(message.msg);
-        } else if (message.type === "error") {
-            log(message.msg);
-            socket.close();
-            programRunning = false;
-        }   
-    }
-
-    socket.onclose = function(event) {
-        log("Execution complete.");
-        socket = null;
-        programRunning = false;
-    }
-}
-
 function compile() {
-    
     var request = {main : []};
-    
     for (var idx = 0; idx < playground.children.length; idx++) {
         request.main.push(playground.children[idx].compile());
     }
-    
     return request;
 }
 
@@ -317,6 +301,7 @@ HTMLDivElement.prototype.compile = function() {
         block.name = dropZone.getElementsByClassName("var")[0].compile();
         
     } else if (this.classList.contains("var")) {
+        
         block.type = "var";
         
         block.class = this.getElementsByTagName("select")[0].value;

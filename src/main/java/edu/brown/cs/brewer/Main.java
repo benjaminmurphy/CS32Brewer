@@ -1,18 +1,19 @@
 package edu.brown.cs.brewer;
 
-import java.util.Arrays;
-
-import edu.brown.cs.brewer.handlers.Parser;
-import edu.brown.cs.brewer.handlers.Parser.BrewerParseException;
-import edu.brown.cs.brewer.handlers.Stream.Runner;
+import edu.brown.cs.brewer.handlers.BrewerServer;
 
 public class Main {
   private static final int DEFAULT_PORT = 4567;
 
   public static void main(String[] args) {
+    
+    BrewerServer.runServer(DEFAULT_PORT);
+    
+    
     // Server server = new Server(DEFAULT_PORT);
 
     // testing json parser
+    /*
     String factorial =
         "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"literal\",\"value\":6,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{type : \"print\", name : \"b\"}, {\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"}},\"arg2\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"name\":\"mul\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}}]}, {type : \"print\", name : \"b\"}]}";
     BrewerRuntime br;
@@ -25,6 +26,7 @@ public class Main {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    */
 
     // A simple example program:
     // BrewerRuntime simplebr = new BrewerRuntime();

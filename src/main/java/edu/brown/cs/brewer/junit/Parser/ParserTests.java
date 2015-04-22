@@ -15,7 +15,6 @@ import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.Variable;
 import edu.brown.cs.brewer.handlers.Parser;
 import edu.brown.cs.brewer.handlers.Parser.BrewerParseException;
-import edu.brown.cs.brewer.handlers.Stream.Runner;
 
 /**
  * The Junit test for the Parser.java class.
@@ -36,7 +35,7 @@ public class ParserTests {
   public void test1() {
     String setGet = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"x\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":5,\"class\":\"number\"}},{\"type\":\"get\",\"name\":{\"type\":\"var\",\"name\":\"x\",\"class\":\"number\"}}]}";
     try {
-      br = Parser.parseJSONProgram(setGet, null);
+      br = Parser.parseJSONProgram(setGet);
       br.setRunner(new Runner(null, 0));
       br.run();
 
