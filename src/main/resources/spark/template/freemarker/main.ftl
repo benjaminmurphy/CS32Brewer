@@ -10,9 +10,9 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
 
-        <link rel="stylesheet" href="static/css/normalize.css">
-        <link rel="stylesheet" href="static/css/main.css">
-        <script src="static/js/modernizr.js"></script>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/modernizr.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -227,9 +227,9 @@
         </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="static/js/interact-1.2.4.js"></script>
-        <script>window.jQuery || document.write('<script src="static/js/jquery-1.11.2.min.js"><\/script>')</script>
-        <script src="static/js/main.js"></script>
+        <script src="js/interact-1.2.4.js"></script>
+        <script>window.jQuery || document.write('<script src="js/jquery-1.11.2.min.js"><\/script>')</script>
+        <script src="js/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

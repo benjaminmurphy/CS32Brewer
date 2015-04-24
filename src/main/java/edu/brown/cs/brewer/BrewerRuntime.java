@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.OperationNotSupportedException;
+
 import edu.brown.cs.brewer.expression.Expression;
 
 /**
@@ -62,11 +64,11 @@ public class BrewerRuntime implements Runnable {
   public void kill() {
     this.isRunning = false;
   }
-  
+
   public void clearLogs() {
     this.logs = new ArrayList<Log>();
   }
-  
+
   public boolean isRunning() {
     return this.isRunning();
   }
