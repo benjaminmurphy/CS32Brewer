@@ -33,7 +33,7 @@ public class BrewerServer {
 
   private static void runSparkServer() {
     Spark.setPort(portNum);
-    Spark.externalStaticFileLocation("src/main/resources");
+    Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.get("/", new IndexHandler(), new FreeMarkerEngine());
     Spark.post("/run", new RunHandler());
     Spark.post("/logs", new LogHandler());
