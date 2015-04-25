@@ -70,6 +70,6 @@ public class BrewerRuntime implements Runnable {
   }
 
   public boolean isRunning() {
-    return this.isRunning();
+    return this.isRunning;
   }
 }
