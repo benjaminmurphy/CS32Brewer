@@ -125,15 +125,18 @@ $(".typeSelect").bind("change", function(event){
     var newField;
     if (myType == "number") {
         newField = document.createElement('input');
+        console.log("numbers!");
         $(newField).addClass("litVal");
         newField.type = "number";
         newField.placeholder ="-0.0";
     } else if (myType == "string") {
+        console.log("strongss");
         newField = document.createElement('input');
         $(newField).addClass("litVal");
         newField.type = "text";
         newField.placeholder ="Text";
     } else if (myType == "bool") {
+        console.log("bulll");
         newField = document.createElement('input');
         $(newField).addClass("litVal");
         newField.type = "number";
@@ -147,7 +150,21 @@ $(".typeSelect").bind("change", function(event){
 
 HTMLDivElement.prototype.getValue = function() {
     var type = this.getElementsByTagName("select")[0].value;
-    return parseFloat(this.getElementsByClassName("litVal")[0].value);
+    var returnVal;
+    var thisValue = this.getElementsByClassName("litVal")[0].value;
+    console.log(thisValue);
+    if (type == "number") {
+        returnVal = parseFloat(thisValue);
+    } else if (type == "string") {
+        returnVal = thisValue;
+    } else if (type == "bool") {
+        if (parseFloat(thisValue) > 0) {
+            returnVal = true;
+        } else {
+            returnVal = false;
+        }
+    }
+    return returnVal;
 }
 
 
@@ -219,7 +236,9 @@ function runProgram() {
     console.log("Running program!");
     programRunning = true;
 
-    var request = JSON.stringify(compile());
+    var requestObj = compile();
+    console.log(requestObj);
+    var request = JSON.stringify(requestObj);
     
     $.post("/run", request, function(response) {
         response = JSON.parse(response);
