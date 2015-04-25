@@ -88,8 +88,7 @@ public class Parser {
       BrewerRuntime runtime) throws BrewerParseException {
     JSONObject variableObj = (JSONObject) obj.get("name");
     String varname = (String) variableObj.get("name");
-    Class<?> vartype =
-        parseTypeFromString((String) variableObj.get("class"));
+    Class<?> vartype = parseTypeFromString((String) variableObj.get("class"));
     Expression value =
         parseJSONExpression((JSONObject) obj.get("value"), runtime);
     Class<?> valtype = value.getType();
@@ -140,8 +139,10 @@ public class Parser {
   private static Expression parseComparisonExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
-    Expression arg1 = parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
-    Expression arg2 = parseJSONExpression((JSONObject) obj.get("arg2"), runtime);
+    Expression arg1 =
+        parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
+    Expression arg2 =
+        parseJSONExpression((JSONObject) obj.get("arg2"), runtime);
     Class<?> type1 = arg1.getType();
     Class<?> type2 = arg2.getType();
     if (!type1.isAssignableFrom(type2) || !type2.isAssignableFrom(type1)) {
@@ -164,9 +165,11 @@ public class Parser {
   private static Expression parseLogicalExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
-    Expression arg1 = parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
+    Expression arg1 =
+        parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
     Class<?> arg1type = arg1.getType();
-    Expression arg2 = parseJSONExpression((JSONObject) obj.get("arg2"), runtime);
+    Expression arg2 =
+        parseJSONExpression((JSONObject) obj.get("arg2"), runtime);
     Class<?> arg2type = arg2.getType();
     if (!Boolean.class.isAssignableFrom(arg1type)
         || !Boolean.class.isAssignableFrom(arg2type)) {
@@ -187,9 +190,11 @@ public class Parser {
   private static Expression parseNumericalExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
-    Expression arg1 = parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
+    Expression arg1 =
+        parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
     Class<?> arg1type = arg1.getType();
-    Expression arg2 = parseJSONExpression((JSONObject) obj.get("arg2"), runtime);
+    Expression arg2 =
+        parseJSONExpression((JSONObject) obj.get("arg2"), runtime);
     Class<?> arg2type = arg2.getType();
     if (!Double.class.isAssignableFrom(arg1type)
         || !Double.class.isAssignableFrom(arg2type)) {
@@ -292,6 +297,8 @@ public class Parser {
         return Double.class;
       case "boolean":
         return Boolean.class;
+      case "bool":
+        return Boolean.class;
       default:
         try {
           return Class.forName(typename);
@@ -322,7 +329,7 @@ public class Parser {
       super("Type error: " + msg);
     }
   }
-  
+
   private static Double getDouble(JSONObject item, String key) {
     if (item.get(key).getClass() == Double.class) {
       return ((Double) item.get(key));
