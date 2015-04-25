@@ -119,21 +119,10 @@ public class Parser {
   private static Literal parseLiteralExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String vartypename = (String) obj.get("class");
-
-    switch (vartypename) {
-      case "string":
-        String stringPrim = (String) obj.get("value");
-        return new Literal(runtime, stringPrim, String.class);
-      case "number":
-        Double doublePrim = getDouble(obj, "value");
-        return new Literal(runtime, doublePrim, Double.class);
-      case "boolean":
-        Boolean boolPrim = (Boolean) obj.get("value");
-        return new Literal(runtime, boolPrim, Boolean.class);
-      default:
-        throw new TypeErrorException("Literals of the type \"" + vartypename
-            + "\" are unsupported.");
-    }
+    Class<?> vartype = parseTypeFromString(vartypename);
+    System.out.println(obj.toJSONString());
+    System.out.println(obj.get("value"));
+    return new Literal(runtime, vartype.cast(obj.get("value")), vartype);
   }
 
   private static Expression parseComparisonExpression(JSONObject obj,
