@@ -24,6 +24,7 @@ public class GetCommand extends Expression {
   @Override
   public Object evaluate() {
     Variable var = runtime.getVariables().get(varname);
+    System.out.println(varname);
     return vartype.cast(var.getValue());
   }
 
