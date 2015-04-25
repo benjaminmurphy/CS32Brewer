@@ -111,7 +111,9 @@ public class Parser {
 
   private static PrintExpression parsePrintExpression(JSONObject obj,
       BrewerRuntime runtime) {
-    String varname = (String) obj.get("name");
+    // Changed the parsing to get inner name.
+    JSONObject innerObj = (JSONObject) obj.get("name");
+    String varname = (String) innerObj.get("name");
     return new PrintExpression(runtime, varname);
   }
 
