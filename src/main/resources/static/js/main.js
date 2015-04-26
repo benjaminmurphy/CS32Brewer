@@ -167,8 +167,6 @@ HTMLDivElement.prototype.getValue = function() {
     return returnVal;
 }
 
-
-
 var itemPadding = 10;
 var minHeight = 40;
 var minWidth = 100;
@@ -195,7 +193,7 @@ HTMLDivElement.prototype.resize = function() {
     }
 
     var newHeight = sumHeight + itemPadding;
-    var newWidth = maxWidth 
+    var newWidth = maxWidth;
     if (!this.classList.contains("droppable")) {
         newWidth += itemPadding*2;
         newHeight += itemPadding;
@@ -366,6 +364,57 @@ HTMLDivElement.prototype.compile = function() {
                 block.commands.push(secondDropZone.children[idx].compile());
             }
         }
+
+    } else if (this.classList.contains("if")) {
+        block.type = "if";
+
+        var condition = this.children[1];
+        var commands = this.children[2];
+
+        block.commands = [];
+
+        this.condition = condition.children[1].compile();
+
+        for (var idx = 0; idx < commands.children.length; idx++) {
+            if (commands.children[idx].tagName === "DIV") {
+                block.commands.push(commands.children[idx].compile());
+            }
+        }
+
+    } else if (this.classList.contains("ifElse")) {
+
+        block.type = "ifelse";
+
+        var condition = this.children[1];
+        var ifCommands = this.children[2];
+        var elseCommands = this.children[3];
+
+        this.condition = condition.children[1].compile();
+
+        block.commands = [];
+        for (var idx = 0; idx < ifCommands.children.length; idx++) {
+            if (ifCommands.children[idx].tagName === "DIV") {
+                block.commands.push(ifCommands.children[idx].compile());
+            }
+        }
+
+        block.else = [];
+        for (var idx = 0; idx < elseCommands.children.length; idx++) {
+            if (elseCommands.children[idx].tagName === "DIV") {
+                block.commands.push(elseCommands.children[idx].compile());
+            }
+        }
+
+    } else if (this.classList.contains("andOr")) {
+        block.type = "logic_operator";
+
+        var firstDropZone = this.children[1];
+        var operator = this.children[2];
+        var secondDropZone = this.children[3];
+
+        block.name = operator.value;
+        block.arg1 = firstDropZone.children[1].compile();
+        block.arg2 = secondDropZone.children[1].compile();
 
     } else if (this.classList.contains("equality")) {
         block.type = "comparison";
