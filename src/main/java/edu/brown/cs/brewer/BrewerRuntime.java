@@ -106,7 +106,7 @@ public class BrewerRuntime implements Runnable {
   // return this.returnValuesStack.pop();
   // }
 
-  public class ProgramKilledException extends Exception {
+  public static class ProgramKilledException extends Exception {
 
   }
 }

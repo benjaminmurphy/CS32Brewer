@@ -3,6 +3,7 @@ package edu.brown.cs.brewer.expression;
 import java.util.Map;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 import edu.brown.cs.brewer.Variable;
 
 /**
@@ -35,7 +36,10 @@ public class SetCommand extends Expression {
   }
 
   @Override
-  public Void evaluate() {
+  public Void evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     Map<String, Variable> vars = runtime.getVariables();
     Variable oldval = vars.get(varname);
     Object eval = value.evaluate();

@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 import edu.brown.cs.brewer.Variable;
 
 public class PrintExpression extends Expression {
@@ -13,7 +14,10 @@ public class PrintExpression extends Expression {
   }
 
   @Override
-  public Void evaluate() {
+  public Void evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     String msg = varname + ": ";
     Variable v = runtime.getVariables().get(varname);
     if (v == null) {

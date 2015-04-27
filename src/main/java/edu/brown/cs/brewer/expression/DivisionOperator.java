@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 /**
  * An expression that divides two numerical arguments
@@ -20,7 +21,10 @@ public class DivisionOperator extends Expression {
   }
 
   @Override
-  public Double evaluate() {
+  public Double evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     return ((Double) arg1.evaluate() / (Double) arg2.evaluate());
   }
 

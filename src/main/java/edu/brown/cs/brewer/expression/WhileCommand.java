@@ -3,6 +3,7 @@ package edu.brown.cs.brewer.expression;
 import java.util.List;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 public class WhileCommand extends Expression {
 
@@ -17,7 +18,10 @@ public class WhileCommand extends Expression {
   }
 
   @Override
-  public Void evaluate() {
+  public Void evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     while ((Boolean) condition.evaluate()) {
       for (Expression c : commands) {
         c.evaluate();

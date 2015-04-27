@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 /**
  * This is an expression that wraps a literal value. This can be used to send
@@ -26,7 +27,10 @@ public class Literal extends Expression {
   }
 
   @Override
-  public Object evaluate() {
+  public Object evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     return value;
   }
 

@@ -1,8 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
-import java.util.Map;
-
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 import edu.brown.cs.brewer.Variable;
 
 /**
@@ -22,7 +21,10 @@ public class GetCommand extends Expression {
   }
 
   @Override
-  public Object evaluate() {
+  public Object evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     Variable var = runtime.getVariables().get(varname);
     System.out.println(varname);
     return vartype.cast(var.getValue());

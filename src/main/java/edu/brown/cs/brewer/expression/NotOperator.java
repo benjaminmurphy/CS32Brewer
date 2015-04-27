@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 /**
  * Implements the Not operator. This class Takes a boolean expression as an
@@ -23,7 +24,10 @@ public class NotOperator extends Expression {
   }
 
   @Override
-  public Boolean evaluate() {
+  public Boolean evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     return !(Boolean) arg1.evaluate();
   }
 

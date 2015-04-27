@@ -15,6 +15,9 @@ public class EqualityOperator extends Expression {
 
   @Override
   public Boolean evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     return arg1.evaluate().equals(arg2.evaluate());
   }
 

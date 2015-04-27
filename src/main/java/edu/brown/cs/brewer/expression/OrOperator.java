@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 /**
  * Implements the Or operator, takes two boolean expressions and returns their
@@ -21,7 +22,10 @@ public class OrOperator extends Expression {
   }
 
   @Override
-  public Boolean evaluate() {
+  public Boolean evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     return (Boolean) arg1.evaluate() || (Boolean) arg2.evaluate();
   }
 

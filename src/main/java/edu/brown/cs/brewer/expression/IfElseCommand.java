@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 public class IfElseCommand extends Expression {
 
@@ -29,7 +30,10 @@ public class IfElseCommand extends Expression {
   }
 
   @Override
-  public Void evaluate() {
+  public Void evaluate() throws ProgramKilledException {
+	if(!runtime.isRunning()){
+		throw new ProgramKilledException();
+	}
     if ((boolean) condition.evaluate()) {
       if (commandsIfTrue != null) {
         for (Expression c : commandsIfTrue) {
