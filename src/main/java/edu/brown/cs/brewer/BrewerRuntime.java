@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import edu.brown.cs.brewer.expression.Expression;
 
@@ -21,17 +20,11 @@ public class BrewerRuntime implements Runnable {
   private List<Expression> program = null;
   private boolean isRunning = false;
 
-  // private Stack<Expression> programStack;
-  // private Stack<Object> returnValuesStack;
-
   public BrewerRuntime() {
     this.variables = new HashMap<String, Variable>();
     this.logs = new ArrayList<Log>();
-    // this.programStack = new Stack<>();
-    // this.returnValuesStack = new Stack<>();
   }
 
-  // TODO what if fails?
   public void setProgram(List<Expression> newprog) {
     if (!isRunning && program == null) {
       this.program = newprog;
@@ -42,17 +35,6 @@ public class BrewerRuntime implements Runnable {
   public void run() {
     if (!isRunning) {
       isRunning = true;
-
-      // // set up stacks
-      // programStack.clear();
-      // returnValuesStack.clear();
-      // for (int i = program.size() - 1; i >= 0; i--) {
-      // programStack.push(program.get(i));
-      // }
-      //
-      // while (isRunning && !programStack.isEmpty()) {
-      // programStack.pop().evaluate();
-      // }
 
       try {
         for (Expression e : program) {
@@ -89,22 +71,6 @@ public class BrewerRuntime implements Runnable {
   public boolean isRunning() {
     return this.isRunning;
   }
-
-  // public void pushExpressionToStack(Expression e) {
-  // this.programStack.push(e);
-  // }
-  //
-  // public void pushValueToStack(Object o) {
-  // this.returnValuesStack.push(o);
-  // }
-  //
-  // public Expression popExpressionFromStack() {
-  // return this.programStack.pop();
-  // }
-  //
-  // public Object popValueFromStack() {
-  // return this.returnValuesStack.pop();
-  // }
 
   public static class ProgramKilledException extends Exception {
 
