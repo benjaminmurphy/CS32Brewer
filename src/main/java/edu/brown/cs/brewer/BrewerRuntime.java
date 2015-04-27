@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.naming.OperationNotSupportedException;
-
 import edu.brown.cs.brewer.expression.Expression;
 
 /**
@@ -23,14 +21,14 @@ public class BrewerRuntime implements Runnable {
   private List<Expression> program = null;
   private boolean isRunning = false;
 
-  private Stack<Expression> programStack;
-  private Stack<Object> returnValuesStack;
+  // private Stack<Expression> programStack;
+  // private Stack<Object> returnValuesStack;
 
   public BrewerRuntime() {
     this.variables = new HashMap<String, Variable>();
     this.logs = new ArrayList<Log>();
-    this.programStack = new Stack<>();
-    this.returnValuesStack = new Stack<>();
+    // this.programStack = new Stack<>();
+    // this.returnValuesStack = new Stack<>();
   }
 
   // TODO what if fails?
@@ -45,15 +43,23 @@ public class BrewerRuntime implements Runnable {
     if (!isRunning) {
       isRunning = true;
 
-      // set up stacks
-      programStack.clear();
-      returnValuesStack.clear();
-      for (int i = program.size() - 1; i >= 0; i--) {
-        programStack.push(program.get(i));
-      }
+      // // set up stacks
+      // programStack.clear();
+      // returnValuesStack.clear();
+      // for (int i = program.size() - 1; i >= 0; i--) {
+      // programStack.push(program.get(i));
+      // }
+      //
+      // while (isRunning && !programStack.isEmpty()) {
+      // programStack.pop().evaluate();
+      // }
 
-      while (isRunning && !programStack.isEmpty()) {
-        programStack.pop().evaluate();
+      try {
+        for (Expression e : program) {
+          e.evaluate();
+        }
+      } catch (ProgramKilledException e) {
+        addLog("Program Killed.", true);
       }
     }
     isRunning = false;
@@ -84,19 +90,23 @@ public class BrewerRuntime implements Runnable {
     return this.isRunning;
   }
 
-  public void pushExpressionToStack(Expression e) {
-    this.programStack.push(e);
-  }
+  // public void pushExpressionToStack(Expression e) {
+  // this.programStack.push(e);
+  // }
+  //
+  // public void pushValueToStack(Object o) {
+  // this.returnValuesStack.push(o);
+  // }
+  //
+  // public Expression popExpressionFromStack() {
+  // return this.programStack.pop();
+  // }
+  //
+  // public Object popValueFromStack() {
+  // return this.returnValuesStack.pop();
+  // }
 
-  public void pushValueToStack(Object o) {
-    this.returnValuesStack.push(o);
-  }
+  public class ProgramKilledException extends Exception {
 
-  public Expression popExpressionFromStack() {
-    return this.programStack.pop();
-  }
-
-  public Object popValueFromStack() {
-    return this.returnValuesStack.pop();
   }
 }

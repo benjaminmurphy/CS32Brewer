@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 public abstract class Expression {
 
@@ -15,7 +16,7 @@ public abstract class Expression {
    *
    * @return
    */
-  public abstract Object evaluate();
+  public abstract Object evaluate() throws ProgramKilledException;
 
   public abstract Class<?> getType();
 }

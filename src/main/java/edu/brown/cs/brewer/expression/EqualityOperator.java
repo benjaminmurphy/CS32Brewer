@@ -1,6 +1,7 @@
 package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 public class EqualityOperator extends Expression {
   private Expression arg1, arg2;
@@ -13,7 +14,7 @@ public class EqualityOperator extends Expression {
   }
 
   @Override
-  public Boolean evaluate() {
+  public Boolean evaluate() throws ProgramKilledException {
     return arg1.evaluate().equals(arg2.evaluate());
   }
 
