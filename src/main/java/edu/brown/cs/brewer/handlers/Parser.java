@@ -22,6 +22,7 @@ public class Parser {
 
   public static BrewerRuntime parseJSONProgram(String json)
       throws BrewerParseException, ParseException {
+    System.out.println("Parsing program: " + json);
     Gson GSON = new Gson();// TODO make this static
     JSONParser parser = new JSONParser();
 
@@ -241,7 +242,7 @@ public class Parser {
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
     Expression arg1 =
-        parseJSONExpression((JSONObject) obj.get("condition"), runtime);
+        parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
     Class<?> argtype = arg1.getType();
     if (!Boolean.class.isAssignableFrom(argtype)) {
       throw new TypeErrorException("Argument for " + opname
