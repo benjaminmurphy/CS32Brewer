@@ -12,6 +12,48 @@ var itemPadding = 10;
 var minHeight = 40;
 var minWidth = 100;
 
+var variableList = [];
+
+function makeVariable() {
+    document.getElementById("newVarBox").style.display = "block";
+}
+
+function addVariable() {
+    var box = document.getElementById("newVarBox");
+    box.style.display = "none";
+    var name = document.getElementById("newVarName").value;
+    if (name == "") {
+        return;
+    }
+    var type = document.getElementById("typeSelect").value;
+    var inList = false;
+    for(var i = 0; i < variableList.length; i++) {
+        if (variableList[i].name == name) {
+            inList = true;
+        }
+    }
+    if (inList) {
+        alert(name + " is already a variable!");
+    } else {
+        variableList.push({"name": name, "type": type});
+        var option = document.createElement('OPTION');
+        option.value = name;
+        option.innerHTML = name;
+        $("#varSelect")[0].appendChild(option);
+    }
+    document.getElementById("newVarName").value = "";
+}
+
+function getType(name) {
+    for(var i = 0; i < variableList.length; i++) {
+        if (variableList[i].name == name) {
+            return variableList[i].type;
+        }
+    }
+    alert("Type not found you doof");
+    return null;
+}
+
 function allowDrop(event) {
     event.preventDefault();
 }
@@ -162,11 +204,12 @@ function runProgram() {
         
         if (response.status == "failure") {
             
+            programRunning = false;
+
             for (var i = 0; i < response.messages.length; i++) {
                 log(response.messages[i]);
             }
-            
-            programRunning = false;
+             
         } else {
             logger = setInterval(getLogs, 50);
         }
@@ -260,8 +303,9 @@ HTMLDivElement.prototype.compile = function() {
         
         block.type = "var";
         
-        block.class = this.getElementsByTagName("select")[0].value;
-        block.name = this.getElementsByTagName("select")[1].value;
+        var name = this.getElementsByTagName("select")[0].value;
+        block.name = name;
+        block.class = getType(name);
         
     } else if (this.classList.contains("literal")) {
         block.type = "literal";

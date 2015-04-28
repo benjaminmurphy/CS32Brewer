@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory -->
+        <!-- Place favicon.ico in the root directory --> 
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
@@ -24,10 +24,37 @@
         </div>
 
         <div id="menu" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <h2>menu</h2>
-
             <table>
 
+                <tr>
+                    <td>
+                        <h2>menu</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button makeVariable" type="button" id="makeVariable" onclick="makeVariable()">
+                            Add Variable
+                        </button>
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div class="newVarBox" id="newVarBox">
+                            <input id="newVarName" name="newVarName" type="string" placeholder="Var Name"></input>
+                            <select id="typeSelect" name="varType">
+                                <option value="number">number</option>
+                                <option value="string">string</option>
+                                <option value="bool">bool</option>
+                            </select>
+                             <button class="button" type="button" id="addVar" onclick="addVariable()">
+                                Add
+                            </button>
+                        </div>
+                    </td>
+                </tr>
                 <tr>
 
                     <td>
@@ -67,17 +94,8 @@
 
                     <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
                         <h3 class="itemHeader">Var</h3>
-                        <select class="typeSelect" name="litType">
-                            <option value="number">number</option>
-                            <option value="string">string</option>
-                            <option value="bool">bool</option>
-                        </select>
-                        <select class="functionSelect" name="equalityType">
+                        <select class="functionSelect" id="varSelect" name="equalityType">
                             <option value="a">a</option>
-                            <option value="b">b</option>
-                            <option value="c">c</option>
-                            <option value="0">0</option>
-                            <option value="1">1</option>
                         </select>
                         </div></td>
 

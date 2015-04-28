@@ -188,17 +188,45 @@ h3.itemHeader {
     font-weight: 100;
 }
 
-.functionSelect, .typeSelect {
+select {
+    border-radius: 0px;
+    height: 26px;
+}
+.button {
+    height: 26px;
+}
+
+.functionSelect {
     margin:0.6em;
     margin-right: 2em;
     margin-left: 2em;
 }
 
-.typeSelect {
+#typeSelect {
     float:left;
-    margin:0.6em;
-    margin-right: 0.2em;
-    margin-left: 1em;
+}
+#newVarName {
+    float:left;
+    width: 86px;
+    height: 26px;
+    padding: 0 0 0 5px;
+    border: 0;
+    font-size: 16px;
+}
+#addVar {
+    float:left;
+}
+#newVarBox {
+    width: 100%;
+    height: 60px;
+    vertical-align: middle;
+    display: block;
+    margin: 0;
+    padding: 5px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    box-sizing: padding-box;
+    display: none;
 }
 
 .litVal {
