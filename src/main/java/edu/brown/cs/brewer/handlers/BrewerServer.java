@@ -57,8 +57,8 @@ public class BrewerServer {
         runtime.run();
         variables.put("status", "success");
       } catch (BrewerParseException | ParseException e) {
-        List<String> logs = new ArrayList<>();
-        logs.add(e.getMessage());
+        List<Log> logs = new ArrayList<>();
+        logs.add(new Log(e.getMessage(), true));
         variables.put("error", logs);
         variables.put("status", "failure");
       }
@@ -84,13 +84,13 @@ public class BrewerServer {
           variables.put("running", false);
         }
 
-        List<String> messages = new ArrayList<String>();
-        for (Log l : logs) {
-          messages.add(l.getMsg());
-        }
+        // List<String> messages = new ArrayList<String>();
+        // for (Log l : logs) {
+        // messages.add(l.getMsg());
+        // }
 
         variables.put("status", "success");
-        variables.put("messages", messages);
+        variables.put("messages", logs);
       }
 
       else {
