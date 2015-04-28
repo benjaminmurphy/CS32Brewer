@@ -42,6 +42,9 @@ public class Parser {
 
   private static Expression parseJSONExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
+    if (obj == null) {
+      throw new MissingElementException("An element in the JSON is missing.");
+    }
     String exprType = (String) obj.get("type");
 
     switch (exprType) {
@@ -332,6 +335,13 @@ public class Parser {
     public TypeErrorException(String msg) {
       // TODO add fields for error type, etc.
       super("Type error: " + msg);
+    }
+  }
+
+  public static class MissingElementException extends BrewerParseException {
+    public MissingElementException(String msg) {
+      // TODO add fields for error type, etc.
+      super("Missing element: " + msg);
     }
   }
 
