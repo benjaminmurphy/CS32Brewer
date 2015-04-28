@@ -376,6 +376,14 @@ HTMLDivElement.prototype.compile = function() {
         block.arg1 = compile(firstDropZone.children[0]);
         block.arg2 = compile(secondDropZone.children[0]);
 
+    } else if (this.classList.contains("not")) {
+        block.type = "unary_operator";
+
+        var firstDropZone = this.children[1];
+        
+        block.name = "not";
+        block.arg1 = compile(firstDropZone.children[0]);
+
     } else if (this.classList.contains("equality")) {
         block.type = "comparison";
 
