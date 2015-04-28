@@ -59,7 +59,7 @@ public class BrewerServer {
       } catch (BrewerParseException | ParseException e) {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(e.getMessage(), true));
-        variables.put("error", logs);
+        variables.put("messages", logs);
         variables.put("status", "failure");
       }
       return gson.toJson(variables.build());
