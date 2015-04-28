@@ -36,10 +36,13 @@ function addVariable() {
         alert(name + " is already a variable!");
     } else {
         variableList.push({"name": name, "type": type});
-        var option = document.createElement('OPTION');
-        option.value = name;
-        option.innerHTML = name;
-        $("#varSelect")[0].appendChild(option);
+        var selects = document.getElementsByClassName("varSelect");
+        for(var i = 0; i < selects.length; i++) {
+            var option = document.createElement('OPTION');
+            option.value = name;
+            option.innerHTML = name;
+            selects[i].appendChild(option);
+        }
     }
     document.getElementById("newVarName").value = "";
 }
