@@ -1,14 +1,14 @@
 /*! HTML5 Boilerplate v5.0.0 | MIT License | http://h5bp.com/ */
 
 /*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
+* What follows is the result of much research on cross-browser styling.
+* Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+* Kroc Camen, and the H5BP dev community and team.
+*/
 
 /* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
+Base styles: opinionated defaults
+========================================================================== */
 
 html {
     color: #222;
@@ -17,12 +17,12 @@ html {
 }
 
 /*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * These selection rule sets have to be separate.
- * Customize the background color to match your design.
- */
+* Remove text-shadow in selection highlight:
+* https://twitter.com/miketaylr/status/12228805301
+*
+* These selection rule sets have to be separate.
+* Customize the background color to match your design.
+*/
 
 ::-moz-selection {
     background: #b3d4fc;
@@ -35,8 +35,8 @@ html {
 }
 
 /*
- * A better looking default horizontal rule
- */
+* A better looking default horizontal rule
+*/
 
 hr {
     display: block;
@@ -48,10 +48,10 @@ hr {
 }
 
 /*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
+* Remove the gap between audio, canvas, iframes,
+* images, videos and the bottom of their containers:
+* https://github.com/h5bp/html5-boilerplate/issues/440
+*/
 
 audio,
 canvas,
@@ -63,8 +63,8 @@ video {
 }
 
 /*
- * Remove default fieldset styles.
- */
+* Remove default fieldset styles.
+*/
 
 fieldset {
     border: 0;
@@ -73,16 +73,16 @@ fieldset {
 }
 
 /*
- * Allow only vertical resizing of textareas.
- */
+* Allow only vertical resizing of textareas.
+*/
 
 textarea {
     resize: vertical;
 }
 
 /* ==========================================================================
-   Browser Upgrade Prompt
-   ========================================================================== */
+Browser Upgrade Prompt
+========================================================================== */
 
 .browserupgrade {
     margin: 0.2em 0;
@@ -92,44 +92,52 @@ textarea {
 }
 
 /* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
+Author's custom styles
+========================================================================== */
+
+* {
+    font-family: monospace;
+}
+
 #header {
     height: 50px;
     width: 100%;
     position: fixed;
     z-index: 3;
-    background-image: -webkit-linear-gradient(gray, gray);
+    background-color: rgba(100, 100, 100, 0.9);
+    box-shadow: 0 0 5px #999;
 }
 
 #title {
     margin: 0.2em;
     margin-top: 0px;
+    margin-left: 25px;
     color:#ddd;
     text-shadow: 0px 1px 2px #333;
-    font-family: monospace;
     font-size: 40px;
 }
 
 #menu {
-    width: 300px;
-    height: 100%;
+    width: 260px;
+    height: calc(100% - 50px);
     position: fixed;
     left: 0;
-    top: 0;
-    padding-top: 50px;
+    bottom: 0;
+    margin: 0;
     padding-left: 25px;
     background: #bbbbcc;
     box-shadow: 0 0 5px #999;
     box-sizing: border-box;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    
 }
 
 #playground {
-    width: calc(80% - 300px);
+    width: calc(80% - 260px);
     height: 100%;
     position: absolute;
-    left: 300px;
+    left: 260px;
     top: 0;
     padding-top: 60px;
     padding-left: 10px;
@@ -138,11 +146,10 @@ textarea {
 
 #console {
     width: 20%;
-    height: 100%;
+    height: calc(100% - 50px);
     position: fixed;
     right: 0;
     bottom: 0;
-    padding-top: 50px;
     padding-left: 25px;
     background: rgba(127,127,127,.3);
     box-shadow: 0 0 5px #999;
@@ -155,54 +162,31 @@ textarea {
     bottom: 0.2em;
 }
 
-
 .item {
-    height: 75px;
-    width: 250px;
+    min-width: 200px;
     vertical-align: middle;
     display: block;
     margin: 0;
-    padding: 0;
+    padding: 0 0 10px 0;
     border: 1px solid #999;
     border-radius: 5px;
+    box-sizing: padding-box;
 }
 
-.tallItem {
-    height: 115px;
+#spacing {
+    height: 15px;
 }
 
 td {
-    padding-bottom: 2px;
-}
-
-h2 {
-    font-family: monospace;
+    padding-bottom: 4px;
 }
 
 h3.itemHeader {
-    margin: 0 0 0 3px;
+    margin: 0 0 0 7px;
     font-weight: 100;
-    /*height: 10px;*/
-}
-h3.droppableHeader {
-    display:none;
-    margin:0;
-    /*padding: 10px 0 0 5px;*/
-    height: 0px;
-    font-size: 16px;
-    color: rgba(200,200,200,0.5);
 }
 
-.unselectable, .droppableHeader {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
 .functionSelect, .typeSelect {
-    float:left;
     margin:0.6em;
     margin-right: 2em;
     margin-left: 2em;
@@ -226,73 +210,105 @@ h3.droppableHeader {
 .droppable {
     width: 100px;
     height: 40px;
-    float: left;
     display: block;
     background: rgba(255,255,255,0.7);
     margin: 00px 10px 0 10px;
     border-radius: 5px;
     box-shadow: inset 0 0 5px #999;
-    /*z-index: 0;*/
 }
+
+.bVal {
+    min-width: 100px;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    padding-top: 5px;
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 20px;
+}
+
+.sVal, .nVal {
+    min-width: 100px;
+    width: 100px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.sVal input, .nVal input {
+    width: 86px;
+    height: 26px;
+    margin: 6px 0 0 6px;
+    padding: 0 0 0 5px;
+    box-sizing: border-box;
+    border: 0;
+    font-size: 16px;
+}
+
+.nVal input {
+    text-align: center;
+}
+
 .boolean {
     width: 100px;
 }
 
+.functionSelect {
+    display: block;
+}
+
 .var {
-    /*width: 100px;*/
-    background-color: lavender;
+    background-color: #9b59b6;
 }
 
 .get {
-    background-color: goldenrod;
+    background-color: #2ecc71;
 }
 
 .set {
-    background-color: gold;
+    background-color: #d35400;
 }
 
 .print {
-    background-color: orange;
+    background-color: #f39c12;
 }
 
 .equality {
-    background-color: seagreen;
+    background-color: #16a085;
 }
 
 .arithmetic {
-    background-color: #229977;
+    background-color: #27ae60;
 }
 
 .andOr {
-    background-color: teal;
+    background-color: #2980b9;
 }
 
 .if {
-    background-color: aqua;
+    background-color: #f1c40f;
 }
 
 .ifElse {
-    background-color: aqua;
+    background-color: #f1c40f;
 }
 
 .while {
-    background-color: forestgreen;
+    background-color: #34495e;
 }
 
 .literal {
-    background-color: #882233;
+    background-color: #e74c3c;
 }
 
-
-
 /* ==========================================================================
-   Helper classes
-   ========================================================================== */
+Helper classes
+========================================================================== */
 
 /*
- * Hide visually and from screen readers:
- * http://juicystudio.com/article/screen-readers-display-none.php
- */
+* Hide visually and from screen readers:
+* http://juicystudio.com/article/screen-readers-display-none.php
+*/
 
 .hidden {
     display: none !important;
@@ -300,9 +316,9 @@ h3.droppableHeader {
 }
 
 /*
- * Hide only visually, but have it available for screen readers:
- * http://snook.ca/archives/html_and_css/hiding-content-for-accessibility
- */
+* Hide only visually, but have it available for screen readers:
+* http://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+*/
 
 .visuallyhidden {
     border: 0;
@@ -316,10 +332,10 @@ h3.droppableHeader {
 }
 
 /*
- * Extends the .visuallyhidden class to allow the element
- * to be focusable when navigated to via the keyboard:
- * https://www.drupal.org/node/897638
- */
+* Extends the .visuallyhidden class to allow the element
+* to be focusable when navigated to via the keyboard:
+* https://www.drupal.org/node/897638
+*/
 
 .visuallyhidden.focusable:active,
 .visuallyhidden.focusable:focus {
@@ -332,24 +348,24 @@ h3.droppableHeader {
 }
 
 /*
- * Hide visually and from screen readers, but maintain layout
- */
+* Hide visually and from screen readers, but maintain layout
+*/
 
 .invisible {
     visibility: hidden;
 }
 
 /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *    `contenteditable` attribute is included anywhere else in the document.
- *    Otherwise it causes space to appear at the top and bottom of elements
- *    that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *    `:before` to contain the top-margins of child elements.
- */
+* Clearfix: contain floats
+*
+* For modern browsers
+* 1. The space content is one way to avoid an Opera bug when the
+*    `contenteditable` attribute is included anywhere else in the document.
+*    Otherwise it causes space to appear at the top and bottom of elements
+*    that receive the `clearfix` class.
+* 2. The use of `table` rather than `block` is only necessary if using
+*    `:before` to contain the top-margins of child elements.
+*/
 
 .clearfix:before,
 .clearfix:after {
@@ -362,27 +378,27 @@ h3.droppableHeader {
 }
 
 /* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
+EXAMPLE Media Queries for Responsive Design.
+These examples override the primary ('mobile first') styles.
+Modify as content requires.
+========================================================================== */
 
 @media only screen and (min-width: 35em) {
     /* Style adjustments for viewports that meet the condition */
 }
 
 @media print,
-       (-o-min-device-pixel-ratio: 5/4),
-       (-webkit-min-device-pixel-ratio: 1.25),
-       (min-resolution: 120dpi) {
-    /* Style adjustments for high resolution devices */
-}
+    (-o-min-device-pixel-ratio: 5/4),
+    (-webkit-min-device-pixel-ratio: 1.25),
+    (min-resolution: 120dpi) {
+        /* Style adjustments for high resolution devices */
+    }
 
 /* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   http://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
+Print styles.
+Inlined to avoid the additional HTTP request:
+http://www.phpied.com/delay-loading-your-print-css/
+========================================================================== */
 
 @media print {
     *,
@@ -390,7 +406,7 @@ h3.droppableHeader {
     *:after {
         background: transparent !important;
         color: #000 !important; /* Black prints faster:
-                                   http://www.sanbeiji.com/archives/953 */
+        http://www.sanbeiji.com/archives/953 */
         box-shadow: none !important;
         text-shadow: none !important;
     }
@@ -409,9 +425,9 @@ h3.droppableHeader {
     }
 
     /*
-     * Don't show links that are fragment identifiers,
-     * or use the `javascript:` pseudo protocol
-     */
+    * Don't show links that are fragment identifiers,
+    * or use the `javascript:` pseudo protocol
+    */
 
     a[href^="#"]:after,
     a[href^="javascript:"]:after {
@@ -425,9 +441,9 @@ h3.droppableHeader {
     }
 
     /*
-     * Printing Tables:
-     * http://css-discuss.incutio.com/wiki/Printing_Tables
-     */
+    * Printing Tables:
+    * http://css-discuss.incutio.com/wiki/Printing_Tables
+    */
 
     thead {
         display: table-header-group;

@@ -24,24 +24,32 @@
         </div>
 
         <div id="menu" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <h2>menu</h2>
             <table>
 
                 <table>
+
                     <tr>
 
-                        <td><div class="item literal" draggable="true" ondragstart="startDrag(event)" id="literal">
-                            <h3 class="itemHeader">Literal</h3>
-                            <select class="typeSelect" name="litType">
-                                <option value="number">number</option>
-                                <option value="string">string</option>
-                                <option value="bool">bool</option>
-                            </select>
-                            <input class="litVal litValNumber" name="litVal" type="number" placeholder="-0.0">
-                        </div></td>
+                        <td>
+                            <div class="item literal bVal">
+                                True
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="item literal bVal">
+                                False
+                            </div>
+
+                        </td>
 
                     </tr>
-                     <tr>
+                    
+                </table>
+                <table>
+
+                    <tr>
 
                         <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
                             <h3 class="itemHeader">Var</h3>
@@ -57,7 +65,7 @@
                                 <option value="0">0</option>
                                 <option value="1">1</option>
                             </select>
-                        </div></td>
+                            </div></td>
 
                     </tr>
                     <tr>
@@ -80,6 +88,7 @@
                                 <div class="droppable">
                                     <h3 class="droppableHeader">Variable</h3>
                                 </div>
+                                to
                                 <div class="droppable">
                                     <h3 class="droppableHeader">Value</h3>
                                 </div>
@@ -202,7 +211,7 @@
                             <div class="droppable">
                                 <h3 class="droppableHeader">Instructions</h3>
                             </div>
-                        </div></td>
+                            </div></td>
 
                     </tr>
 
@@ -215,9 +224,9 @@
         <div id="playground" ondrop="drop(event)" ondragover="allowDrop(event)">
 
         </div>
-        
+
         <div id="console">
-        <h2>console</h2>
+            <h2>console</h2>
         </div>
 
         <div id="buttonTab">

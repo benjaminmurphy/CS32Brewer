@@ -4,13 +4,13 @@ var playground = document.getElementById("playground");
 var menu = document.getElementById("menu");
 var consoleBox = document.getElementById("console");
 
-var droppableWidth = 100;
-
 var lineNumber = 0;
 
 var logger = null;
 
-// Allows elements to be dropped.
+var itemPadding = 10;
+var minHeight = 40;
+var minWidth = 100;
 
 function allowDrop(event) {
     event.preventDefault();
@@ -24,19 +24,25 @@ function drop(event) {
     var data = event.dataTransfer.getData("text");
     var element = document.getElementById(data);
 
+    var parent = element.parentNode;
+    
     if (target.classList.contains("droppable") && playground.contains(target)) {
         event.preventDefault();
         element.style.display = "block";
         target.appendChild(element);
         element.classList.add("shrinkable");
-        growParents(element);
+        recursiveResize(element);
     } else if (playground.contains(target)) {
         event.preventDefault();
         element.style.display = "block";
         playground.appendChild(element);
+        element.resize();
     } else if (menu.contains(target)) {
         event.preventDefault();
         element.parentNode.removeChild(element);
+    }
+    if (parent && !menu.contains(parent) && parent !== null && parent.tagName === "DIV") {
+        recursiveResize(parent);
     }
 }
 
@@ -44,179 +50,87 @@ function drop(event) {
 
 function startDrag(event) {
     var original = document.getElementById(event.target.id);
+    var parent = original.parentNode;
     var copy = null;
 
     if (playground.contains(original)) {
-
-        copy = original.cloneNode(true);
-        /*copy.id = "copy_" + copynum.toString();
-        copynum += 1;
-        copy.style.display = "none";
-        original.appendChild(copy);*/
-
-        if (original.classList.contains("shrinkable")) {
-            original.classList.remove("shrinkable");
-            var parent = original.parentNode;
-            //parent.removeChild(original);
-            shrinkParentsAndThis(parent);
-        }
-
+        event.dataTransfer.setData("text", original.id);
+        recursiveResize(parent);
     } else if (menu.contains(original)) {
         copy = original.cloneNode(true);
         copy.id = "copy_" + copynum.toString();
         copynum += 1;
         copy.style.display = "none";
         original.appendChild(copy);
+        event.dataTransfer.setData("text", copy.id);
     }
-
-    event.dataTransfer.setData("text", copy.id);
 }
 
 // Grow or shrink all parent elements.
 
-function growParents(element) {
-    var currentElement = element.parentNode;
-    while (currentElement.id !== "playground" && currentElement.id !== "menu") {
-        currentElement.resize([]);
-        currentElement = currentElement.parentNode;
+function recursiveResize(element) {
+    while (element.id !== "playground" && element.id !== "menu") {
+        element.resize();
+        element = element.parentNode;
     }
 }
 
-function shrinkParentsAndThis(element) {
-    var currentElement = element;
-    while (currentElement.id !== "playground" && currentElement.id !== "menu") {
-        currentElement.resize([element]);
-        currentElement = currentElement.parentNode;
-    }
-}
-
-// Grow or shrink one element.
-
-HTMLDivElement.prototype.grow = function(width, height) {    
-    var newHeight = this.offsetHeight + 20;
-    this.style.height = newHeight + 'px';
-    var newWidth = width;
-
-    if (!this.classList.contains("droppable")) {
-        newWidth += this.scrollWidth;
-    }
-
-    this.style.width = newWidth + 'px';
-}
-
-HTMLDivElement.prototype.shrink = function(width, height) {
-    var newHeight = this.scrollHeight - 20;
-    this.style.height = newHeight + 'px';
-    var newWidth = this.offsetWidth  - width;
-
-    if (!this.classList.contains("droppable")) {
-        newWidth += droppableWidth;
-    }
-
-    this.style.width = newWidth + 'px';
-}
-
-
-$(".typeSelect").bind("change", function(event){
-  var myType = this.options[this.selectedIndex].value;
-  var par = this.parentNode;
-  if ($(par).hasClass("literal")) {
-  par.getElementsByClassName("litVal")[0].remove();
-    var newField;
-    if (myType == "number") {
-        newField = document.createElement('input');
-        console.log("numbers!");
-        $(newField).addClass("litVal");
-        newField.type = "number";
-        newField.placeholder ="-0.0";
-    } else if (myType == "string") {
-        console.log("strongss");
-        newField = document.createElement('input');
-        $(newField).addClass("litVal");
-        newField.type = "text";
-        newField.placeholder ="Text";
-    } else if (myType == "bool") {
-        console.log("bulll");
-        newField = document.createElement('input');
-        $(newField).addClass("litVal");
-        newField.type = "number";
-        newField.placeholder ="-0.0";
-    }
-    par.appendChild(newField);
-  }
-  $(par).attr("valType", myType);
-});
-
-
-HTMLDivElement.prototype.getValue = function() {
-    var type = this.getElementsByTagName("select")[0].value;
-    var returnVal;
-    var thisValue = this.getElementsByClassName("litVal")[0].value;
-    console.log(thisValue);
-    if (type == "number") {
-        returnVal = parseFloat(thisValue);
-    } else if (type == "string") {
-        returnVal = thisValue;
-    } else if (type == "bool") {
-        if (parseFloat(thisValue) > 0) {
-            returnVal = true;
+HTMLDivElement.prototype.getValue = function() {    
+    if (this.classList.contains("nVal")) {
+        return parseFloat(this.getElementsByTagName("input")[0].value);
+    } else if (this.classList.contains("sVal")) {
+        return this.getElementsByTagName("input")[0].value;
+    } else if (this.classList.contains("bVal")) {
+        if (this.classList.contains("true")) {
+            return true;
         } else {
-            returnVal = false;
+            return false;
         }
     }
-    return returnVal;
 }
-
-var itemPadding = 10;
-var minHeight = 40;
-var minWidth = 100;
 
 HTMLDivElement.prototype.resize = function() {    
     var sumHeight = 0;
     var maxWidth = 0;
-
+    
+    if (this.classList.contains("literal") || this.classList.contains("droppable")) {
+        minWidth = 100;
+    } else if (this.classList.contains("item")) {
+        minWidth = 200;
+    }
+    
+    if (this.classList.contains("droppable") && !this.classList.contains("single")) {
+            sumHeight += 15;
+    }
+    
     var children = this.children;
     for(var i = 0; i < children.length; i++) {
-        console.log(i);
         var child = children[i];
-        console.log(child);
-        if ((child.classList.contains("droppable") 
+        sumHeight += child.offsetHeight;
+        
+        if (child.offsetWidth > maxWidth && child.classList.contains("droppable") 
              || child.classList.contains("item")
-             || child.classList.contains("functionSelect"))
-            && child !== this) {
-
-            if (child.offsetWidth > maxWidth) {
-                maxWidth = child.offsetWidth;
-            }
-            sumHeight += child.offsetHeight + itemPadding;
+             || child.classList.contains("functionSelect")) {
+            maxWidth = child.offsetWidth;
         }
-    }
+        
+        if (child.tagName === "SELECT" && !this.classList.contains("var")) {
+            sumHeight += 15;   
+        }
 
-    var newHeight = sumHeight + itemPadding;
-    var newWidth = maxWidth;
-    if (!this.classList.contains("droppable")) {
-        newWidth += itemPadding*2;
-        newHeight += itemPadding;
     }
-    if (newHeight > minHeight) {
-        this.style.height = newHeight + 'px';
-    } else {
-        this.style.height = minHeight + 'px';
-    }
-    if (newWidth > minWidth) {
-        this.style.width = newWidth + 'px';
-    } else {
-        this.style.width = minWidth + 'px';
-    }
+    
+    this.style.height = Math.max(sumHeight, minHeight) + 'px';
+    this.style.width = Math.max(maxWidth, minWidth) + 'px';
 }
 
 function setConsole() {
     if (consoleBox.style.display == "none") {
         consoleBox.style.display = "block";
-        playground.style.width = "calc(80% - 300px)";
+        playground.style.width = "calc(80% - 300px);";
     } else {
         consoleBox.style.display = "none";
-        playground.style.width = "calc(100% - 300px)";
+        playground.style.width = "calc(100% - 300px);";
     }
 }
 
@@ -235,8 +149,13 @@ function runProgram() {
     programRunning = true;
 
     var requestObj = compile();
+    
     console.log(requestObj);
+    
     var request = JSON.stringify(requestObj);
+    
+    clearLogs();
+    lineNumber = 0;
     
     $.post("/run", request, function(response) {
         response = JSON.parse(response);
@@ -248,6 +167,21 @@ function runProgram() {
             logger = setInterval(getLogs, 50);
         }
     })
+}
+
+function clearLogs() {
+    
+    var toRemove = [];
+    
+    for (var i = 0; i < consoleBox.children.length; i++) {
+        if (consoleBox.children[i].tagName === "P") {
+            toRemove.push(consoleBox.children[i]);
+        }
+    }
+    
+    for (var i = 0; i < toRemove.length; i++) {
+        consoleBox.removeChild(toRemove[i]);
+    }
 }
 
 function getLogs() {
@@ -284,6 +218,7 @@ function log(msg) {
     var line = document.createElement("p");
     var text = document.createTextNode(lineNumber.toString() + ": " + msg);
     line.appendChild(text);
+    lineNumber += 1;
 
     consoleBox.appendChild(line);
 }
@@ -305,10 +240,10 @@ HTMLDivElement.prototype.compile = function() {
         block.type = "set";
 
         var firstDropZone = this.children[1];
-        var secondDropZone = this.children[2];
+        var secondDropZone = this.children[3];
 
         block.name = firstDropZone.getElementsByClassName("var")[0].compile();
-        block.value = secondDropZone.children[1].compile();
+        block.value = secondDropZone.children[0].compile();
 
     } else if (this.classList.contains("get")) {
         block.type = "get";
@@ -329,13 +264,20 @@ HTMLDivElement.prototype.compile = function() {
         
         block.value = this.getValue();
         
-        block.class = this.getElementsByTagName("select")[0].value;
+        if (this.classList.contains("nVal")) {
+            block.class = "number";
+        } else if (this.classList.contains("nVal")) {
+            block.class = "string";
+        } else {
+            block.class = "bool";
+        }
+        
 
     } else if (this.classList.contains("print")) {
         block.type = "print";
         
         var firstDropZone = this.children[1];
-        block.name = firstDropZone.getElementsByClassName("var")[0].compile();
+        block.name = firstDropZone.children[0].compile();
         
     } else if (this.classList.contains("arithmetic")) {
         block.type = "numeric_operator";
@@ -344,8 +286,8 @@ HTMLDivElement.prototype.compile = function() {
         var operator = this.children[2];
         var secondDropZone = this.children[3];
         
-        block.arg1 = firstDropZone.children[1].compile();
-        block.arg2 = secondDropZone.children[1].compile();
+        block.arg1 = firstDropZone.children[0].compile();
+        block.arg2 = secondDropZone.children[0].compile();
         
         block.name = operator.value;
         
@@ -353,32 +295,28 @@ HTMLDivElement.prototype.compile = function() {
         block.type = "while";
         
         var firstDropZone = this.children[1];
-        var secondDropZone = this.children[2];
+        var secondDropZone = this.children[3];
         
-        block.condition = firstDropZone.children[1].compile();
+        block.condition = firstDropZone.children[0].compile();
         
         block.commands = [];
         
         for (var idx = 0; idx < secondDropZone.children.length; idx++) {
-            if (secondDropZone.children[idx].tagName === "DIV") {
-                block.commands.push(secondDropZone.children[idx].compile());
-            }
+            block.commands.push(secondDropZone.children[idx].compile());
         }
 
     } else if (this.classList.contains("if")) {
         block.type = "if";
 
         var condition = this.children[1];
-        var commands = this.children[2];
+        var commands = this.children[3];
 
         block.commands = [];
 
         this.condition = condition.children[1].compile();
 
         for (var idx = 0; idx < commands.children.length; idx++) {
-            if (commands.children[idx].tagName === "DIV") {
-                block.commands.push(commands.children[idx].compile());
-            }
+            block.commands.push(commands.children[idx].compile());
         }
 
     } else if (this.classList.contains("ifElse")) {
@@ -386,23 +324,19 @@ HTMLDivElement.prototype.compile = function() {
         block.type = "ifelse";
 
         var condition = this.children[1];
-        var ifCommands = this.children[2];
-        var elseCommands = this.children[3];
+        var ifCommands = this.children[3];
+        var elseCommands = this.children[5];
 
-        this.condition = condition.children[1].compile();
+        this.condition = condition.children[0].compile();
 
         block.commands = [];
         for (var idx = 0; idx < ifCommands.children.length; idx++) {
-            if (ifCommands.children[idx].tagName === "DIV") {
-                block.commands.push(ifCommands.children[idx].compile());
-            }
+            block.commands.push(ifCommands.children[idx].compile());
         }
 
         block.else = [];
         for (var idx = 0; idx < elseCommands.children.length; idx++) {
-            if (elseCommands.children[idx].tagName === "DIV") {
-                block.commands.push(elseCommands.children[idx].compile());
-            }
+            block.commands.push(elseCommands.children[idx].compile());
         }
 
     } else if (this.classList.contains("andOr")) {
@@ -413,8 +347,8 @@ HTMLDivElement.prototype.compile = function() {
         var secondDropZone = this.children[3];
 
         block.name = operator.value;
-        block.arg1 = firstDropZone.children[1].compile();
-        block.arg2 = secondDropZone.children[1].compile();
+        block.arg1 = firstDropZone.children[0].compile();
+        block.arg2 = secondDropZone.children[0].compile();
 
     } else if (this.classList.contains("equality")) {
         block.type = "comparison";
@@ -423,8 +357,8 @@ HTMLDivElement.prototype.compile = function() {
         var operator = this.children[2];
         var secondDropZone = this.children[3];
         
-        block.arg1 = firstDropZone.children[1].compile();
-        block.arg2 = secondDropZone.children[1].compile();
+        block.arg1 = firstDropZone.children[0].compile();
+        block.arg2 = secondDropZone.children[0].compile();
         
         block.name = operator.value;
     }

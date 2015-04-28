@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
@@ -13,7 +12,6 @@ import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.Log;
 import edu.brown.cs.brewer.handlers.Parser.BrewerParseException;
 import spark.ModelAndView;
-import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
