@@ -154,6 +154,8 @@ Author's custom styles
     background: rgba(127,127,127,.3);
     box-shadow: 0 0 5px #999;
     box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #buttonTab {
@@ -226,6 +228,7 @@ h3.itemHeader {
     box-sizing: border-box;
     display: inline-block;
     font-size: 20px;
+    background: 
 }
 
 .sVal, .nVal {
@@ -233,6 +236,14 @@ h3.itemHeader {
     width: 100px;
     height: 40px;
     box-sizing: border-box;
+}
+
+.boolean {
+    background: rgba(44, 44, 44, 0.7);
+}
+
+.variable {
+    background: rgba(142, 68, 173, 0.7);
 }
 
 .sVal input, .nVal input {
@@ -258,11 +269,11 @@ h3.itemHeader {
 }
 
 .var {
-    background-color: #9b59b6;
+    background-color: #8e44ad;
 }
 
 .get {
-    background-color: #2ecc71;
+    background-color: #d35400;
 }
 
 .set {
@@ -270,11 +281,11 @@ h3.itemHeader {
 }
 
 .print {
-    background-color: #f39c12;
+    background-color: #d35400;
 }
 
 .equality {
-    background-color: #16a085;
+    background-color: #34495e;
 }
 
 .arithmetic {
@@ -282,7 +293,7 @@ h3.itemHeader {
 }
 
 .andOr {
-    background-color: #2980b9;
+    background-color: #27ae60;
 }
 
 .if {
@@ -298,7 +309,7 @@ h3.itemHeader {
 }
 
 .literal {
-    background-color: #e74c3c;
+    background-color: #f39c12;
 }
 
 /* ==========================================================================
