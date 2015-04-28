@@ -95,7 +95,6 @@
                     <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
                         <h3 class="itemHeader">Var</h3>
                         <select class="functionSelect varSelect" name="equalityType">
-                            <option value="a">a</option>
                         </select>
                         </div></td>
 
