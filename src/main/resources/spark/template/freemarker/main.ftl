@@ -25,7 +25,6 @@
 
         <div id="menu" ondrop="drop(event)" ondragover="allowDrop(event)">
             <table>
-
                 <tr>
                     <td>
                         <h2>menu</h2>
@@ -44,234 +43,236 @@
                     <td>
                         <div class="newVarBox" id="newVarBox">
                             <input id="newVarName" name="newVarName" type="string" placeholder="Var Name"></input>
-                            <select id="typeSelect" name="varType">
-                                <option value="number">number</option>
-                                <option value="string">string</option>
-                                <option value="bool">bool</option>
-                            </select>
-                             <button class="button" type="button" id="addVar" onclick="addVariable()">
-                                Add
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-
-                    <td>
-                        <div class="item literal bVal true" draggable="true" type="bool" ondragstart="startDrag(event)" id="trueLiteral">
-                            True
-                        </div>
-
-                    </td>
-
-                    <td>
-                        <div class="item literal bVal false" draggable="true" type="bool" ondragstart="startDrag(event)" id="falseLiteral">
-                            False
-                        </div>
-
-                    </td>
-
-
-                </tr>
-
-                <tr>
-
-                    <td>
-                        <div class="item literal sVal" draggable="true" type="string" ondragstart="startDrag(event)" id="stringLiteral">
-                            <input class="litVal litValString" name="litVal" type="string" placeholder="String">
-                        </div>
-                    </td>
-
-                    <td>
-                        <div class="item literal nVal" draggable="true" type="number" ondragstart="startDrag(event)" id="numberLiteral">
-                            <input class="litVal litValNumber" name="litVal" type="number" placeholder="Number">
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-
-                    <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
-                        <h3 class="itemHeader">Var</h3>
-                        <select class="functionSelect varSelect" name="equalityType">
+                        <select id="typeSelect" name="varType">
+                            <option value="number">number</option>
+                            <option value="string">string</option>
+                            <option value="bool">bool</option>
                         </select>
-                        </div></td>
-
-                </tr>
-                <tr>
-
-                    <td>
-                        <div class="item get" draggable="true" ondragstart="startDrag(event)" id="get">
-                            <h3 class="itemHeader">Get variable:</h3>
-                            <div class="droppable single variable">
-                            </div>
+                        <button class="button" type="button" id="addVar" onclick="addVariable()">
+                            Add
+                        </button>
                         </div>
                     </td>
-
                 </tr>
-                <tr>
+        </table>
+    <table>
+        <tr>
 
-                    <td>
-                        <div class="item set" draggable="true" ondragstart="startDrag(event)" id="set">
-                            <h3 class="itemHeader">Set variable:</h3>
-                            <div class="droppable single variable">
-                            </div>
-                            <h3 class="itemHeader">To:</h3>
-                            <div class="droppable single">
-                            </div>
-                        </div>
-                    </td>
+            <td>
+                <div class="item literal bVal true" draggable="true" type="bool" ondragstart="startDrag(event)" id="trueLiteral">
+                    True
+                </div>
 
-                </tr>
-                <tr>
+            </td>
 
-                    <td>
-                        <div class="item print" draggable="true" ondragstart="startDrag(event)" id="print">
-                            <h3 class="itemHeader">Print variable:</h3>
-                            <div class="droppable single variable">
-                            </div>
-                        </div>
-                    </td>
+            <td>
+                <div class="item literal bVal false" draggable="true" type="bool" ondragstart="startDrag(event)" id="falseLiteral">
+                    False
+                </div>
 
-                </tr>
-                <tr>
+            </td>
 
-                    <td>
-                        <div class="item tallItem equality" draggable="true" ondragstart="startDrag(event)" id="equality">
-                            <h3 class="itemHeader">Equality</h3>
-                            <div class="droppable single">
-                            </div>
-                            <select class="functionSelect" name="equalityType">
-                                <option value="eq">=</option>
-                                <option value="less">&lt</option>
-                                <option value="greater">&gt</option>
-                            </select>
-                            <div class="droppable single">
-                            </div>
-                        </div>
-                    </td>
 
-                </tr>
-                <tr>
+        </tr>
 
-                    <td>
-                        <div class="item tallItem andOr" draggable="true" ondragstart="startDrag(event)" id="andOr">
-                            <h3 class="itemHeader">And/Or</h3>
-                            <div class="droppable boolean single">
-                            </div>
-                            <select class="functionSelect" name="andOrType">
-                                <option value="and">AND</option>
-                                <option value="or">OR</option>
-                            </select>
-                            <div class="droppable boolean single">
-                            </div>
-                        </div>
-                    </td>
+        <tr>
 
-                </tr>
-                <tr>
+            <td>
+                <div class="item literal sVal" draggable="true" type="string" ondragstart="startDrag(event)" id="stringLiteral">
+                    <input class="litVal litValString" name="litVal" type="string" placeholder="String">
+                </div>
+            </td>
 
-                    <td>
-                        <div class="item not" draggable="true" ondragstart="startDrag(event)" id="not">
-                            <h3 class="itemHeader">Not</h3>
-                            <div class="droppable boolean single">
-                            </div>
-                        </div>
-                    </td>
+            <td>
+                <div class="item literal nVal" draggable="true" type="number" ondragstart="startDrag(event)" id="numberLiteral">
+                    <input class="litVal litValNumber" name="litVal" type="number" placeholder="Number">
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
 
-                </tr>
-                <tr>
+            <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
+                <h3 class="itemHeader">Var</h3>
+                <select class="functionSelect varSelect" name="equalityType">
+                </select>
+                </div></td>
 
-                    <td>
-                        <div class="item tallItem arithmetic" draggable="true" ondragstart="startDrag(event)" id="arithmetic">
-                            <h3 class="itemHeader">Arithmetic</h3>
-                            <div class="droppable single number">
-                            </div>
-                            <select class="functionSelect" name="andOrType">
-                                <option value="add">+</option>
-                                <option value="sub">-</option>
-                                <option value="mul">*</option>
-                                <option value="div">/</option>
-                            </select>
-                            <div class="droppable single number">
-                            </div>
-                        </div>
-                    </td>
+        </tr>
+        <tr>
 
-                </tr>
-                <tr>
-
-                    <td>
-                        <div class="item if" draggable="true" ondragstart="startDrag(event)" id="if">
-                            <h3 class="itemHeader">If:</h3>
-                            <div class="droppable boolean single">
-                            </div>
-                            <h3 class="itemHeader">Then:</h3>
-                            <div class="droppable">
-                            </div>
-                        </div>
-                    </td>
-
-                </tr>
-                <tr>
-
-                    <td>
-                        <div class="item tallItem ifElse" draggable="true" ondragstart="startDrag(event)" id="ifElse">
-                            <h3 class="itemHeader">If:</h3>
-                            <div class="droppable boolean single">
-                            </div>
-                            <h3 class="itemHeader">Then:</h3>
-                            <div class="droppable">
-                            </div>
-                            <h3 class="itemHeader">Else:</h3>
-                            <div class="droppable">
-                            </div>
-                        </div>
-                    </td>
-
-                </tr>
-                <tr>
-
-                    <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">
-                        <h3 class="itemHeader">While:</h3>
-                        <div class="droppable boolean single">
-                        </div>
-                        <h3 class="itemHeader">Do:</h3>
-                        <div class="droppable">
-                        </div>
-                        </div></td>
-
-                </tr>
-
-                <tr>
-                    <td>
-                    <div id="spacing">
-
+            <td>
+                <div class="item get" draggable="true" ondragstart="startDrag(event)" id="get">
+                    <h3 class="itemHeader">Get variable:</h3>
+                    <div class="droppable single variable">
                     </div>
-                    </td>
-                </tr>
+                </div>
+            </td>
 
-            </table>
+        </tr>
+        <tr>
 
-        </div>
+            <td>
+                <div class="item set" draggable="true" ondragstart="startDrag(event)" id="set">
+                    <h3 class="itemHeader">Set variable:</h3>
+                    <div class="droppable single variable">
+                    </div>
+                    <h3 class="itemHeader">To:</h3>
+                    <div class="droppable single">
+                    </div>
+                </div>
+            </td>
 
-        <div id="playground" ondrop="drop(event)" ondragover="allowDrop(event)">
+        </tr>
+        <tr>
 
-        </div>
+            <td>
+                <div class="item print" draggable="true" ondragstart="startDrag(event)" id="print">
+                    <h3 class="itemHeader">Print variable:</h3>
+                    <div class="droppable single variable">
+                    </div>
+                </div>
+            </td>
 
-        <div id="console">
-            <h2>console</h2>
-        </div>
+        </tr>
+        <tr>
 
-        <div id="buttonTab">
-            <button id="runButton" onclick="runProgram()">Run</button>
-            <button id="killButton" onclick="killProgram()">Kill</button>
-            <button id="consoleButton" onclick="setConsole()">Console</button>
-        </div>
+            <td>
+                <div class="item equality" draggable="true" ondragstart="startDrag(event)" id="equality">
+                    <h3 class="itemHeader">Equality</h3>
+                    <div class="droppable single">
+                    </div>
+                    <select class="functionSelect" name="equalityType">
+                        <option value="eq">=</option>
+                        <option value="less">&lt</option>
+                        <option value="greater">&gt</option>
+                    </select>
+                    <div class="droppable single">
+                    </div>
+                </div>
+            </td>
 
-        <script src="js/interact-1.2.4.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="js/main.js"></script>
-    </body>
+        </tr>
+        <tr>
+
+            <td>
+                <div class="item andOr" draggable="true" ondragstart="startDrag(event)" id="andOr">
+                    <h3 class="itemHeader">And/Or</h3>
+                    <div class="droppable boolean single">
+                    </div>
+                    <select class="functionSelect" name="andOrType">
+                        <option value="and">AND</option>
+                        <option value="or">OR</option>
+                    </select>
+                    <div class="droppable boolean single">
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td>
+                <div class="item not" draggable="true" ondragstart="startDrag(event)" id="not">
+                    <h3 class="itemHeader">Not</h3>
+                    <div class="droppable boolean single">
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td>
+                <div class="item arithmetic" draggable="true" ondragstart="startDrag(event)" id="arithmetic">
+                    <h3 class="itemHeader">Arithmetic</h3>
+                    <div class="droppable single number">
+                    </div>
+                    <select class="functionSelect" name="andOrType">
+                        <option value="add">+</option>
+                        <option value="sub">-</option>
+                        <option value="mul">*</option>
+                        <option value="div">/</option>
+                    </select>
+                    <div class="droppable single number">
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td>
+                <div class="item if" draggable="true" ondragstart="startDrag(event)" id="if">
+                    <h3 class="itemHeader">If:</h3>
+                    <div class="droppable boolean single">
+                    </div>
+                    <h3 class="itemHeader">Then:</h3>
+                    <div class="droppable">
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td>
+                <div class="item ifElse" draggable="true" ondragstart="startDrag(event)" id="ifElse">
+                    <h3 class="itemHeader">If:</h3>
+                    <div class="droppable boolean single">
+                    </div>
+                    <h3 class="itemHeader">Then:</h3>
+                    <div class="droppable">
+                    </div>
+                    <h3 class="itemHeader">Else:</h3>
+                    <div class="droppable">
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">
+                <h3 class="itemHeader">While:</h3>
+                <div class="droppable boolean single">
+                </div>
+                <h3 class="itemHeader">Do:</h3>
+                <div class="droppable">
+                </div>
+                </div></td>
+
+        </tr>
+
+        <tr>
+            <td>
+                <div id="spacing">
+
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+    </div>
+
+<div id="playground" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+</div>
+
+<div id="console">
+    <h2>console</h2>
+</div>
+
+<div id="buttonTab">
+    <button id="runButton" onclick="runProgram()">Run</button>
+    <button id="killButton" onclick="killProgram()">Kill</button>
+    <button id="consoleButton" onclick="setConsole()">Console</button>
+</div>
+
+<script src="js/interact-1.2.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/main.js"></script>
+</body>
 </html>

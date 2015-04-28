@@ -15,7 +15,11 @@ var minWidth = 100;
 var variableList = [];
 
 function makeVariable() {
-    document.getElementById("newVarBox").style.display = "block";
+    if (document.getElementById("newVarBox").style.display === "block") {
+        document.getElementById("newVarBox").style.display = "none"
+    } else {
+        document.getElementById("newVarBox").style.display = "block";
+    }
 }
 
 function addVariable() {
@@ -159,7 +163,7 @@ HTMLDivElement.prototype.resize = function() {
             maxWidth = child.offsetWidth;
         }
 
-        if (child.tagName === "SELECT" && !this.classList.contains("var")) {
+        if (child.tagName === "SELECT") {
             sumHeight += 15;   
         }
 
