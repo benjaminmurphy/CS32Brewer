@@ -50,28 +50,16 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
       try {
         runtime = Parser.parseJSONProgram(req.body());
         runtime.run();
-
-        ImmutableMap.Builder<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>();
-
         variables.put("status", "success");
-
-        return gson.toJson(variables.build());
-
-
       } catch (BrewerParseException | ParseException e) {
-        runtime = new BrewerRuntime();
-        runtime.addLog(e.getMessage(), true);
+        variables.put("error", e.getMessage());
+        variables.put("status", "failure");
       }
-
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
-
-      variables.put("status", "failure");
-
       return gson.toJson(variables.build());
 
     }
@@ -84,9 +72,7 @@ public class BrewerServer {
       ImmutableMap.Builder<String, Object> variables =
           new ImmutableMap.Builder<String, Object>();
 
-      System.out.println("requesting logs");
       if (runtime != null) {
-        System.out.println("getting logs");
         List<Log> logs = runtime.getLogs();
         runtime.clearLogs();
 
@@ -97,18 +83,17 @@ public class BrewerServer {
         }
 
         List<String> messages = new ArrayList<String>();
-
         for (Log l : logs) {
           messages.add(l.getMsg());
         }
 
         variables.put("status", "success");
         variables.put("messages", messages);
-
-        return gson.toJson(variables.build());
       }
 
-      variables.put("status", "failure");
+      else {
+        variables.put("status", "failure");
+      }
 
       return gson.toJson(variables.build());
 
