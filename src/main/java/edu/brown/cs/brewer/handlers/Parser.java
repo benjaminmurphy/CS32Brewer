@@ -123,16 +123,17 @@ public class Parser {
     // I think we can use <Class>.valueOf() using reflection or something to do
     // this cleanly
     // return new Literal(runtime, vartype.cast(obj.get("value")), vartype);
+    // TODO fix data type parsing
 
     switch (vartypename) {
       case "string":
-        String stringPrim = (String) obj.get("value");
+        String stringPrim = obj.get("value").toString();
         return new Literal(runtime, stringPrim, String.class);
       case "number":
         Double doublePrim = getDouble(obj, "value");
         return new Literal(runtime, doublePrim, Double.class);
       case "bool":
-        Boolean boolPrim = (Boolean) obj.get("value");
+        Boolean boolPrim = Boolean.parseBoolean(obj.get("value").toString());
         return new Literal(runtime, boolPrim, Boolean.class);
       default:
         throw new TypeErrorException("Literals of the type \"" + vartypename
