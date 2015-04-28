@@ -90,6 +90,9 @@ public class Parser {
   private static SetCommand parseSetExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     JSONObject variableObj = (JSONObject) obj.get("name");
+    if (variableObj == null) {
+      throw new MissingElementException("Set expression is missing a variable.");
+    }
     String varname = (String) variableObj.get("name");
     Class<?> vartype = parseTypeFromString((String) variableObj.get("class"));
     Expression value =
@@ -105,6 +108,9 @@ public class Parser {
   private static GetCommand parseGetExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     JSONObject variableObj = (JSONObject) obj.get("name");
+    if (variableObj == null) {
+      throw new MissingElementException("Get expression is missing a variable.");
+    }
     String varname = (String) variableObj.get("name");
     String vartypename = (String) variableObj.get("class");
     Class<?> vartype = parseTypeFromString(vartypename);
@@ -112,9 +118,13 @@ public class Parser {
   }
 
   private static PrintExpression parsePrintExpression(JSONObject obj,
-      BrewerRuntime runtime) {
+      BrewerRuntime runtime) throws BrewerParseException {
     // Changed the parsing to get inner name.
     JSONObject innerObj = (JSONObject) obj.get("name");
+    if (innerObj == null) {
+      throw new MissingElementException(
+          "Print expression is missing a variable.");
+    }
     String varname = (String) innerObj.get("name");
     return new PrintExpression(runtime, varname);
   }
