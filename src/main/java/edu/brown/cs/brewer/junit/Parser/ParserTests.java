@@ -9,8 +9,6 @@ import java.util.Map;
 import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.Runner;
-
 import com.google.gson.Gson;
 
 import edu.brown.cs.brewer.BrewerRuntime;
@@ -59,9 +57,9 @@ public class ParserTests {
   /**
    * Printing in while loop, subtraction first.
    * 
-   * a = 5; 
-   * while a > 0: 
-   *    a -= 1; 
+   * a = 5;
+   * while a > 0:
+   *    a -= 1;
    *    print(a);
    */
   @Test
@@ -84,9 +82,9 @@ public class ParserTests {
   /**
    * Printing in while loop, print first.
    * 
-   * a = 5; 
-   * while a > 0: 
-   *    print(a); 
+   * a = 5;
+   * while a > 0:
+   *    print(a);
    *    a -= 1;
    */
   @Test
@@ -108,24 +106,45 @@ public class ParserTests {
 
   // The following tests test nested commands.
   /**
-   * Nesting some arithmetic, check output using if statement.
+   * Nesting some arithmetic.
    * a = 8;
    * a = (2 * ((a / 2) + 1));
-   * a should be 10 at this point.
-   * if (3.1415926545 == a):
-   *    a = 0;
-   * else 
-   *    a = 1;
    */
   @Test
   public void nestedArithmetic() {
-    // TODO After if else block set.
-    // String nestedArithmetic =
-    // {"main":[{"type":"set","name":{"type":"var","class":"number","name":"a"},"value":{"type":"literal","value":8,"class":"number"}},{"type":"set","name":{"type":"var","class":"number","name":"a"},"value":{"type":"numeric_operator","arg1":{"type":"literal","value":2,"class":"number"},"arg2":{"type":"numeric_operator","arg1":{"type":"numeric_operator","arg1":{"type":"get","name":{"type":"var","class":"number","name":"a"}},"arg2":{"type":"literal","value":2,"class":"number"},"name":"div"},"arg2":{"type":"literal","value":1,"class":"number"},"name":"add"},"name":"mul"}},{%ADD
-    // IF Else statement here}]};
+    String nestedArithmetic = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"literal\",\"value\":8,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"arg2\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"arg2\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"name\":\"div\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"add\"},\"name\":\"mul\"}}]}";
+    try {
+      br = Parser.parseJSONProgram(nestedArithmetic);
+      br.run();
+
+      Map<String, Variable> vars = br.getVariables();
+      Object value = vars.get("a").getValue();
+      assertTrue((double) value == 10.0);
+
+    } catch (BrewerParseException | ParseException e) {
+      e.printStackTrace();
+      fail("nestedArithmetic test failed");
+    }
   }
 
+  /**
+   * if (3.1415926545 == a):
+   *    a = 0;
+   * else
+   *    a = 1;
+   */
+
   // More complicated factorial test.
+  /**
+   * a = 6;
+   * b = 1;
+   * 
+   * while a > 1:
+   *    print(b);
+   *    b = a * b;
+   *    a = a - 1;
+   * print(b);
+   */
   @Test
   public void factorial() {
     String factorial = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"literal\",\"value\":6,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"}},\"arg2\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"name\":\"mul\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"get\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"}},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}}]},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"b\"}}]}";
