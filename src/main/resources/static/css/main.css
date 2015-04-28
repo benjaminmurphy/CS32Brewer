@@ -285,7 +285,7 @@ h3.itemHeader {
 }
 
 .equality {
-    background-color: #34495e;
+    background-color: rgb(104, 146, 188);
 }
 
 .arithmetic {
@@ -305,7 +305,7 @@ h3.itemHeader {
 }
 
 .while {
-    background-color: #34495e;
+    background-color: rgb(104, 146, 188);
 }
 
 .literal {

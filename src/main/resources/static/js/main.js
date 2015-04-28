@@ -161,7 +161,11 @@ function runProgram() {
         response = JSON.parse(response);
         
         if (response.status == "failure") {
-            console.log("Run failed.");
+            
+            for (var i = 0; i < response.messages.length; i++) {
+                log(response.messages[i]);
+            }
+            
             programRunning = false;
         } else {
             logger = setInterval(getLogs, 50);
