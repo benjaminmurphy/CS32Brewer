@@ -209,11 +209,11 @@ function runProgram() {
 
             console.log(response);
             
-            for (var i = 0; i < response.error.length; i++) {
-                if (response.error[i].isError) {
-                    log(response.error[i].msg, true);
+            for (var i = 0; i < response.messages.length; i++) {
+                if (response.messages[i].isError) {
+                    log(response.messages[i].msg, true);
                 } else {
-                    log(response.error[i].msg, false);
+                    log(response.messages[i].msg, false);
                 }            }
 
             programRunning = false;
