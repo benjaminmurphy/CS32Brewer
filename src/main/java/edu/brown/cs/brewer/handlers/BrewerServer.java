@@ -50,28 +50,18 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
       try {
         runtime = Parser.parseJSONProgram(req.body());
         runtime.run();
-
-        ImmutableMap.Builder<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>();
-
         variables.put("status", "success");
-
-        return gson.toJson(variables.build());
-
-
       } catch (BrewerParseException | ParseException e) {
-        runtime = new BrewerRuntime();
-        runtime.addLog(e.getMessage(), true);
+        List<Log> logs = new ArrayList<>();
+        logs.add(new Log(e.getMessage(), true));
+        variables.put("messages", logs);
+        variables.put("status", "failure");
       }
-
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
-
-      variables.put("status", "failure");
-
       return gson.toJson(variables.build());
 
     }
@@ -84,9 +74,7 @@ public class BrewerServer {
       ImmutableMap.Builder<String, Object> variables =
           new ImmutableMap.Builder<String, Object>();
 
-      System.out.println("requesting logs");
       if (runtime != null) {
-        System.out.println("getting logs");
         List<Log> logs = runtime.getLogs();
         runtime.clearLogs();
 
@@ -96,19 +84,18 @@ public class BrewerServer {
           variables.put("running", false);
         }
 
-        List<String> messages = new ArrayList<String>();
-
-        for (Log l : logs) {
-          messages.add(l.getMsg());
-        }
+        // List<String> messages = new ArrayList<String>();
+        // for (Log l : logs) {
+        // messages.add(l.getMsg());
+        // }
 
         variables.put("status", "success");
-        variables.put("messages", messages);
-
-        return gson.toJson(variables.build());
+        variables.put("messages", logs);
       }
 
-      variables.put("status", "failure");
+      else {
+        variables.put("status", "failure");
+      }
 
       return gson.toJson(variables.build());
 

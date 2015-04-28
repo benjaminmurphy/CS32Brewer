@@ -158,13 +158,24 @@
 
                     <td>
                         <div class="item tallItem andOr" draggable="true" ondragstart="startDrag(event)" id="andOr">
-                            <h3 class="itemHeader">Boolean</h3>
+                            <h3 class="itemHeader">And/Or</h3>
                             <div class="droppable boolean single">
                             </div>
                             <select class="functionSelect" name="andOrType">
                                 <option value="and">AND</option>
                                 <option value="or">OR</option>
                             </select>
+                            <div class="droppable boolean single">
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+
+                    <td>
+                        <div class="item not" draggable="true" ondragstart="startDrag(event)" id="not">
+                            <h3 class="itemHeader">Not</h3>
                             <div class="droppable boolean single">
                             </div>
                         </div>

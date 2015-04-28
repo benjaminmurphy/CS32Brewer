@@ -151,6 +151,7 @@ Author's custom styles
     right: 0;
     bottom: 0;
     padding-left: 25px;
+    padding-right: 25px;
     background: rgba(127,127,127,.3);
     box-shadow: 0 0 5px #999;
     box-sizing: border-box;
@@ -320,7 +321,7 @@ select {
     background-color: #27ae60;
 }
 
-.andOr {
+.andOr, .not {
     background-color: #27ae60;
 }
 
@@ -338,6 +339,11 @@ select {
 
 .literal {
     background-color: #f39c12;
+}
+
+.errorMsg {
+    color: red;
+    font-weight: 700;
 }
 
 /* ==========================================================================
