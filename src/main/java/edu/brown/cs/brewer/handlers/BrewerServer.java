@@ -63,7 +63,8 @@ public class BrewerServer {
 
 
       } catch (BrewerParseException | ParseException e) {
-        e.printStackTrace();
+        runtime = new BrewerRuntime();
+        runtime.addLog(e.getMessage(), true);
       }
 
       ImmutableMap.Builder<String, Object> variables =
@@ -83,7 +84,9 @@ public class BrewerServer {
       ImmutableMap.Builder<String, Object> variables =
           new ImmutableMap.Builder<String, Object>();
 
+      System.out.println("requesting logs");
       if (runtime != null) {
+        System.out.println("getting logs");
         List<Log> logs = runtime.getLogs();
         runtime.clearLogs();
 
