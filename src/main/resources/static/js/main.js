@@ -25,7 +25,7 @@ function drop(event) {
     var element = document.getElementById(data);
 
     var parent = element.parentNode;
-    
+
     if (target.classList.contains("droppable") && playground.contains(target)) {
         event.preventDefault();
         element.style.display = "block";
@@ -92,34 +92,34 @@ HTMLDivElement.prototype.getValue = function() {
 HTMLDivElement.prototype.resize = function() {    
     var sumHeight = 0;
     var maxWidth = 0;
-    
+
     if (this.classList.contains("literal") || this.classList.contains("droppable")) {
         minWidth = 100;
     } else if (this.classList.contains("item")) {
         minWidth = 200;
     }
-    
+
     if (this.classList.contains("droppable") && !this.classList.contains("single")) {
-            sumHeight += 15;
+        sumHeight += 15;
     }
-    
+
     var children = this.children;
     for(var i = 0; i < children.length; i++) {
         var child = children[i];
         sumHeight += child.offsetHeight;
-        
+
         if (child.offsetWidth > maxWidth && child.classList.contains("droppable") 
-             || child.classList.contains("item")
-             || child.classList.contains("functionSelect")) {
+            || child.classList.contains("item")
+            || child.classList.contains("functionSelect")) {
             maxWidth = child.offsetWidth;
         }
-        
+
         if (child.tagName === "SELECT" && !this.classList.contains("var")) {
             sumHeight += 15;   
         }
 
     }
-    
+
     this.style.height = Math.max(sumHeight, minHeight) + 'px';
     this.style.width = Math.max(maxWidth, minWidth) + 'px';
 }
@@ -148,24 +148,29 @@ function runProgram() {
     console.log("Running program!");
     programRunning = true;
 
-    var requestObj = compile();
-    
+    var requestObj = compileMain();
+
     console.log(requestObj);
-    
+
     var request = JSON.stringify(requestObj);
-    
+
     clearLogs();
     lineNumber = 0;
-    
+
     $.post("/run", request, function(response) {
         response = JSON.parse(response);
-        
+
         if (response.status == "failure") {
+
+            console.log(response);
             
-            for (var i = 0; i < response.messages.length; i++) {
-                log(response.messages[i]);
-            }
-            
+            for (var i = 0; i < response.error.length; i++) {
+                if (response.error[i].isError) {
+                    log(response.error[i].msg, true);
+                } else {
+                    log(response.error[i].msg, false);
+                }            }
+
             programRunning = false;
         } else {
             logger = setInterval(getLogs, 50);
@@ -174,15 +179,15 @@ function runProgram() {
 }
 
 function clearLogs() {
-    
+
     var toRemove = [];
-    
+
     for (var i = 0; i < consoleBox.children.length; i++) {
         if (consoleBox.children[i].tagName === "P") {
             toRemove.push(consoleBox.children[i]);
         }
     }
-    
+
     for (var i = 0; i < toRemove.length; i++) {
         consoleBox.removeChild(toRemove[i]);
     }
@@ -191,11 +196,15 @@ function clearLogs() {
 function getLogs() {
     $.post("/logs", function(response) {
         response = JSON.parse(response);
-        
+
         for (var i = 0; i < response.messages.length; i++) {
-            log(response.messages[i]);
+            if (response.messages[i].isError) {
+                log(response.messages[i].msg, true);
+            } else {
+                log(response.messages[i].msg, false);
+            }
         }
-        
+
         if (!response.running) {
             clearInterval(logger);
             programRunning = false;
@@ -207,7 +216,7 @@ function getLogs() {
 function killProgram() {
     $.post("/kill", function(response) {
         response = JSON.parse(response);
-        
+
         if (response.status == "failure") {
             console.log("Kill failed.");
         } else {
@@ -218,21 +227,34 @@ function killProgram() {
     });
 }
 
-function log(msg) {
+function log(msg, isError) {
     var line = document.createElement("p");
     var text = document.createTextNode(lineNumber.toString() + ": " + msg);
     line.appendChild(text);
+    
+    if (isError) {
+        line.className += " errorMsg";
+    }
+    
     lineNumber += 1;
 
     consoleBox.appendChild(line);
 }
 
-function compile() {
+function compileMain() {
     var request = {main : []};
     for (var idx = 0; idx < playground.children.length; idx++) {
         request.main.push(playground.children[idx].compile());
     }
     return request;
+}
+
+function compile(element) {
+    if (element === null || element === undefined || element.tagName !== "DIV") {
+        return null;
+    } else {
+        return element.compile();
+    }
 }
 
 HTMLDivElement.prototype.compile = function() {
@@ -246,28 +268,28 @@ HTMLDivElement.prototype.compile = function() {
         var firstDropZone = this.children[1];
         var secondDropZone = this.children[3];
 
-        block.name = firstDropZone.getElementsByClassName("var")[0].compile();
-        block.value = secondDropZone.children[0].compile();
+        block.name = compile(firstDropZone.children[0]);
+        block.value = compile(secondDropZone.children[0]);
 
     } else if (this.classList.contains("get")) {
         block.type = "get";
-        
+
         var dropZone = this.children[1];
-        
-        block.name = dropZone.getElementsByClassName("var")[0].compile();
-        
+
+        block.name = compile(dropZone.children[0]);
+
     } else if (this.classList.contains("var")) {
-        
+
         block.type = "var";
-        
-        block.class = this.getElementsByTagName("select")[0].value;
-        block.name = this.getElementsByTagName("select")[1].value;
-        
+
+        block.class = this.children[1].value;
+        block.name = this.children[2].value;
+
     } else if (this.classList.contains("literal")) {
         block.type = "literal";
-        
+
         block.value = this.getValue();
-        
+
         if (this.classList.contains("nVal")) {
             block.class = "number";
         } else if (this.classList.contains("nVal")) {
@@ -275,38 +297,38 @@ HTMLDivElement.prototype.compile = function() {
         } else {
             block.class = "bool";
         }
-        
+
 
     } else if (this.classList.contains("print")) {
         block.type = "print";
-        
+
         var firstDropZone = this.children[1];
-        block.name = firstDropZone.children[0].compile();
-        
+        block.name = compile(firstDropZone.children[0]);
+
     } else if (this.classList.contains("arithmetic")) {
         block.type = "numeric_operator";
-        
+
         var firstDropZone = this.children[1];
         var operator = this.children[2];
         var secondDropZone = this.children[3];
-        
-        block.arg1 = firstDropZone.children[0].compile();
-        block.arg2 = secondDropZone.children[0].compile();
-        
+
+        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg2 = compile(secondDropZone.children[0]);
+
         block.name = operator.value;
-        
+
     } else if (this.classList.contains("while")) {
         block.type = "while";
-        
+
         var firstDropZone = this.children[1];
         var secondDropZone = this.children[3];
-        
-        block.condition = firstDropZone.children[0].compile();
-        
+
+        block.condition = compile(firstDropZone.children[0]);
+
         block.commands = [];
-        
+
         for (var idx = 0; idx < secondDropZone.children.length; idx++) {
-            block.commands.push(secondDropZone.children[idx].compile());
+            block.commands.push(compile(secondDropZone.children[idx]));
         }
 
     } else if (this.classList.contains("if")) {
@@ -317,10 +339,10 @@ HTMLDivElement.prototype.compile = function() {
 
         block.commands = [];
 
-        this.condition = condition.children[1].compile();
+        this.condition = compile(condition.children[0]);
 
         for (var idx = 0; idx < commands.children.length; idx++) {
-            block.commands.push(commands.children[idx].compile());
+            block.commands.push(compile(commands.children[idx]));
         }
 
     } else if (this.classList.contains("ifElse")) {
@@ -335,12 +357,12 @@ HTMLDivElement.prototype.compile = function() {
 
         block.commands = [];
         for (var idx = 0; idx < ifCommands.children.length; idx++) {
-            block.commands.push(ifCommands.children[idx].compile());
+            block.commands.push(compile(ifCommands.children[idx]));
         }
 
         block.else = [];
         for (var idx = 0; idx < elseCommands.children.length; idx++) {
-            block.commands.push(elseCommands.children[idx].compile());
+            block.commands.push(compile(elseCommands.children[idx]));
         }
 
     } else if (this.classList.contains("andOr")) {
@@ -351,21 +373,21 @@ HTMLDivElement.prototype.compile = function() {
         var secondDropZone = this.children[3];
 
         block.name = operator.value;
-        block.arg1 = firstDropZone.children[0].compile();
-        block.arg2 = secondDropZone.children[0].compile();
+        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg2 = compile(secondDropZone.children[0]);
 
     } else if (this.classList.contains("equality")) {
         block.type = "comparison";
-        
+
         var firstDropZone = this.children[1];
         var operator = this.children[2];
         var secondDropZone = this.children[3];
-        
-        block.arg1 = firstDropZone.children[0].compile();
-        block.arg2 = secondDropZone.children[0].compile();
-        
+
+        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg2 = compile(secondDropZone.children[0]);
+
         block.name = operator.value;
     }
-    
+
     return block;
 }
