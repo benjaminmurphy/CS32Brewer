@@ -411,16 +411,17 @@ HTMLDivElement.prototype.compile = function() {
         var ifCommands = this.children[3];
         var elseCommands = this.children[5];
 
-        this.condition = condition.children[0].compile();
+        block.condition = condition.children[0].compile();
 
         block.commands = [];
+        block.else = [];
         for (var idx = 0; idx < ifCommands.children.length; idx++) {
             block.commands.push(compile(ifCommands.children[idx]));
         }
 
         block.else = [];
         for (var idx = 0; idx < elseCommands.children.length; idx++) {
-            block.commands.push(compile(elseCommands.children[idx]));
+            block.else.push(compile(elseCommands.children[idx]));
         }
 
     } else if (this.classList.contains("andOr")) {
