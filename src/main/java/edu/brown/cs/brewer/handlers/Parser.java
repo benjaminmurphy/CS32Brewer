@@ -126,8 +126,12 @@ public class Parser {
       throw new MissingElementException(
           "Print expression is missing a variable.");
     }
-    String varname = (String) innerObj.get("name");
-    return new PrintExpression(runtime, varname);
+    if (((String) innerObj.get("type")).equals("var")) {
+      String varname = (String) innerObj.get("name");
+      return new PrintExpression(runtime, varname);
+    } else {
+      return new PrintExpression(runtime, parseLiteralExpression(innerObj, runtime));
+    }
   }
 
   private static Literal parseLiteralExpression(JSONObject obj,

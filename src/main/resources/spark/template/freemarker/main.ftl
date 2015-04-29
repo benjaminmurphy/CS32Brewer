@@ -137,7 +137,7 @@
 
             <td>
                 <div class="item print" draggable="true" ondragstart="startDrag(event)" id="print">
-                    <h3 class="itemHeader">Print variable:</h3>
+                    <h3 class="itemHeader">Print:</h3>
                     <div class="droppable single variable">
                     </div>
                 </div>

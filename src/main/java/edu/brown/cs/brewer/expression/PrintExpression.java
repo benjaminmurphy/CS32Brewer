@@ -7,26 +7,43 @@ import edu.brown.cs.brewer.Variable;
 public class PrintExpression extends Expression {
 
   private String varname;
+  private Literal literal;
 
   public PrintExpression(final BrewerRuntime _runtime, final String _varname) {
     super(_runtime);
     this.varname = _varname;
+    this.literal = null;
   }
+
+  public PrintExpression(final BrewerRuntime _runtime, final Literal _literal) {
+    super(_runtime);
+    this.literal = _literal;
+    this.varname = null;
+  }
+
 
   @Override
   public Void evaluate() throws ProgramKilledException {
-	if(!runtime.isRunning()){
-		throw new ProgramKilledException();
-	}
-    String msg = varname + ": ";
-    Variable v = runtime.getVariables().get(varname);
-    if (v == null) {
-      msg += "null";
-    } else {
-      msg += v.getValue();
+    if(!runtime.isRunning()) {
+      throw new ProgramKilledException();
     }
-    runtime.addLog(msg, false);
-    return null;
+
+    if (varname != null) {
+      String msg = varname + ": ";
+      Variable v = runtime.getVariables().get(varname);
+      if (v == null) {
+        msg += "null";
+      } else {
+        msg += v.getValue();
+      }
+      runtime.addLog(msg, false);
+      return null;
+    } else {
+
+      String msg = this.literal.evaluate().toString();
+      runtime.addLog(msg, false);
+      return null;
+    }
   }
 
   @Override
