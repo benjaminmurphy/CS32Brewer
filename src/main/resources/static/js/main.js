@@ -397,7 +397,7 @@ HTMLDivElement.prototype.compile = function() {
 
         block.commands = [];
 
-        block.condition = compile(condition.children[0]);
+        block.condition = condition.children[0].compile();
 
         for (var idx = 0; idx < commands.children.length; idx++) {
             block.commands.push(compile(commands.children[idx]));
