@@ -1,3 +1,7 @@
 /target/
 
 .DS_Store
+
+pom.xml
+
+.mvn-classpath
