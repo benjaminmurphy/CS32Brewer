@@ -350,7 +350,7 @@ HTMLDivElement.prototype.compile = function() {
 
         if (this.classList.contains("nVal")) {
             block.class = "number";
-        } else if (this.classList.contains("nVal")) {
+        } else if (this.classList.contains("sVal")) {
             block.class = "string";
         } else {
             block.class = "bool";
