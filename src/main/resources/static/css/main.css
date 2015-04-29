@@ -115,6 +115,7 @@ Author's custom styles
     color:#ddd;
     text-shadow: 0px 1px 2px #333;
     font-size: 40px;
+    float: left;
 }
 
 #menu {
@@ -357,6 +358,39 @@ select {
 .errorMsg {
     color: red;
     font-weight: 700;
+}
+
+#instructions, #about {
+    float: right;
+    margin-right: 20px;
+}
+
+#aboutDiv {
+    position: fixed;
+    width: 40%;
+    height: 40%;
+    background-color: gray;
+    top: 30%;
+    left: 30%;
+    display: none;
+    z-index: 20;
+    border-radius: 5px;
+}
+
+#aboutDiv button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #2980b9;
+}
+
+#aboutDiv p {
+    position: absolute;
+    width: 80%;
+    height: 20%;
+    top: 20%;
+    left: 10%;
+    font-size: 20px;
 }
 
 /* ==========================================================================

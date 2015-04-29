@@ -22,6 +22,14 @@ function makeVariable() {
     }
 }
 
+function showAbout() {
+    if (document.getElementById("aboutDiv").style.display === "block") {
+        document.getElementById("aboutDiv").style.display = "none"
+    } else {
+        document.getElementById("aboutDiv").style.display = "block";
+    }
+}
+
 function addVariable() {
     var box = document.getElementById("newVarBox");
     box.style.display = "none";

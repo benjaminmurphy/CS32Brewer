@@ -21,6 +21,14 @@
 
         <div id="header">
             <h1 id="title">Brewer</h1>
+            <h2 id="instructions">Instructions</h2>
+            <h2 id="about" onclick="showAbout()">About</h2>
+        </div>
+
+        <div id="aboutDiv">
+            <button class="button" type="button" onclick="showAbout()">Close</button>
+            <p>Brewer &copy; 2015 Raphael Kargon, Ben Murphy, Noah Picard, Steven Shi<br>
+                For more information, contact benjamin_murphy@brown.edu.</p>
         </div>
 
         <div id="menu" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -51,9 +59,9 @@
                         <button class="button" type="button" id="addVar" onclick="addVariable()">
                             Add
                         </button>
-                        </div>
-                    </td>
-                </tr>
+                </div>
+                </td>
+            </tr>
         </table>
     <table>
         <tr>
@@ -145,8 +153,8 @@
                     </div>
                     <select class="functionSelect" name="equalityType">
                         <option value="eq">=</option>
-                        <option value="less">&lt</option>
-                        <option value="greater">&gt</option>
+                        <option value="less">&lt;</option>
+                        <option value="greater">&gt;</option>
                     </select>
                     <div class="droppable single">
                     </div>
