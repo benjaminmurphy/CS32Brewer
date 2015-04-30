@@ -119,7 +119,7 @@ Author's custom styles
 }
 
 #menu {
-    width: 260px;
+    width: 170px;
     height: calc(100% - 50px);
     position: fixed;
     left: 0;
@@ -131,18 +131,33 @@ Author's custom styles
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: scroll;
-    
 }
 
-#playground {
-    width: calc(80% - 260px);
+#playground1, #playground2, #playground3 {
+    width: calc(26.66% - 56.66px);
     height: 100%;
-    position: absolute;
-    left: 260px;
+    position: fixed;
     top: 0;
     padding-top: 60px;
     padding-left: 10px;
     box-sizing: border-box;
+    border-right: 2px solid black;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#playground1 {
+    left: 170px;
+}
+
+#playground2 {
+    left: calc(26.66% + 113.33px);
+
+}
+
+#playground3 {
+    left: calc(53.33% + 56.66px);
+    border-right: 0;
 }
 
 #console {
@@ -166,14 +181,20 @@ Author's custom styles
     bottom: 0.2em;
 }
 
+.varSelect {
+    width: 100px;
+    margin: 0;
+    padding: 0;
+}
+
 #makeVariable {
     border-radius: 5px;
-    width: 200px;
+    width: 120px;
     background-color: #2980b9;
 }
 
 .item {
-    min-width: 200px;
+    min-width: 120px;
     vertical-align: middle;
     display: block;
     margin: 0;
@@ -193,6 +214,8 @@ td {
 
 h3.itemHeader {
     margin: 0 0 0 7px;
+    width: 100%;
+    min-height: 10px;
     font-weight: 100;
 }
 
@@ -205,35 +228,32 @@ select {
 }
 
 .functionSelect {
-    margin:0.6em;
-    margin-right: 2em;
-    margin-left: 2em;
+    margin: 0.6em;
 }
 
 #typeSelect {
-    width: 90px;
+    width: 100%;
     margin-top: 5px;
 }
 #newVarName {
-    float:left;
     width: 100%;
     height: 26px;
     padding: 0 0 0 5px;
     box-sizing: border-box;
+    text-align: center;
     border: 0;
     border-radius: 5px;
     font-size: 16px;
 }
 #addVar {
-    float: right;
-    width: 90px;
-    margin-top: 5px;
+    width: 100%;
+    margin-top: 3px;
     border-radius: 5px;
     background-color: #2980b9;
 }
 #newVarBox {
-    width: 200px;
-    height: 65px;
+    width: 120px;
+    height: 98px;
     vertical-align: middle;
     display: block;
     margin: 0;
@@ -263,8 +283,8 @@ select {
 }
 
 .bVal {
-    min-width: 100px;
-    width: 100px;
+    min-width: 120px;
+    width: 120px;
     height: 40px;
     text-align: center;
     padding-top: 5px;
@@ -275,8 +295,8 @@ select {
 }
 
 .sVal, .nVal {
-    min-width: 100px;
-    width: 100px;
+    min-width: 120px;
+    width: 120px;
     height: 40px;
     box-sizing: border-box;
 }
@@ -290,16 +310,13 @@ select {
 }
 
 .sVal input, .nVal input {
-    width: 86px;
+    width: 106px;
     height: 26px;
     margin: 6px 0 0 6px;
     padding: 0 0 0 5px;
     box-sizing: border-box;
     border: 0;
     font-size: 16px;
-}
-
-.nVal input {
     text-align: center;
 }
 
@@ -358,6 +375,24 @@ select {
 .errorMsg {
     color: red;
     font-weight: 700;
+}
+
+#main1-title, #main2-title, #main3-title {
+    position: absolute;
+    width: calc(26.66% - 56.66px);
+    text-align: center;
+}
+
+#main1-title {
+    left: 170px;
+}
+
+#main2-title {
+    left: calc(26.66% + 113.33px);
+}
+
+#main3-title {
+    left: calc(53.33% + 56.66px);
 }
 
 #instructions, #about {

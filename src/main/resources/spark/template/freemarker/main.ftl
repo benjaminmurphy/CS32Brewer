@@ -21,6 +21,9 @@
 
         <div id="header">
             <h1 id="title">Brewer</h1>
+            <h2 id="main1-title">main</h2>
+            <h2 id="main2-title">main (cont.)</h2>
+            <h2 id="main3-title">main (cont.)</h2>
             <h2 id="instructions">Instructions</h2>
             <h2 id="about" onclick="showAbout()">About</h2>
         </div>
@@ -67,14 +70,15 @@
         <tr>
 
             <td>
-                <div class="item literal bVal true" draggable="true" type="bool" ondragstart="startDrag(event)" id="trueLiteral">
+                <div class="item literal bVal true boolean" draggable="true" type="bool" ondragstart="startDrag(event)" id="trueLiteral">
                     True
                 </div>
 
             </td>
-
+        </tr>
+        <tr>
             <td>
-                <div class="item literal bVal false" draggable="true" type="bool" ondragstart="startDrag(event)" id="falseLiteral">
+                <div class="item literal bVal false boolean" draggable="true" type="bool" ondragstart="startDrag(event)" id="falseLiteral">
                     False
                 </div>
 
@@ -86,13 +90,16 @@
         <tr>
 
             <td>
-                <div class="item literal sVal" draggable="true" type="string" ondragstart="startDrag(event)" id="stringLiteral">
+                <div class="item literal sVal string" draggable="true" type="string" ondragstart="startDrag(event)" id="stringLiteral">
                     <input class="litVal litValString" name="litVal" type="string" placeholder="String">
                 </div>
             </td>
 
+        </tr>
+        <tr>
+
             <td>
-                <div class="item literal nVal" draggable="true" type="number" ondragstart="startDrag(event)" id="numberLiteral">
+                <div class="item literal nVal number" draggable="true" type="number" ondragstart="startDrag(event)" id="numberLiteral">
                     <input class="litVal litValNumber" name="litVal" type="number" placeholder="Number">
                 </div>
             </td>
@@ -101,8 +108,8 @@
     <table>
         <tr>
 
-            <td><div class="item var" draggable="true" ondragstart="startDrag(event)" id="var">
-                <h3 class="itemHeader">Var</h3>
+            <td><div class="item var variable" draggable="true" ondragstart="startDrag(event)" id="var">
+                <h3 class="itemHeader"></h3>
                 <select class="functionSelect varSelect" name="equalityType">
                 </select>
                 </div></td>
@@ -111,19 +118,8 @@
         <tr>
 
             <td>
-                <div class="item get" draggable="true" ondragstart="startDrag(event)" id="get">
-                    <h3 class="itemHeader">Get variable:</h3>
-                    <div class="droppable single variable">
-                    </div>
-                </div>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td>
-                <div class="item set" draggable="true" ondragstart="startDrag(event)" id="set">
-                    <h3 class="itemHeader">Set variable:</h3>
+                <div class="item set void" draggable="true" ondragstart="startDrag(event)" id="set">
+                    <h3 class="itemHeader">Set:</h3>
                     <div class="droppable single variable">
                     </div>
                     <h3 class="itemHeader">To:</h3>
@@ -136,9 +132,9 @@
         <tr>
 
             <td>
-                <div class="item print" draggable="true" ondragstart="startDrag(event)" id="print">
+                <div class="item print void" draggable="true" ondragstart="startDrag(event)" id="print">
                     <h3 class="itemHeader">Print:</h3>
-                    <div class="droppable single variable">
+                    <div class="droppable single variable lit">
                     </div>
                 </div>
             </td>
@@ -147,8 +143,8 @@
         <tr>
 
             <td>
-                <div class="item equality" draggable="true" ondragstart="startDrag(event)" id="equality">
-                    <h3 class="itemHeader">Equality</h3>
+                <div class="item equality boolean" draggable="true" ondragstart="startDrag(event)" id="equality">
+                    <h3 class="itemHeader"></h3>
                     <div class="droppable single">
                     </div>
                     <select class="functionSelect" name="equalityType">
@@ -165,8 +161,8 @@
         <tr>
 
             <td>
-                <div class="item andOr" draggable="true" ondragstart="startDrag(event)" id="andOr">
-                    <h3 class="itemHeader">And/Or</h3>
+                <div class="item andOr boolean" draggable="true" ondragstart="startDrag(event)" id="andOr">
+                    <h3 class="itemHeader"> </h3>
                     <div class="droppable boolean single">
                     </div>
                     <select class="functionSelect" name="andOrType">
@@ -182,7 +178,7 @@
         <tr>
 
             <td>
-                <div class="item not" draggable="true" ondragstart="startDrag(event)" id="not">
+                <div class="item not boolean" draggable="true" ondragstart="startDrag(event)" id="not">
                     <h3 class="itemHeader">Not</h3>
                     <div class="droppable boolean single">
                     </div>
@@ -193,8 +189,8 @@
         <tr>
 
             <td>
-                <div class="item arithmetic" draggable="true" ondragstart="startDrag(event)" id="arithmetic">
-                    <h3 class="itemHeader">Arithmetic</h3>
+                <div class="item arithmetic number" draggable="true" ondragstart="startDrag(event)" id="arithmetic">
+                    <h3 class="itemHeader"> </h3>
                     <div class="droppable single number">
                     </div>
                     <select class="functionSelect" name="andOrType">
@@ -212,7 +208,7 @@
         <tr>
 
             <td>
-                <div class="item if" draggable="true" ondragstart="startDrag(event)" id="if">
+                <div class="item if void" draggable="true" ondragstart="startDrag(event)" id="if">
                     <h3 class="itemHeader">If:</h3>
                     <div class="droppable boolean single">
                     </div>
@@ -226,7 +222,7 @@
         <tr>
 
             <td>
-                <div class="item ifElse" draggable="true" ondragstart="startDrag(event)" id="ifElse">
+                <div class="item ifElse void" draggable="true" ondragstart="startDrag(event)" id="ifElse">
                     <h3 class="itemHeader">If:</h3>
                     <div class="droppable boolean single">
                     </div>
@@ -242,7 +238,7 @@
         </tr>
         <tr>
 
-            <td><div class="item while" draggable="true" ondragstart="startDrag(event)" id="while">
+            <td><div class="item while void" draggable="true" ondragstart="startDrag(event)" id="while">
                 <h3 class="itemHeader">While:</h3>
                 <div class="droppable boolean single">
                 </div>
@@ -265,7 +261,15 @@
 
     </div>
 
-<div id="playground" ondrop="drop(event)" ondragover="allowDrop(event)">
+<div id="playground1" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+</div>
+
+<div id="playground2" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+</div>
+
+<div id="playground3" ondrop="drop(event)" ondragover="allowDrop(event)">
 
 </div>
 

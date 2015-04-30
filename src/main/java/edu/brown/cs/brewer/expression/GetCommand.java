@@ -26,7 +26,6 @@ public class GetCommand extends Expression {
 		throw new ProgramKilledException();
 	}
     Variable var = runtime.getVariables().get(varname);
-    System.out.println(varname);
     return vartype.cast(var.getValue());
   }
 

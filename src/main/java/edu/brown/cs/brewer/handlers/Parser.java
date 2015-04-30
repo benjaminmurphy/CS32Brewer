@@ -22,7 +22,6 @@ public class Parser {
 
   public static BrewerRuntime parseJSONProgram(String json)
       throws BrewerParseException, ParseException {
-    System.out.println("Parsing program: " + json);
     Gson GSON = new Gson();// TODO make this static
     JSONParser parser = new JSONParser();
 
@@ -52,8 +51,8 @@ public class Parser {
       case "set": {
         return parseSetExpression(obj, runtime);
       }
-      case "get": {
-        return parseGetExpression(obj, runtime);
+      case "var": {
+        return parseVarExpression(obj, runtime);
       }
       case "print": {
         return parsePrintExpression(obj, runtime);
@@ -106,16 +105,15 @@ public class Parser {
     return new SetCommand(runtime, varname, value, vartype);
   }
 
-  private static GetCommand parseGetExpression(JSONObject obj,
+  private static GetCommand parseVarExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
-    JSONObject variableObj = (JSONObject) obj.get("name");
-    if (variableObj == null) {
-      throw new MissingElementException("Get expression is missing a variable.");
+    String var = (String) obj.get("name");
+    if (var == null) {
+      throw new MissingElementException("Var expression is missing a name.");
     }
-    String varname = (String) variableObj.get("name");
-    String vartypename = (String) variableObj.get("class");
+    String vartypename = (String) obj.get("class");
     Class<?> vartype = parseTypeFromString(vartypename);
-    return new GetCommand(runtime, varname, vartype);
+    return new GetCommand(runtime, var, vartype);
   }
 
   private static PrintExpression parsePrintExpression(JSONObject obj,

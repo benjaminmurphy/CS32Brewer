@@ -1,6 +1,10 @@
 var copynum = 0;
 
-var playground = document.getElementById("playground");
+var playground1 = document.getElementById("playground1");
+var playground2 = document.getElementById("playground2");
+var playground3 = document.getElementById("playground3");
+
+var functionground = document.getElementById("function");
 var menu = document.getElementById("menu");
 var consoleBox = document.getElementById("console");
 
@@ -73,6 +77,18 @@ function allowDrop(event) {
     event.preventDefault();
 }
 
+function playgroundThatContains(target) {
+    if (playground1.contains(target)) {
+        return playground1;
+    } else if (playground2.contains(target)) {
+        return playground2;
+    } else if (playground3.contains(target)) {
+        return playground3;
+    } else {
+        return null;
+    }
+}
+
 // Drop handler.
 
 function drop(event) {
@@ -83,16 +99,59 @@ function drop(event) {
 
     var parent = element.parentNode;
 
-    if (target.classList.contains("droppable") && playground.contains(target)) {
+    if (target.classList.contains("droppable") && playgroundThatContains(target) !== null) {
+
+        if (target.classList.contains("single")) {
+            if (element.classList.contains("while") || element.classList.contains("ifElse") ||
+                element.classList.contains("if")) {
+                return;
+            }
+        }
+
+        if (target.classList.contains("number")) {
+
+            if (!element.classList.contains("number") &&
+                !element.classList.contains("var")) {
+                return;
+            }
+
+        } else if (target.classList.contains("boolean")) {
+
+            if (!element.classList.contains("boolean") &&
+                !element.classList.contains("var")) {
+                return;
+            }
+
+        } else if (target.classList.contains("variable")) {
+
+            if (target.classList.contains("lit")) {
+                if (!element.classList.contains("var") && !element.classList.contains("literal")) {
+                    return;
+                }
+            } else {
+
+                if (!element.classList.contains("var")) {
+                    return;
+                }
+            }
+
+        } else if (target.classList.contains("string")) {
+
+            if (!element.classList.contains("string") &&
+                !element.classList.contains("var")) {
+                return;
+            }
+        }
+
         event.preventDefault();
         element.style.display = "block";
         target.appendChild(element);
         element.classList.add("shrinkable");
         recursiveResize(element);
-    } else if (playground.contains(target)) {
+    } else if (playgroundThatContains(target) !== null) {
         event.preventDefault();
         element.style.display = "block";
-        playground.appendChild(element);
+        playgroundThatContains(target).appendChild(element);
         element.resize();
     } else if (menu.contains(target)) {
         event.preventDefault();
@@ -110,7 +169,7 @@ function startDrag(event) {
     var parent = original.parentNode;
     var copy = null;
 
-    if (playground.contains(original)) {
+    if (playgroundThatContains(original) !== null) {
         event.dataTransfer.setData("text", original.id);
         recursiveResize(parent);
     } else if (menu.contains(original)) {
@@ -126,7 +185,7 @@ function startDrag(event) {
 // Grow or shrink all parent elements.
 
 function recursiveResize(element) {
-    while (element.id !== "playground" && element.id !== "menu") {
+    while (element.id !== "playground1" && element.id !== "playground2" && element.id !== "playground3" && element.id !== "menu") {
         element.resize();
         element = element.parentNode;
     }
@@ -153,7 +212,7 @@ HTMLDivElement.prototype.resize = function() {
     if (this.classList.contains("literal") || this.classList.contains("droppable")) {
         minWidth = 100;
     } else if (this.classList.contains("item")) {
-        minWidth = 200;
+        minWidth = 120;
     }
 
     if (this.classList.contains("droppable") && !this.classList.contains("single")) {
@@ -220,7 +279,7 @@ function runProgram() {
         if (response.status == "failure") {
 
             console.log(response);
-            
+
             for (var i = 0; i < response.messages.length; i++) {
                 if (response.messages[i].isError) {
                     log(response.messages[i].msg, true);
@@ -289,11 +348,11 @@ function log(msg, isError) {
     var line = document.createElement("p");
     var text = document.createTextNode(lineNumber.toString() + ": " + msg);
     line.appendChild(text);
-    
+
     if (isError) {
         line.className += " errorMsg";
     }
-    
+
     lineNumber += 1;
 
     consoleBox.appendChild(line);
@@ -301,8 +360,14 @@ function log(msg, isError) {
 
 function compileMain() {
     var request = {main : []};
-    for (var idx = 0; idx < playground.children.length; idx++) {
-        request.main.push(playground.children[idx].compile());
+    for (var idx = 0; idx < playground1.children.length; idx++) {
+        request.main.push(playground1.children[idx].compile());
+    }
+    for (var idx = 0; idx < playground2.children.length; idx++) {
+        request.main.push(playground2.children[idx].compile());
+    }
+    for (var idx = 0; idx < playground3.children.length; idx++) {
+        request.main.push(playground3.children[idx].compile());
     }
     return request;
 }
@@ -328,13 +393,6 @@ HTMLDivElement.prototype.compile = function() {
 
         block.name = compile(firstDropZone.children[0]);
         block.value = compile(secondDropZone.children[0]);
-
-    } else if (this.classList.contains("get")) {
-        block.type = "get";
-
-        var dropZone = this.children[1];
-
-        block.name = compile(dropZone.children[0]);
 
     } else if (this.classList.contains("var")) {
 
@@ -439,7 +497,7 @@ HTMLDivElement.prototype.compile = function() {
         block.type = "unary_operator";
 
         var firstDropZone = this.children[1];
-        
+
         block.name = "not";
         block.arg1 = compile(firstDropZone.children[0]);
 
