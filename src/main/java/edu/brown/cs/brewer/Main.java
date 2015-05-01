@@ -5,10 +5,24 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import edu.brown.cs.brewer.handlers.BrewerServer;
 
-
+/**
+ * Runs a Brewer Server that accepts requests from clients and runs
+ * user-generated programs.
+ *
+ * @author raphaelkargon
+ *
+ */
 public class Main {
+  /**
+   * The default port number.
+   */
   private static final int DEFAULT_PORT = 4567;
 
+  /**
+   * This runs the server.
+   *
+   * @param args Command line arguments. Currently just "port", the port number.
+   */
   public static void main(String[] args) {
     OptionParser parser = new OptionParser();
     OptionSpec<Integer> portSpec =
