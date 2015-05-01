@@ -134,7 +134,7 @@
             <td>
                 <div class="item print void" draggable="true" ondragstart="startDrag(event)" id="print">
                     <h3 class="itemHeader">Print:</h3>
-                    <div class="droppable single variable lit">
+                    <div class="droppable single nonvoid">
                     </div>
                 </div>
             </td>
