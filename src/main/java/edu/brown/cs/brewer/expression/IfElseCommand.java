@@ -6,13 +6,38 @@ import java.util.List;
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
+/**
+ * Represents an if/else statement.
+ *
+ * @author raphaelkargon
+ *
+ */
 public class IfElseCommand extends Expression {
 
+  /**
+   * The condition which, if it evaluates to true, runs one set of commands,
+   * otherwise the other.
+   */
   private Expression condition;
+
+  /**
+   * The expressions run by the if/else statement. Which expression is evaluated
+   * is determined by the 'condition'.
+   */
   private List<Expression> commandsIfTrue, commandsIfFalse;
 
-  public IfElseCommand(BrewerRuntime _runtime, Expression _condition,
-      List<Expression> _commandsIfTrue, List<Expression> _commandsIfFalse) {
+  /**
+   * Creates a new if/else block.
+   *
+   * @param _runtime The containing runtime
+   * @param _condition The conditional for the if block
+   * @param _commandsIfTrue Commands to be run if conditional is true
+   * @param _commandsIfFalse Commands to be run if conditional is false (can be
+   *        null)
+   */
+  public IfElseCommand(final BrewerRuntime _runtime,
+      final Expression _condition, final List<Expression> _commandsIfTrue,
+      final List<Expression> _commandsIfFalse) {
     super(_runtime);
     this.condition = _condition;
 
@@ -31,9 +56,9 @@ public class IfElseCommand extends Expression {
 
   @Override
   public Void evaluate() throws ProgramKilledException {
-	if(!runtime.isRunning()){
-		throw new ProgramKilledException();
-	}
+    if (!runtime.isRunning()) {
+      throw new ProgramKilledException();
+    }
     if ((boolean) condition.evaluate()) {
       if (commandsIfTrue != null) {
         for (Expression c : commandsIfTrue) {
@@ -47,7 +72,6 @@ public class IfElseCommand extends Expression {
         }
       }
     }
-
     return null;
   }
 
