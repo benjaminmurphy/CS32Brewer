@@ -141,6 +141,10 @@ function drop(event) {
                 !element.classList.contains("var")) {
                 return;
             }
+        } else if (target.classList.contains("nonvoid")) {
+            if (element.classList.contains("void")) {
+                return;
+            }
         }
 
         event.preventDefault();
