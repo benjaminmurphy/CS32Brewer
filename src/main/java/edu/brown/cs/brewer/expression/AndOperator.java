@@ -12,8 +12,19 @@ import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
  */
 public class AndOperator extends Expression {
 
+  /**
+   * The two operands for the And expression.
+   */
   private Expression arg1, arg2;
 
+  /**
+   * Constructs an And operator. (Note: And is commutative, and operand order
+   * does not matter.)
+   *
+   * @param _runtime The containing runtime.
+   * @param _arg1 The first operand
+   * @param _arg2 The second operand
+   */
   public AndOperator(final BrewerRuntime _runtime, final Expression _arg1,
       final Expression _arg2) {
     super(_runtime);
@@ -23,9 +34,9 @@ public class AndOperator extends Expression {
 
   @Override
   public Boolean evaluate() throws ProgramKilledException {
-	if(!runtime.isRunning()){
-		throw new ProgramKilledException();
-	}
+    if (!runtime.isRunning()) {
+      throw new ProgramKilledException();
+    }
     return (Boolean) arg1.evaluate() && (Boolean) arg2.evaluate();
   }
 
