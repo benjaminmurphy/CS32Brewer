@@ -20,8 +20,20 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 public class BrewerServer {
+
+  /**
+   * The port number for the server.
+   */
   private static int portNum;
+
+  /**
+   * The runtime object used to store and run programs.
+   */
   private static BrewerRuntime runtime;
+
+  /**
+   * The Gson object used to parse requests.
+   */
   private static Gson gson = new Gson();
 
   public static void runServer(int port) {

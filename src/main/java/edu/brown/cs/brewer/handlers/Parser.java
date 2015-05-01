@@ -37,7 +37,7 @@ import edu.brown.cs.brewer.expression.WhileCommand;
 public class Parser {
 
   /**
-   * Parses a program, represented as a JSON string,
+   * Parses a program, represented as a JSON string.
    *
    * @param json The program
    * @return A BrewerRuntime object that contains the given program
@@ -118,7 +118,7 @@ public class Parser {
   }
 
   /**
-   * Parses a "set variable" expression
+   * Parses a "set variable" expression.
    *
    * @param obj The JSON object representing the expression
    * @param runtime The runtime containing the program
@@ -146,7 +146,7 @@ public class Parser {
 
   /**
    * Parses a variable expression, returning a GetCommand that returns the given
-   * variable's value
+   * variable's value.
    *
    * @param obj The JSON object representing the expression
    * @param runtime The runtime containing the program
@@ -166,12 +166,12 @@ public class Parser {
   }
 
   /**
-   * Parses a print expression
+   * Parses a print expression.
    *
    * @param obj The JSON object representing the expression
    * @param runtime The runtime containing the program
    * @return A PrintExpression represented by the JSON object
-   * @throws BrewerParseException If the JSONObject is not a proper set
+   * @throws BrewerParseException If the JSONObject is not a proper print
    *         expression
    */
   private static PrintExpression parsePrintExpression(JSONObject obj,
@@ -181,6 +181,14 @@ public class Parser {
     return new PrintExpression(runtime, parseJSONExpression(innerObj, runtime));
   }
 
+  /**
+   * Parses a literal expression.
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The expression's containing runtime
+   * @return A Literal value, as represented by the JSON
+   * @throws BrewerParseException If the JSON is invalid brewer code
+   */
   private static Literal parseLiteralExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String vartypename = (String) obj.get("class");
@@ -201,6 +209,15 @@ public class Parser {
     }
   }
 
+  /**
+   * Parses a comparison expression.
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The expression's containing runtime
+   * @return An Expression of the type Equality-, LessThan-, or
+   *         GreaterThanOperator type, as represented by the JSON
+   * @throws BrewerParseException If the JSON is invalid brewer code
+   */
   private static Expression parseComparisonExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
@@ -227,6 +244,14 @@ public class Parser {
     }
   }
 
+  /**
+   * Parses a binary boolean expression.
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The expression's containing runtime
+   * @return An And or Or Operator, as represented by the JSON
+   * @throws BrewerParseException If the JSON is invalid brewer code
+   */
   private static Expression parseLogicalExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
@@ -252,6 +277,14 @@ public class Parser {
     }
   }
 
+  /**
+   * Parses an arithmetic expression.
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The encapsulating runtime
+   * @return An Expression representing an arithmetic operation
+   * @throws BrewerParseException If the JSON is invalid brewer code
+   */
   private static Expression parseNumericalExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
@@ -284,6 +317,14 @@ public class Parser {
     }
   }
 
+  /**
+   * Parses a unary expression.
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The encapsulating runtime
+   * @return A unary expression (currently just "not")
+   * @throws BrewerParseException if the JSON is invalid brewer code
+   */
   private static Expression parseUnaryExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
@@ -303,6 +344,14 @@ public class Parser {
     }
   }
 
+  /**
+   * Parses a While loop expression.
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The encapsulating runtime
+   * @return A WhileCommand corresponding to the JSON
+   * @throws BrewerParseException if the JSON is invalid brewer code
+   */
   private static WhileCommand parseWhileExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     Expression cond =
@@ -320,6 +369,14 @@ public class Parser {
     return new WhileCommand(runtime, cond, commands);
   }
 
+  /**
+   * Parses an IfElse expression. (including just "if" expressions)
+   *
+   * @param obj The JSON string representing the expression
+   * @param runtime The encapsulating runtime
+   * @return An IfElseCommand expression
+   * @throws BrewerParseException if the JSON is invalid brewer code
+   */
   private static IfElseCommand parseIfElseExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     Expression cond =
@@ -374,34 +431,86 @@ public class Parser {
     }
   }
 
+  /**
+   * Represents an error in parsing JSON code. This is thrown if the JSON is
+   * syntactically valid, but does not represent a valid Brewer program.
+   *
+   * @author raphaelkargon
+   *
+   */
   public static class BrewerParseException extends Exception {
+    /**
+     * Generated UID
+     */
+    private static final long serialVersionUID = 5358774121052623116L;
+
     public BrewerParseException(String msg) {
-      // TODO add fields for command num, to better identify location of bug
       super("Parser error: " + msg);
     }
   }
 
+  /**
+   * A Brewer Parsing error that involves a syntax error, ie missing or misnamed
+   * fields.
+   *
+   * @author raphaelkargon
+   *
+   */
   public static class SyntaxErrorException extends BrewerParseException {
+    /**
+     * Generated UID
+     */
+    private static final long serialVersionUID = 6357956308056427694L;
+
     public SyntaxErrorException(String msg) {
-      // TODO add fields for command num, missing token, etc...
       super("Syntax error: " + msg);
     }
   }
 
+  /**
+   * A Brewer parsing error that involves mismatched types, i.e trying to assign
+   * a number to a string variable.
+   *
+   * @author raphaelkargon
+   *
+   */
   public static class TypeErrorException extends BrewerParseException {
+    /**
+     * Generated UID
+     */
+    private static final long serialVersionUID = -4379552698914138573L;
+
     public TypeErrorException(String msg) {
-      // TODO add fields for error type, etc.
       super("Type error: " + msg);
     }
   }
 
+  /**
+   * A Brewer parsing error that involves missing subelements in an expression.
+   * An example would be a missing conditional in a While block.
+   *
+   * @author raphaelkargon
+   *
+   */
   public static class MissingElementException extends BrewerParseException {
+    /**
+     * Generated UID
+     */
+    private static final long serialVersionUID = 2736828088809684077L;
+
     public MissingElementException(String msg) {
-      // TODO add fields for error type, etc.
       super("Missing element: " + msg);
     }
   }
 
+  /**
+   * Returns a double from a JSONObject
+   *
+   * @param item The JSON object
+   * @param key The key that stores the value
+   * @return A double, or 0 if the JSON object does not properly represent a
+   *         real number.
+   */
   private static Double getDouble(JSONObject item, String key) {
     if (item.get(key).getClass() == Double.class) {
       return ((Double) item.get(key));
