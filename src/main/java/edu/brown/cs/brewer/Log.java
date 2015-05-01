@@ -8,7 +8,13 @@ package edu.brown.cs.brewer;
  *
  */
 public class Log {
+  /**
+   * The message represented by this log element.
+   */
   private String msg;
+  /**
+   * Whether or not this message is an error.
+   */
   private boolean isError;
 
   /**
@@ -26,10 +32,10 @@ public class Log {
   }
 
   /**
-   * @param msg
-   * @param isError
+   * @param msg The log message
+   * @param isError Whether this message is an error
    */
-  public Log(String _msg, boolean _isError) {
+  public Log(final String _msg, final boolean _isError) {
     super();
     this.msg = _msg;
     this.isError = _isError;
@@ -37,7 +43,6 @@ public class Log {
 
   @Override
   public String toString() {
-    // TODO Auto-generated method stub
     String out = "Log: ";
     if (isError) {
       out += "ERROR: ";
