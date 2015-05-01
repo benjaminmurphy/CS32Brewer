@@ -3,32 +3,53 @@ package edu.brown.cs.brewer.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-
-import edu.brown.cs.brewer.BrewerRuntime;
-import edu.brown.cs.brewer.expression.*;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import edu.brown.cs.brewer.BrewerRuntime;
+import edu.brown.cs.brewer.expression.AdditionOperator;
+import edu.brown.cs.brewer.expression.AndOperator;
+import edu.brown.cs.brewer.expression.DivisionOperator;
+import edu.brown.cs.brewer.expression.EqualityOperator;
+import edu.brown.cs.brewer.expression.Expression;
+import edu.brown.cs.brewer.expression.GetCommand;
+import edu.brown.cs.brewer.expression.GreaterThanOperator;
+import edu.brown.cs.brewer.expression.IfElseCommand;
+import edu.brown.cs.brewer.expression.LessThanOperator;
+import edu.brown.cs.brewer.expression.Literal;
+import edu.brown.cs.brewer.expression.MultiplicationOperator;
+import edu.brown.cs.brewer.expression.NotOperator;
+import edu.brown.cs.brewer.expression.OrOperator;
+import edu.brown.cs.brewer.expression.PrintExpression;
+import edu.brown.cs.brewer.expression.SetCommand;
+import edu.brown.cs.brewer.expression.SubtractionOperator;
+import edu.brown.cs.brewer.expression.WhileCommand;
+
+/**
+ * A class that parses JSON strings into Brewer programs (returned as
+ * BrewerRuntime objects containing the given program)
+ *
+ * @author raphaelkargon
+ *
+ */
 public class Parser {
 
+  /**
+   * Parses a program, represented as a JSON string,
+   *
+   * @param json The program
+   * @return A BrewerRuntime object that contains the given program
+   * @throws BrewerParseException If there is a syntax error with the JSON (in
+   *         terms of the Brewer specification)
+   * @throws ParseException If the string is not valid JSON
+   */
   public static BrewerRuntime parseJSONProgram(String json)
       throws BrewerParseException, ParseException {
-    Gson GSON = new Gson();// TODO make this static
     JSONParser parser = new JSONParser();
-
     JSONObject mainprog = (JSONObject) parser.parse(json);
-
     JSONArray mainprogArr = (JSONArray) mainprog.get("main");
-
     BrewerRuntime runtime = new BrewerRuntime();
 
     List<Expression> programCommands = new ArrayList<Expression>();
@@ -40,6 +61,15 @@ public class Parser {
     return runtime;
   }
 
+  /**
+   * Parses a single JSON Expression. Subexpressions are also parsed
+   * recursively.
+   *
+   * @param obj The JSON object representing a certain Brewer block
+   * @param runtime The runtime containing the program
+   * @return The Expression represented by the JSON object
+   * @throws BrewerParseException If the json object is not proper Brewer Code
+   */
   private static Expression parseJSONExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     if (obj == null) {
@@ -87,6 +117,15 @@ public class Parser {
     }
   }
 
+  /**
+   * Parses a "set variable" expression
+   *
+   * @param obj The JSON object representing the expression
+   * @param runtime The runtime containing the program
+   * @return A SetCommand represented by the JSON object
+   * @throws BrewerParseException If the JSONObject is not a proper set
+   *         expression
+   */
   private static SetCommand parseSetExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     JSONObject variableObj = (JSONObject) obj.get("name");
@@ -105,6 +144,16 @@ public class Parser {
     return new SetCommand(runtime, varname, value, vartype);
   }
 
+  /**
+   * Parses a variable expression, returning a GetCommand that returns the given
+   * variable's value
+   *
+   * @param obj The JSON object representing the expression
+   * @param runtime The runtime containing the program
+   * @return A GetCommand represented by the JSON object
+   * @throws BrewerParseException If the JSONObject is not a proper variable
+   *         expression
+   */
   private static GetCommand parseVarExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String var = (String) obj.get("name");
@@ -116,30 +165,25 @@ public class Parser {
     return new GetCommand(runtime, var, vartype);
   }
 
+  /**
+   * Parses a print expression
+   *
+   * @param obj The JSON object representing the expression
+   * @param runtime The runtime containing the program
+   * @return A PrintExpression represented by the JSON object
+   * @throws BrewerParseException If the JSONObject is not a proper set
+   *         expression
+   */
   private static PrintExpression parsePrintExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     // Changed the parsing to get inner name.
     JSONObject innerObj = (JSONObject) obj.get("name");
-    if (innerObj == null) {
-      throw new MissingElementException(
-          "Print expression is missing a variable.");
-    }
-    if (((String) innerObj.get("type")).equals("var")) {
-      String varname = (String) innerObj.get("name");
-      return new PrintExpression(runtime, varname);
-    } else {
-      return new PrintExpression(runtime, parseLiteralExpression(innerObj, runtime));
-    }
+    return new PrintExpression(runtime, parseJSONExpression(innerObj, runtime));
   }
 
   private static Literal parseLiteralExpression(JSONObject obj,
       BrewerRuntime runtime) throws BrewerParseException {
     String vartypename = (String) obj.get("class");
-    Class<?> vartype = parseTypeFromString(vartypename);
-    // I think we can use <Class>.valueOf() using reflection or something to do
-    // this cleanly
-    // return new Literal(runtime, vartype.cast(obj.get("value")), vartype);
-    // TODO fix data type parsing
 
     switch (vartypename) {
       case "string":
