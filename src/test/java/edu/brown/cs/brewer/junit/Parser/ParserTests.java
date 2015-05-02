@@ -331,7 +331,7 @@ public class ParserTests {
    */
   @Test
   public void andPass() {
-    String andPass = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logicoperatorArg\",\"name\":\"and\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
+    String andPass = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logic_operator\",\"name\":\"and\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
     boolean expected = true;
     try {
       br = Parser.parseJSONProgram(andPass);
@@ -355,7 +355,7 @@ public class ParserTests {
    */
   @Test
   public void andFail() {
-    String andFail = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logicoperatorArg\",\"name\":\"and\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
+    String andFail = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logic_operator\",\"name\":\"and\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
     boolean expected = false;
     try {
       br = Parser.parseJSONProgram(andFail);
@@ -379,7 +379,7 @@ public class ParserTests {
    */
   @Test
   public void andFail2() {
-    String andFail2 = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logicoperatorArg\",\"name\":\"and\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"}}}]}";
+    String andFail2 = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logic_operator\",\"name\":\"and\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"}}}]}";
     boolean expected = false;
     try {
       br = Parser.parseJSONProgram(andFail2);
@@ -403,7 +403,7 @@ public class ParserTests {
    */
   @Test
   public void orPass() {
-    String orPass = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logicoperatorArg\",\"name\":\"or\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
+    String orPass = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logic_operator\",\"name\":\"or\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
     boolean expected = true;
     try {
       br = Parser.parseJSONProgram(orPass);
@@ -427,7 +427,7 @@ public class ParserTests {
    */
   @Test
   public void orPass2() {
-    String orPass2 = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logicoperatorArg\",\"name\":\"or\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
+    String orPass2 = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logic_operator\",\"name\":\"or\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
     boolean expected = true;
     try {
       br = Parser.parseJSONProgram(orPass2);
@@ -451,7 +451,7 @@ public class ParserTests {
    */
   @Test
   public void orFail() {
-    String orFail = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logicoperatorArg\",\"name\":\"or\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"}}}]}";
+    String orFail = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"logic_operator\",\"name\":\"or\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"}}}]}";
     boolean expected = false;
     try {
       br = Parser.parseJSONProgram(orFail);
@@ -475,7 +475,7 @@ public class ParserTests {
    */
   @Test
   public void notPass() {
-    String notPass = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"unaryoperatorArg\",\"name\":\"not\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
+    String notPass = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"unary_operator\",\"name\":\"not\",\"arg1\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"}}}]}";
     boolean expected = false;
     try {
       br = Parser.parseJSONProgram(notPass);
@@ -499,7 +499,7 @@ public class ParserTests {
    */
   @Test
   public void notFail() {
-    String notFail = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"unaryoperatorArg\",\"name\":\"not\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"}}}]}";
+    String notFail = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"unary_operator\",\"name\":\"not\",\"arg1\":{\"type\":\"literal\",\"value\":false,\"class\":\"bool\"}}}]}";
     boolean expected = true;
     try {
       br = Parser.parseJSONProgram(notFail);
@@ -521,7 +521,7 @@ public class ParserTests {
    * print(3.25 + 1.111)
    */
   public void add() {
-    String add = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"add\"}}]}";
+    String add = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"add\"}}]}";
     double expected = 3.25 + 1.111;
     try {
       br = Parser.parseJSONProgram(add);
@@ -543,7 +543,7 @@ public class ParserTests {
    * print(3.25 - 1.111)
    */
   public void subtract() {
-    String sub = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"sub\"}}]}";
+    String sub = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"sub\"}}]}";
     double expected = 3.25 - 1.111;
 
     try {
@@ -567,7 +567,7 @@ public class ParserTests {
    * print(3.25 * 1.111)
    */
   public void multiply() {
-    String mul = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"mul\"}}]}";
+    String mul = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"mul\"}}]}";
     double expected = 3.25 * 1.111;
     try {
       br = Parser.parseJSONProgram(mul);
@@ -589,7 +589,7 @@ public class ParserTests {
    * print(3.25 / 1.111)
    */
   public void divide() {
-    String div = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"div\"}}]}";
+    String div = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":3.25,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1.111,\"class\":\"number\"},\"name\":\"div\"}}]}";
     double expected = 3.25 / 1.111;
     try {
       br = Parser.parseJSONProgram(div);
@@ -617,7 +617,7 @@ public class ParserTests {
    */
   @Test
   public void whilePrintSubtractFirst() {
-    String whilePrint = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":5,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}}]}]}";
+    String whilePrint = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":5,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}}]}]}";
     try {
       br = Parser.parseJSONProgram(whilePrint);
       br.run();
@@ -642,7 +642,7 @@ public class ParserTests {
    */
   @Test
   public void whilePrintPrintFirst() {
-    String whilePrint = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":5,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}}]}]}";
+    String whilePrint = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":5,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}}]}]}";
     try {
       br = Parser.parseJSONProgram(whilePrint);
       br.run();
@@ -665,7 +665,7 @@ public class ParserTests {
    */
   @Test
   public void nestedArithmetic() {
-    String nestedArithmetic = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"literal\",\"value\":8,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"arg2\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"arg2\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"name\":\"div\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"add\"},\"name\":\"mul\"}}]}";
+    String nestedArithmetic = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"literal\",\"value\":8,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"arg2\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"class\":\"number\",\"name\":\"a\"},\"arg2\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"name\":\"div\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"add\"},\"name\":\"mul\"}}]}";
     try {
       br = Parser.parseJSONProgram(nestedArithmetic);
       br.run();
@@ -746,7 +746,7 @@ public class ParserTests {
    */
   @Test
   public void factorial() {
-    String factorial = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":10,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"},\"value\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"},\"name\":\"mul\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numericoperatorArg\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}}]},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"}}]}";
+    String factorial = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":10,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"greater\"},\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"},\"name\":\"mul\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"sub\"}}]},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"number\"}}]}";
     try {
       br = Parser.parseJSONProgram(factorial);
       br.run();
