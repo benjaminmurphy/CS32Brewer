@@ -23,7 +23,7 @@ $(document).ready(function() {
     var url = document.URL;
     var pieces = url.split("/");
     
-    if (!pieces.contains("getSave")) {
+    if (pieces[pieces.length-1] !== "home") {
         loadProgram(pieces[pieces.length-1]);
     }
 });
@@ -392,12 +392,12 @@ function saveProgram() {
     $.post("/save", JSON.stringify(req), function(response) {
         response = JSON.parse(response);
         
-        if (response.status === "failure") {
+        if (response.status === "failed") {
             console.log("Save failed.")
         } else {
             console.log("Save completed.");
             
-            window.location.replace(response.programUrl);
+            window.location.replace(window.location.href.replace("[A-Za-z0-9]+$", response.program));
         }
     });
 }
