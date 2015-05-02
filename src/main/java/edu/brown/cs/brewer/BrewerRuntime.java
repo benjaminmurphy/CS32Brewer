@@ -21,7 +21,7 @@ public class BrewerRuntime implements Runnable {
   private Map<String, Variable> variables;
 
   /**
-   * Keeps track of messages logged by the program. (Includign runtime errors)
+   * Keeps track of messages logged by the program. (Including runtime errors)
    */
   private List<Log> logs;
 

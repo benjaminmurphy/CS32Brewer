@@ -91,13 +91,13 @@ public class Parser {
       case "comparison":
         return parseComparisonExpression(obj, runtime);
 
-      case "logicoperatorArg":
+      case "logic_operator":
         return parseLogicalExpression(obj, runtime);
 
-      case "numericoperatorArg":
+      case "numeric_operator":
         return parseNumericalExpression(obj, runtime);
 
-      case "unaryoperatorArg":
+      case "unary_operator":
         return parseUnaryExpression(obj, runtime);
 
       case "while":
