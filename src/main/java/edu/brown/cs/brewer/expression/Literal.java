@@ -4,18 +4,29 @@ import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
 
 /**
- * This is an expression that wraps a literal value. This can be used to send
- * literals, such as numbers or strings, to
+ * This is an expression that represents a literal value.
  *
  * @author raphaelkargon
  *
- * @param <T> The type of the literal
  */
 public class Literal extends Expression {
 
+  /**
+   * The value of this literal.
+   */
   private Object value;
+  /**
+   * The type of this literal.
+   */
   private Class<?> valtype;
 
+  /**
+   * Constructs a new Literal object.
+   *
+   * @param _runtime The containing runtime.
+   * @param val The literal's value
+   * @param type The literal's type.
+   */
   public Literal(BrewerRuntime _runtime, final Object val, final Class<?> type) {
     super(_runtime);
     if (!type.isInstance(val)) {
@@ -28,9 +39,9 @@ public class Literal extends Expression {
 
   @Override
   public Object evaluate() throws ProgramKilledException {
-	if(!runtime.isRunning()){
-		throw new ProgramKilledException();
-	}
+    if (!runtime.isRunning()) {
+      throw new ProgramKilledException();
+    }
     return value;
   }
 

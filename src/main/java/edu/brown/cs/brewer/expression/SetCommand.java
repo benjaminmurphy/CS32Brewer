@@ -15,13 +15,22 @@ import edu.brown.cs.brewer.Variable;
  */
 public class SetCommand extends Expression {
 
+  /**
+   * The name of the variable.
+   */
   private String varname;
+  /**
+   * The value of the variable.
+   */
   private Expression value;
+  /**
+   * The type of the variable.
+   */
   private Class<?> vartype;
 
   /**
    * Creates a new set command, for the given variables set, variable name, and
-   * new value
+   * new value.
    *
    * @param vars The set of variables to update
    * @param name The name of the specific variable to modify
@@ -37,9 +46,9 @@ public class SetCommand extends Expression {
 
   @Override
   public Void evaluate() throws ProgramKilledException {
-	if(!runtime.isRunning()){
-		throw new ProgramKilledException();
-	}
+    if (!runtime.isRunning()) {
+      throw new ProgramKilledException();
+    }
     Map<String, Variable> vars = runtime.getVariables();
     Variable oldval = vars.get(varname);
     Object eval = value.evaluate();

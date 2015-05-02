@@ -12,8 +12,18 @@ import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
  */
 public class OrOperator extends Expression {
 
+  /**
+   * The first and second arguments passed to Or.
+   */
   private Expression arg1, arg2;
 
+  /**
+   * Creates a new Or block
+   * 
+   * @param _runtime The containing runtime
+   * @param _arg1 The first argument
+   * @param _arg2 The second argument
+   */
   public OrOperator(final BrewerRuntime _runtime, final Expression _arg1,
       final Expression _arg2) {
     super(_runtime);
@@ -23,9 +33,9 @@ public class OrOperator extends Expression {
 
   @Override
   public Boolean evaluate() throws ProgramKilledException {
-	if(!runtime.isRunning()){
-		throw new ProgramKilledException();
-	}
+    if (!runtime.isRunning()) {
+      throw new ProgramKilledException();
+    }
     return (Boolean) arg1.evaluate() || (Boolean) arg2.evaluate();
   }
 
