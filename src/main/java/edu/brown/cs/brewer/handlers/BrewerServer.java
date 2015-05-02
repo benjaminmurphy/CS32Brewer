@@ -77,7 +77,7 @@ public class BrewerServer {
     Spark.post("/logs", new LogHandler());
     Spark.post("/kill", new KillHandler());
     Spark.post("/save", new SaveHandler());
-    Spark.post("/getSave", new GetSaveHandler());
+    Spark.post("/getSave/:id", new GetSaveHandler());
     Spark.post("/getSaves", new GetSavesHandler());
   }
 
