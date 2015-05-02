@@ -263,7 +263,7 @@ public class Parser {
         || !Boolean.class.isAssignableFrom(arg2type)) {
       throw new TypeErrorException("Either argument 1 of type \"" + arg1type
           + "\" or argument 2 of type \"" + arg2type
-          + "\" of logicoperatorArg \"" + opname + "\"is not of type Boolean.");
+          + "\" of logic_operator \"" + opname + "\"is not of type Boolean.");
     }
     switch (opname) {
       case "and":
@@ -271,7 +271,7 @@ public class Parser {
       case "or":
         return new OrOperator(runtime, arg1, arg2);
       default:
-        throw new SyntaxErrorException("Unrecognized logicoperatorArg");
+        throw new SyntaxErrorException("Unrecognized logic_operator");
     }
   }
 
@@ -296,7 +296,7 @@ public class Parser {
         || !Double.class.isAssignableFrom(arg2type)) {
       throw new TypeErrorException("Either argument 1 of type \"" + arg1type
           + "\" or argument 2 of type \"" + arg2type
-          + "\" of numericoperatorArg of type \"" + opname
+          + "\" of numeric_operator of type \"" + opname
           + "\" is not of type Double.");
     }
 
@@ -310,7 +310,7 @@ public class Parser {
       case "div":
         return new DivisionOperator(runtime, arg1, arg2);
       default:
-        throw new SyntaxErrorException("Unrecognized numericoperatorArg \""
+        throw new SyntaxErrorException("Unrecognized numeric_operator \""
             + opname + "\".");
     }
   }
@@ -337,7 +337,7 @@ public class Parser {
       case "not":
         return new NotOperator(runtime, arg1);
       default:
-        throw new SyntaxErrorException("Unrecognized unaryoperatorArg \""
+        throw new SyntaxErrorException("Unrecognized unary_operator \""
             + opname + "\".");
     }
   }
