@@ -26,6 +26,11 @@
             <h2 id="main3-title">main (cont.)</h2>
             <h2 id="instructions">Instructions</h2>
             <h2 id="about" onclick="showAbout()">About</h2>
+            
+            
+            <input type="text" id="prog_id">
+            <button onclick="loadProgramFromUrl()">Go</button>
+            
         </div>
 
         <div id="aboutDiv">

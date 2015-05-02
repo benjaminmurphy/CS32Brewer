@@ -18,16 +18,6 @@ var minWidth = 100;
 
 var variableList = [];
 
-$(document).ready(function() {
-    
-    var url = document.URL;
-    var pieces = url.split("/");
-    
-    if (pieces[pieces.length-2] === "load") {
-        loadProgram(pieces[pieces.length-1]);
-    }
-});
-
 function makeVariable() {
     if (document.getElementById("newVarBox").style.display === "block") {
         document.getElementById("newVarBox").style.display = "none"
@@ -372,7 +362,9 @@ function log(msg, isError) {
     consoleBox.appendChild(line);
 }
 
-function loadProgram(id) {
+function loadProgramFromUrl() {
+    
+    var id = document.getElementById("prog_id").value;
     
     $.post("/getSave/"+id, function(response) {
         response = JSON.parse(response);
@@ -388,12 +380,12 @@ function saveProgram() {
     $.post("/save", JSON.stringify(req), function(response) {
         response = JSON.parse(response);
         
-        if (response.status === "failed") {
+        if (response.status === "save failed") {
             console.log("Save failed.")
         } else {
             console.log("Save completed.");
-            
-            window.location.replace(window.location.href.replace("[A-Za-z0-9]+$", response.program));
+            console.log(response);
+            window.location = response.programUrl;
         }
     });
 }
