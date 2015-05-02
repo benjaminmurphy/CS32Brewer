@@ -11,13 +11,11 @@ import org.json.simple.parser.ParseException;
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.expression.AdditionOperator;
 import edu.brown.cs.brewer.expression.AndOperator;
+import edu.brown.cs.brewer.expression.ComparisonOperator;
 import edu.brown.cs.brewer.expression.DivisionOperator;
-import edu.brown.cs.brewer.expression.EqualityOperator;
 import edu.brown.cs.brewer.expression.Expression;
 import edu.brown.cs.brewer.expression.GetCommand;
-import edu.brown.cs.brewer.expression.GreaterThanOperator;
 import edu.brown.cs.brewer.expression.IfElseCommand;
-import edu.brown.cs.brewer.expression.LessThanOperator;
 import edu.brown.cs.brewer.expression.Literal;
 import edu.brown.cs.brewer.expression.MultiplicationOperator;
 import edu.brown.cs.brewer.expression.NotOperator;
@@ -233,11 +231,11 @@ public class Parser {
     }
     switch (opname) {
       case "eq":
-        return new EqualityOperator(runtime, arg1, arg2);
+        return new ComparisonOperator(runtime, arg1, arg2, 0);
       case "less":
-        return new LessThanOperator(runtime, arg1, arg2);
+        return new ComparisonOperator(runtime, arg1, arg2, -1);
       case "greater":
-        return new GreaterThanOperator(runtime, arg1, arg2);
+        return new ComparisonOperator(runtime, arg1, arg2, 1);
       default:
         throw new SyntaxErrorException("Unrecognized comparison of type \""
             + opname + "\"");
