@@ -34,6 +34,7 @@ public class BrewerServer {
 
   // TODO This could be passed in as an argument to the constructor so the save
   // folder could be changed easily.
+
   private static String savesPath = "databases/";
   private final static String dbId = "saves";
   private static String url = "localhost:%d/getSave/:%s";
@@ -111,7 +112,8 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
       try {
         System.out.println(req.body());
         runtime = Parser.parseJSONProgram(req.body());
@@ -138,7 +140,8 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
 
       if (runtime != null) {
         List<Log> logs = runtime.getLogs();
@@ -176,14 +179,16 @@ public class BrewerServer {
       if (runtime != null) {
         runtime.kill();
 
-        ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+        ImmutableMap.Builder<String, Object> variables =
+            new ImmutableMap.Builder<String, Object>();
 
         variables.put("status", "success");
 
         return gson.toJson(variables.build());
       }
 
-      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
 
       variables.put("status", "failure");
 
@@ -194,6 +199,7 @@ public class BrewerServer {
 
   /**
    * Saves a program to the database.
+   * 
    * @author Shi
    *
    */
@@ -207,7 +213,8 @@ public class BrewerServer {
 
       Database db = saves.get(dbId);
 
-      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
@@ -241,6 +248,7 @@ public class BrewerServer {
 
   /**
    * Gets a program save from the database.
+   * 
    * @author Shi
    *
    */
@@ -254,7 +262,8 @@ public class BrewerServer {
 
       Database db = saves.get(dbId);
 
-      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
@@ -281,6 +290,7 @@ public class BrewerServer {
 
   /**
    * Gets a program saves for a session from the database.
+   * 
    * @author Shi
    *
    */
@@ -295,7 +305,8 @@ public class BrewerServer {
 
       Database db = saves.get(dbId);
 
-      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
