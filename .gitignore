@@ -4,4 +4,6 @@
 
 pom.xml
 
+/databases/
+
 .mvn-classpath
