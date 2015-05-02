@@ -520,3 +520,136 @@ HTMLDivElement.prototype.compile = function() {
 
     return block;
 }
+
+function loadProgram(jsonObj) {
+
+    loadProgramHelp(playground1, jsonObj);
+
+}
+
+function loadProgramHelp(parent, block) {
+
+    if (block.type == "set") {
+
+        var firstDropZone = this.children[1];
+        var secondDropZone = this.children[3];
+
+        block.name = compile(firstDropZone.children[0]);
+        block.value = compile(secondDropZone.children[0]);
+
+    } else if (block.type == "var") {
+
+        var name = this.children[1].value;
+        block.name = name;
+        block.class = getType(name);
+
+    } else if (block.type == "literal") {
+
+        block.value = this.getValue();
+
+        if (this.classList.contains("nVal")) {
+            block.class = "number";
+        } else if (this.classList.contains("sVal")) {
+            block.class = "string";
+        } else {
+            block.class = "bool";
+        }
+
+
+    } else if (block.type == "print") {
+        
+        var firstDropZone = this.children[1];
+        block.name = compile(firstDropZone.children[0]);
+
+    } else if (block.type == "numeric_operator") {
+
+        var firstDropZone = this.children[1];
+        var operator = this.children[2];
+        var secondDropZone = this.children[3];
+
+        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg2 = compile(secondDropZone.children[0]);
+
+        block.name = operator.value;
+
+    } else if (block.type == "while") {
+
+        var firstDropZone = this.children[1];
+        var secondDropZone = this.children[3];
+
+        block.condition = compile(firstDropZone.children[0]);
+
+        block.commands = [];
+
+        for (var idx = 0; idx < secondDropZone.children.length; idx++) {
+            block.commands.push(compile(secondDropZone.children[idx]));
+        }
+
+    } else if (block.type == "if") {
+        
+
+        var condition = this.children[1];
+        var commands = this.children[3];
+
+        block.commands = [];
+
+        block.condition = condition.children[0].compile();
+
+        for (var idx = 0; idx < commands.children.length; idx++) {
+            block.commands.push(compile(commands.children[idx]));
+        }
+
+    } else if (block.type == "ifelse") {
+
+        var condition = this.children[1];
+        var ifCommands = this.children[3];
+        var elseCommands = this.children[5];
+
+        block.condition = condition.children[0].compile();
+
+        block.commands = [];
+        block.else = [];
+        for (var idx = 0; idx < ifCommands.children.length; idx++) {
+            block.commands.push(compile(ifCommands.children[idx]));
+        }
+
+        block.else = [];
+        for (var idx = 0; idx < elseCommands.children.length; idx++) {
+            block.else.push(compile(elseCommands.children[idx]));
+        }
+
+    } else if (block.type == "logic_operator") {
+
+        var firstDropZone = this.children[1];
+        var operator = this.children[2];
+        var secondDropZone = this.children[3];
+
+        block.name = operator.value;
+        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg2 = compile(secondDropZone.children[0]);
+
+    } else if (block.type == "unary_operator") {
+
+        var firstDropZone = this.children[1];
+
+        block.name = "not";
+        block.arg1 = compile(firstDropZone.children[0]);
+
+    } else if (block.type == "comparison") {
+
+        var firstDropZone = this.children[1];
+        var operator = this.children[2];
+        var secondDropZone = this.children[3];
+
+        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg2 = compile(secondDropZone.children[0]);
+
+        block.name = operator.value;
+    }
+
+}
+
+
+
+
+
