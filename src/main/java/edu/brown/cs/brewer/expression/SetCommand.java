@@ -8,7 +8,7 @@ import edu.brown.cs.brewer.Variable;
 
 /**
  * Updates a variable list by assigning the result of a certain expression to a
- * certain variable name
+ * certain variable name.
  *
  * @author raphaelkargon
  *
@@ -32,12 +32,12 @@ public class SetCommand extends Expression {
    * Creates a new set command, for the given variables set, variable name, and
    * new value.
    *
-   * @param vars The set of variables to update
    * @param name The name of the specific variable to modify
    * @param val The new value of the variable
+   * @param type The type of the variable
    */
-  public SetCommand(BrewerRuntime runtimeArg, String name, Expression val,
-      Class<?> type) {
+  public SetCommand(final BrewerRuntime runtimeArg, final String name,
+      final Expression val, final Class<?> type) {
     super(runtimeArg);
     this.varname = name;
     this.value = val;
