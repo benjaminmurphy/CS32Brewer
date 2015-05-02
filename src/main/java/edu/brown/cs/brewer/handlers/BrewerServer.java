@@ -1,7 +1,9 @@
 package edu.brown.cs.brewer.handlers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.parser.ParseException;
 
@@ -18,6 +20,7 @@ import spark.Route;
 import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
+import storage.Database;
 
 /**
  * The server for the Brewer program. It accepts requests to run programs (given
@@ -27,6 +30,15 @@ import spark.template.freemarker.FreeMarkerEngine;
  *
  */
 public class BrewerServer {
+
+  // TODO This could be passed in as an argument to the constructor so the save
+  // folder could be changed easily.
+  private static String savesPath = "databases/";
+
+  /**
+   * The map of saves for sessions.
+   */
+  private static Map<String, Database> saves;
 
   /**
    * The port number for the server.
@@ -63,6 +75,7 @@ public class BrewerServer {
     Spark.post("/run", new RunHandler());
     Spark.post("/logs", new LogHandler());
     Spark.post("/kill", new KillHandler());
+    Spark.post("/save", new SaveHandler());
   }
 
   /**
@@ -90,9 +103,9 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
       try {
+        System.out.println(req.body());
         runtime = Parser.parseJSONProgram(req.body());
         runtime.run();
         variables.put("status", "success");
@@ -117,8 +130,7 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       if (runtime != null) {
         List<Log> logs = runtime.getLogs();
@@ -156,22 +168,57 @@ public class BrewerServer {
       if (runtime != null) {
         runtime.kill();
 
-        ImmutableMap.Builder<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>();
+        ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
         variables.put("status", "success");
 
         return gson.toJson(variables.build());
       }
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       variables.put("status", "failure");
 
       return gson.toJson(variables.build());
 
+    }
+  }
 
+  /**
+   * Saves a program to the database.
+   * @author Shi
+   *
+   */
+  private static final class SaveHandler implements Route {
+    @Override
+    public Object handle(Request req, Response resp) {
+
+      String dbId = gson.fromJson(req.queryParams("sessionId"),
+        String.class);
+      Database db = saves.get(dbId);
+
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+
+      try {
+        if (db == null) {
+          String dbPath = savesPath + dbId;
+          db = new Database(dbPath);
+          saves.put(dbId, db);
+        }
+
+        String[] program = gson.fromJson(req.body(), String[].class);
+        String programId = program[0];
+        String programJSON = program[1];
+
+        db.addProgram(programId, programJSON);
+        
+      } catch (SQLException e) {
+        variables.put("status", "save failed");
+        return gson.toJson(variables.build());
+      }
+
+      variables.put("status", "saved");
+      return gson.toJson(variables.build());
     }
   }
 }

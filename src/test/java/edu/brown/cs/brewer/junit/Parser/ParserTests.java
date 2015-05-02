@@ -692,9 +692,9 @@ public class ParserTests {
    */
   @Test
   public void precision1() {
-    String precisionTest = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"pi\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":3.1415926545,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":3.1415926544,\"class\":\"number\"}},{\"type\":\"ifelse\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"pi\",\"class\":\"number\"},\"arg2\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"name\":\"eq\"},\"commands\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}}],\"else\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"}}]},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}}]}";
+    String precision1 = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"pi\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":3.1415926545,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":3.1415926544,\"class\":\"number\"}},{\"type\":\"ifelse\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"pi\",\"class\":\"number\"},\"arg2\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"name\":\"eq\"},\"commands\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}}],\"else\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"}}]},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}}]}";
     try {
-      br = Parser.parseJSONProgram(precisionTest);
+      br = Parser.parseJSONProgram(precision1);
       br.run();
 
       String outputLog = Arrays.toString(br.getLogs().toArray());
@@ -711,11 +711,27 @@ public class ParserTests {
    * pi = 3.1415926545;
    * a = 3.1415926545;
    * if (pi == a):
-   *    a = 0;
-   * else
    *    a = 1;
+   * else
+   *    a = 0;
    * print(a);
    */
+  @Test
+  public void precision2() {
+    String precision2 = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"pi\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":3.1415926545,\"class\":\"number\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":3.1415926545,\"class\":\"number\"}},{\"type\":\"ifelse\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"pi\",\"class\":\"number\"},\"arg2\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"name\":\"eq\"},\"commands\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}}],\"else\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"}}]},{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}}]}";
+    try {
+      br = Parser.parseJSONProgram(precision2);
+      br.run();
+
+      String outputLog = Arrays.toString(br.getLogs().toArray());
+      String expectedLog = "[Log: MESSAGE: 1.0]";
+
+      assertTrue(outputLog.equals(expectedLog));
+    } catch (BrewerParseException | ParseException e) {
+      e.printStackTrace();
+      fail("preicision2 test failed");
+    }
+  }
 
   // More complicated factorial test.
   /**

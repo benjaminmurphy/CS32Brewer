@@ -55,7 +55,7 @@ public class Variable {
    *
    * @return The Class object representing the variable's type.
    */
-  public final final Class<?> getType() {
+  public final Class<?> getType() {
     return type;
   }
 
