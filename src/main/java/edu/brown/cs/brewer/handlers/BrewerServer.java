@@ -2,6 +2,7 @@ package edu.brown.cs.brewer.handlers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import com.google.gson.Gson;
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.Log;
 import edu.brown.cs.brewer.handlers.Parser.BrewerParseException;
+import edu.brown.cs.brewer.storage.Database;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -20,7 +22,6 @@ import spark.Route;
 import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
-import storage.Database;
 
 /**
  * The server for the Brewer program. It accepts requests to run programs (given
@@ -76,6 +77,8 @@ public class BrewerServer {
     Spark.post("/logs", new LogHandler());
     Spark.post("/kill", new KillHandler());
     Spark.post("/save", new SaveHandler());
+    Spark.post("/getSave", new GetSaveHandler());
+    Spark.post("/getSaves", new GetSavesHandler());
   }
 
   /**
@@ -211,7 +214,7 @@ public class BrewerServer {
         String programJSON = program[1];
 
         db.addProgram(programId, programJSON);
-        
+
       } catch (SQLException e) {
         variables.put("status", "save failed");
         return gson.toJson(variables.build());
@@ -221,4 +224,75 @@ public class BrewerServer {
       return gson.toJson(variables.build());
     }
   }
+
+  /**
+   * Gets a program save from the database.
+   * @author Shi
+   *
+   */
+  private static final class GetSaveHandler implements Route {
+    @Override
+    public Object handle(Request req, Response resp) {
+
+      String dbId = gson.fromJson(req.queryParams("sessionId"),
+        String.class);
+      Database db = saves.get(dbId);
+
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+
+      try {
+        if (db == null) {
+          variables.put("status", "no current saves");
+          variables.put("program", null);
+          return gson.toJson(variables.build());
+        } else {
+
+          String programId = gson.fromJson(req.body(), String.class);
+          String program = db.getProgram(programId);
+          variables.put("program", program);
+        }
+      } catch (SQLException e) {
+        variables.put("status", "could not get save");
+        return gson.toJson(variables.build());
+      }
+
+      variables.put("status", "success");
+      return gson.toJson(variables.build());
+    }
+  }
+
+  /**
+   * Gets a program saves for a session from the database.
+   * @author Shi
+   *
+   */
+  private static final class GetSavesHandler implements Route {
+    @Override
+    public Object handle(Request req, Response resp) {
+
+      String dbId = gson.fromJson(req.queryParams("sessionId"),
+        String.class);
+      Database db = saves.get(dbId);
+
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
+
+      try {
+        if (db == null) {
+          variables.put("status", "no current saves");
+          variables.put("programs", new ArrayList<String>());
+          return gson.toJson(variables.build());
+        } else {
+
+          Collection<String> programIds = db.getPrograms();
+          variables.put("programs", programIds);
+        }
+      } catch (SQLException e) {
+        variables.put("status", "could not get saves");
+        return gson.toJson(variables.build());
+      }
+
+      return gson.toJson(variables.build());
+    }
+  }
+
 }

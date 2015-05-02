@@ -1,11 +1,14 @@
-package storage;
+package edu.brown.cs.brewer.storage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Database {
 
@@ -42,11 +45,11 @@ public class Database {
       // Delete the tables if they already exist
       // TODO remove this to prevent refreshing of database
       Statement stat = conn.createStatement();
-      stat.execute("DROP TABLE IF EXISTS programs");
+      stat.execute("DROP TABLE IF EXISTS program");
       stat.close();
 
       // Create the test tables
-      String schema = "CREATE TABLE programs (id text primary key, program text);";
+      String schema = "CREATE TABLE program (id text primary key, program text);";
       PreparedStatement prep = conn.prepareStatement(schema);
       prep.executeUpdate();
       prep.close();
@@ -86,7 +89,7 @@ public class Database {
     throws SQLException {
     openConnection();
 
-    String query = "INSERT INTO programs VALUES (?,?);";
+    String query = "INSERT INTO program VALUES (?,?);";
     PreparedStatement ps;
     try {
       ps = conn.prepareStatement(query);
@@ -103,6 +106,58 @@ public class Database {
     }
 
     close();
+  }
+
+  /**
+   * Takes an id and returns the program associated with that id.
+   * @param id Program id
+   * 
+   * returns null if program id has no corresponding program.
+   */
+  public String getProgram(String id) throws SQLException {
+    openConnection();
+
+    String query = "SELECT p.program FROM program AS p WHERE p.id = ?;";
+
+    PreparedStatement ps = conn.prepareStatement(query);
+    ps.setString(1, id);
+    ResultSet rs = ps.executeQuery();
+
+    String program = null;
+    if (rs.next()) {
+      program = rs.getString(1);
+    }
+
+    rs.close();
+    ps.close();
+    close();
+
+    return program;
+  }
+
+  /**
+   * Returns the current programs associated with the database.
+   */
+  public Collection<String> getPrograms() throws SQLException {
+    // TODO add some sort of ordering (maybe sort by timestamp)
+    openConnection();
+
+    // Select the program ids
+    String query = "SELECT p.id FROM program;";
+
+    PreparedStatement ps = conn.prepareStatement(query);
+    ResultSet rs = ps.executeQuery();
+
+    List<String> programIds = new ArrayList<String>();
+    while (rs.next()) {
+      programIds.add(rs.getString(1));
+    }
+
+    rs.close();
+    ps.close();
+    close();
+
+    return programIds;
   }
 
   /**
