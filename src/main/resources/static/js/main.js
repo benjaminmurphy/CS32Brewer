@@ -23,7 +23,7 @@ $(document).ready(function() {
     var url = document.URL;
     var pieces = url.split("/");
     
-    if (pieces[pieces.length-1] !== "home") {
+    if (pieces[pieces.length-2] === "load") {
         loadProgram(pieces[pieces.length-1]);
     }
 });
@@ -374,14 +374,10 @@ function log(msg, isError) {
 
 function loadProgram(id) {
     
-    var req = {
-        program: id
-    }
-    
-    $.post("/retrieve", JSON.stringify(req), function(response) {
+    $.post("/getSave/"+id, function(response) {
         response = JSON.parse(response);
         
-        console.log(response.code);
+        console.log(response.program);
     });
 }
 

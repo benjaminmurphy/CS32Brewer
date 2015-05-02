@@ -77,6 +77,7 @@ public class BrewerServer {
     Spark.setPort(portNum);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.get("/", new IndexHandler(), new FreeMarkerEngine());
+    Spark.get("/load/*", new IndexHandler(), new FreeMarkerEngine());
     Spark.post("/run", new RunHandler());
     Spark.post("/logs", new LogHandler());
     Spark.post("/kill", new KillHandler());
@@ -87,7 +88,7 @@ public class BrewerServer {
   }
 
   /**
-   * Servres the GUI to the client.
+   * Servers the GUI to the client.
    *
    * @author raphaelkargon
    *
