@@ -18,8 +18,8 @@ public class OrOperator extends Expression {
   private Expression arg1, arg2;
 
   /**
-   * Creates a new Or block
-   * 
+   * Creates a new Or block.
+   *
    * @param runtimeArg The containing runtime
    * @param argArg1 The first argument
    * @param argArg2 The second argument

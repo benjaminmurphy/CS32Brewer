@@ -442,6 +442,11 @@ public class Parser {
      */
     private static final long serialVersionUID = 5358774121052623116L;
 
+    /**
+     * Constructs a new BrewerParseException.
+     *
+     * @param msg The error message.
+     */
     public BrewerParseException(String msg) {
       super("Parser error: " + msg);
     }
@@ -460,6 +465,11 @@ public class Parser {
      */
     private static final long serialVersionUID = 6357956308056427694L;
 
+    /**
+     * Constructs a new SyntaxErrorException.
+     *
+     * @param msg The error message.
+     */
     public SyntaxErrorException(String msg) {
       super("Syntax error: " + msg);
     }
@@ -478,6 +488,11 @@ public class Parser {
      */
     private static final long serialVersionUID = -4379552698914138573L;
 
+    /**
+     * Constructs a new TypeErrorException.
+     *
+     * @param msg The error message.
+     */
     public TypeErrorException(String msg) {
       super("Type error: " + msg);
     }
@@ -496,6 +511,11 @@ public class Parser {
      */
     private static final long serialVersionUID = 2736828088809684077L;
 
+    /**
+     * Constructs a new MissingElementException.
+     *
+     * @param msg The error message.
+     */
     public MissingElementException(String msg) {
       super("Missing element: " + msg);
     }
