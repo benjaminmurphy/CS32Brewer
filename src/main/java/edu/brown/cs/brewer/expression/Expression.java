@@ -34,14 +34,14 @@ public abstract class Expression {
    * @throws ProgramKilledException When the program is killed and this method
    *         is still called.
    */
-  public final abstract Object evaluate() throws ProgramKilledException;
+  public abstract Object evaluate() throws ProgramKilledException;
 
   /**
    * Returns the type of value returned by evaluate().
    *
    * @return A Class object representign the type returned by evaluate()
    */
-  public final abstract Class<?> getType();
+  public abstract Class<?> getType();
 
   /**
    * Returns this expression's corresponding runtime.
