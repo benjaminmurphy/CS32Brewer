@@ -27,7 +27,7 @@ import edu.brown.cs.brewer.expression.WhileCommand;
 
 /**
  * A class that parses JSON strings into Brewer programs (returned as
- * BrewerRuntime objects containing the given program)
+ * BrewerRuntime objects containing the given program).
  *
  * @author raphaelkargon
  *
@@ -522,7 +522,7 @@ public class Parser {
   }
 
   /**
-   * Returns a double from a JSONObject
+   * Returns a double from a JSONObject.
    *
    * @param item The JSON object
    * @param key The key that stores the value
