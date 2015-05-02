@@ -91,13 +91,13 @@ public class Parser {
       case "comparison":
         return parseComparisonExpression(obj, runtime);
 
-      case "logic_operator":
+      case "logicoperatorArg":
         return parseLogicalExpression(obj, runtime);
 
-      case "numeric_operator":
+      case "numericoperatorArg":
         return parseNumericalExpression(obj, runtime);
 
-      case "unary_operator":
+      case "unaryoperatorArg":
         return parseUnaryExpression(obj, runtime);
 
       case "while":
@@ -263,7 +263,7 @@ public class Parser {
         || !Boolean.class.isAssignableFrom(arg2type)) {
       throw new TypeErrorException("Either argument 1 of type \"" + arg1type
           + "\" or argument 2 of type \"" + arg2type
-          + "\" of logic_operator \"" + opname + "\"is not of type Boolean.");
+          + "\" of logicoperatorArg \"" + opname + "\"is not of type Boolean.");
     }
     switch (opname) {
       case "and":
@@ -271,7 +271,7 @@ public class Parser {
       case "or":
         return new OrOperator(runtime, arg1, arg2);
       default:
-        throw new SyntaxErrorException("Unrecognized logic_operator");
+        throw new SyntaxErrorException("Unrecognized logicoperatorArg");
     }
   }
 
@@ -296,7 +296,7 @@ public class Parser {
         || !Double.class.isAssignableFrom(arg2type)) {
       throw new TypeErrorException("Either argument 1 of type \"" + arg1type
           + "\" or argument 2 of type \"" + arg2type
-          + "\" of numeric_operator of type \"" + opname
+          + "\" of numericoperatorArg of type \"" + opname
           + "\" is not of type Double.");
     }
 
@@ -310,7 +310,7 @@ public class Parser {
       case "div":
         return new DivisionOperator(runtime, arg1, arg2);
       default:
-        throw new SyntaxErrorException("Unrecognized numeric_operator \""
+        throw new SyntaxErrorException("Unrecognized numericoperatorArg \""
             + opname + "\".");
     }
   }
@@ -337,7 +337,7 @@ public class Parser {
       case "not":
         return new NotOperator(runtime, arg1);
       default:
-        throw new SyntaxErrorException("Unrecognized unary_operator \""
+        throw new SyntaxErrorException("Unrecognized unaryoperatorArg \""
             + opname + "\".");
     }
   }
@@ -438,7 +438,7 @@ public class Parser {
    */
   public static class BrewerParseException extends Exception {
     /**
-     * Generated UID
+     * Generated UID.
      */
     private static final long serialVersionUID = 5358774121052623116L;
 
@@ -456,7 +456,7 @@ public class Parser {
    */
   public static class SyntaxErrorException extends BrewerParseException {
     /**
-     * Generated UID
+     * Generated UID.
      */
     private static final long serialVersionUID = 6357956308056427694L;
 
@@ -474,7 +474,7 @@ public class Parser {
    */
   public static class TypeErrorException extends BrewerParseException {
     /**
-     * Generated UID
+     * Generated UID.
      */
     private static final long serialVersionUID = -4379552698914138573L;
 
@@ -492,7 +492,7 @@ public class Parser {
    */
   public static class MissingElementException extends BrewerParseException {
     /**
-     * Generated UID
+     * Generated UID.
      */
     private static final long serialVersionUID = 2736828088809684077L;
 

@@ -12,18 +12,25 @@ import edu.brown.cs.brewer.handlers.BrewerServer;
  * @author raphaelkargon
  *
  */
-public class Main {
+public final class Main {
   /**
    * The default port number.
    */
   private static final int DEFAULT_PORT = 4567;
 
   /**
+   * Private constructor; not used.
+   */
+  private Main() {
+    ;
+  }
+
+  /**
    * This runs the server.
    *
    * @param args Command line arguments. Currently just "port", the port number.
    */
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     OptionParser parser = new OptionParser();
     OptionSpec<Integer> portSpec =
         parser.accepts("port").withRequiredArg().ofType(Integer.class);

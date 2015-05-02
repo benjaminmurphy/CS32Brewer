@@ -23,12 +23,12 @@ public class Literal extends Expression {
   /**
    * Constructs a new Literal object.
    *
-   * @param _runtime The containing runtime.
+   * @param runtimeArg The containing runtime.
    * @param val The literal's value
    * @param type The literal's type.
    */
-  public Literal(BrewerRuntime _runtime, final Object val, final Class<?> type) {
-    super(_runtime);
+  public Literal(BrewerRuntime runtimeArg, final Object val, final Class<?> type) {
+    super(runtimeArg);
     if (!type.isInstance(val)) {
       throw new IllegalArgumentException("Value of type \"" + val.getClass()
           + "\" cannot be placed in literal of type \"" + type + "\".");
@@ -38,8 +38,8 @@ public class Literal extends Expression {
   }
 
   @Override
-  public Object evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Object evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     return value;
@@ -47,7 +47,7 @@ public class Literal extends Expression {
 
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return valtype;
   }
 }

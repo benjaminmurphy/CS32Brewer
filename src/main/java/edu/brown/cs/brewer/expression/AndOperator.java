@@ -21,27 +21,27 @@ public class AndOperator extends Expression {
    * Constructs an And operator. (Note: And is commutative, and operand order
    * does not matter.)
    *
-   * @param _runtime The containing runtime.
-   * @param _arg1 The first operand
-   * @param _arg2 The second operand
+   * @param runtimeArg The containing runtime.
+   * @param argArg1 The first operand
+   * @param argArg2 The second operand
    */
-  public AndOperator(final BrewerRuntime _runtime, final Expression _arg1,
-      final Expression _arg2) {
-    super(_runtime);
-    this.arg1 = _arg1;
-    this.arg2 = _arg2;
+  public AndOperator(final BrewerRuntime runtimeArg, final Expression argArg1,
+      final Expression argArg2) {
+    super(runtimeArg);
+    this.arg1 = argArg1;
+    this.arg2 = argArg2;
   }
 
   @Override
-  public Boolean evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Boolean evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     return (Boolean) arg1.evaluate() && (Boolean) arg2.evaluate();
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Boolean.class;
   }
 

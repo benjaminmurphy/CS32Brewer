@@ -29,34 +29,34 @@ public class IfElseCommand extends Expression {
   /**
    * Creates a new if/else block.
    *
-   * @param _runtime The containing runtime
-   * @param _condition The conditional for the if block
-   * @param _commandsIfTrue Commands to be run if conditional is true
-   * @param _commandsIfFalse Commands to be run if conditional is false (can be
+   * @param runtimeArg The containing runtime
+   * @param conditionArg The conditional for the if block
+   * @param commandsIfTrueArg Commands to be run if conditional is true
+   * @param commandsIfFalseArg Commands to be run if conditional is false (can be
    *        null)
    */
-  public IfElseCommand(final BrewerRuntime _runtime,
-      final Expression _condition, final List<Expression> _commandsIfTrue,
-      final List<Expression> _commandsIfFalse) {
-    super(_runtime);
-    this.condition = _condition;
+  public IfElseCommand(final BrewerRuntime runtimeArg,
+      final Expression conditionArg, final List<Expression> commandsIfTrueArg,
+      final List<Expression> commandsIfFalseArg) {
+    super(runtimeArg);
+    this.condition = conditionArg;
 
-    if (_commandsIfTrue == null) {
+    if (commandsIfTrueArg == null) {
       this.commandsIfTrue = null;
     } else {
-      this.commandsIfTrue = new ArrayList<Expression>(_commandsIfTrue);
+      this.commandsIfTrue = new ArrayList<Expression>(commandsIfTrueArg);
     }
 
-    if (_commandsIfFalse == null) {
+    if (commandsIfFalseArg == null) {
       this.commandsIfFalse = null;
     } else {
-      this.commandsIfFalse = new ArrayList<Expression>(_commandsIfFalse);
+      this.commandsIfFalse = new ArrayList<Expression>(commandsIfFalseArg);
     }
   }
 
   @Override
-  public Void evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Void evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     if ((boolean) condition.evaluate()) {
@@ -77,7 +77,7 @@ public class IfElseCommand extends Expression {
 
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Void.class;
   }
 }

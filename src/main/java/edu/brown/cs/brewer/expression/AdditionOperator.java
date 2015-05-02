@@ -20,27 +20,27 @@ public class AdditionOperator extends Expression {
 
   /**
    *
-   * @param _runtime The runtime containing this expression.
-   * @param _arg1 The first addend
-   * @param _arg2 The second addend
+   * @param runtimeArg The runtime containing this expression.
+   * @param argArg1 The first addend
+   * @param argArg2 The second addend
    */
-  public AdditionOperator(final BrewerRuntime _runtime, final Expression _arg1,
-      final Expression _arg2) {
-    super(_runtime);
-    this.arg1 = _arg1;
-    this.arg2 = _arg2;
+  public AdditionOperator(final BrewerRuntime runtimeArg, final Expression argArg1,
+      final Expression argArg2) {
+    super(runtimeArg);
+    this.arg1 = argArg1;
+    this.arg2 = argArg2;
   }
 
   @Override
-  public Double evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Double evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     return ((Double) arg1.evaluate() + (Double) arg2.evaluate());
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Double.class;
   }
 

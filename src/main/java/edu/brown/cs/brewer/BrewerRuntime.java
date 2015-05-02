@@ -48,14 +48,14 @@ public class BrewerRuntime implements Runnable {
    *
    * @param newprog The new program.
    */
-  public void setProgram(final List<Expression> newprog) {
+  public final void setProgram(final List<Expression> newprog) {
     if (!isRunning && program == null) {
       this.program = newprog;
     }
   }
 
   @Override
-  public void run() {
+  public final void run() {
     if (!isRunning) {
       isRunning = true;
 
@@ -75,16 +75,16 @@ public class BrewerRuntime implements Runnable {
    *
    * @return The program's variables, in a map, stored by name
    */
-  public Map<String, Variable> getVariables() {
+  public final Map<String, Variable> getVariables() {
     return variables;
   }
 
   /**
-   * Returns the program's logs
+   * Returns the program's logs.
    *
    * @return The program's logs
    */
-  public List<Log> getLogs() {
+  public final List<Log> getLogs() {
     return logs;
   }
 
@@ -94,7 +94,7 @@ public class BrewerRuntime implements Runnable {
    * @param msg The log message
    * @param isError Whether the log is an error
    */
-  public void addLog(final String msg, final boolean isError) {
+  public final void addLog(final String msg, final boolean isError) {
     Log l = new Log(msg, isError);
     logs.add(l);
   }
@@ -102,14 +102,14 @@ public class BrewerRuntime implements Runnable {
   /**
    * Stops the program from running.
    */
-  public void kill() {
+  public final void kill() {
     this.isRunning = false;
   }
 
   /**
    * Clears the program logs.
    */
-  public void clearLogs() {
+  public final void clearLogs() {
     this.logs = new ArrayList<Log>();
   }
 
@@ -118,7 +118,7 @@ public class BrewerRuntime implements Runnable {
    *
    * @return whether or not the program is running
    */
-  public boolean isRunning() {
+  public final boolean isRunning() {
     return this.isRunning;
   }
 
@@ -132,7 +132,7 @@ public class BrewerRuntime implements Runnable {
   public static class ProgramKilledException extends Exception {
 
     /**
-     * Generated UID
+     * Generated UID.
      */
     private static final long serialVersionUID = -8717793914226114346L;
 

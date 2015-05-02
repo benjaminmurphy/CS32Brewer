@@ -21,31 +21,31 @@ public class PrintExpression extends Expression {
   /**
    * Creates a new print expression.
    *
-   * @param _runtime The containing runtime
-   * @param _exp The expression to be printed
+   * @param runtimeArg The containing runtime
+   * @param expArg The expression to be printed
    */
-  public PrintExpression(final BrewerRuntime _runtime, final Expression _exp) {
-    super(_runtime);
-    this.exp = _exp;
+  public PrintExpression(final BrewerRuntime runtimeArg, final Expression expArg) {
+    super(runtimeArg);
+    this.exp = expArg;
   }
 
 
   @Override
-  public Void evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Void evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
 
     if (Void.class.isAssignableFrom(exp.getType())) {
-      runtime.addLog("Cannot print value of void expression.", true);
+      runtime().addLog("Cannot print value of void expression.", true);
     } else {
-      runtime.addLog(exp.evaluate().toString(), false);
+      runtime().addLog(exp.evaluate().toString(), false);
     }
     return null;
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Void.class;
   }
 }

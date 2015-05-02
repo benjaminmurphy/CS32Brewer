@@ -25,20 +25,20 @@ public class WhileCommand extends Expression {
   /**
    * Creates a new while loop object.
    *
-   * @param _runtime The containing runtime.
-   * @param _condition The conditional.
-   * @param _commands The list of commands to be run.
+   * @param runtimeArg The containing runtime.
+   * @param conditionArg The conditional.
+   * @param commandsArg The list of commands to be run.
    */
-  public WhileCommand(BrewerRuntime _runtime, Expression _condition,
-      List<Expression> _commands) {
-    super(_runtime);
-    this.condition = _condition;
-    this.commands = _commands;
+  public WhileCommand(BrewerRuntime runtimeArg, Expression conditionArg,
+      List<Expression> commandsArg) {
+    super(runtimeArg);
+    this.condition = conditionArg;
+    this.commands = commandsArg;
   }
 
   @Override
-  public Void evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Void evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     while ((Boolean) condition.evaluate()) {
@@ -50,7 +50,7 @@ public class WhileCommand extends Expression {
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Void.class;
   }
 }

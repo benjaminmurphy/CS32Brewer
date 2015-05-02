@@ -121,7 +121,7 @@ public class BrewerServer {
           new ImmutableMap.Builder<String, Object>();
 
       if (runtime != null) {
-        List<Log> logs = runtime.getLogs();
+        List<Log> logs = runtime().getLogs();
         runtime.clearLogs();
 
         if (runtime.isRunning()) {

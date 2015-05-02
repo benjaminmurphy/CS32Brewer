@@ -19,27 +19,27 @@ public class MultiplicationOperator extends Expression {
   /**
    * Creates a new multiplication block.
    *
-   * @param _runtime The containing runtime
-   * @param _arg1 The first argument
-   * @param _arg2 The second argument
+   * @param runtimeArg The containing runtime
+   * @param argArg1 The first argument
+   * @param argArg2 The second argument
    */
-  public MultiplicationOperator(BrewerRuntime _runtime, Expression _arg1,
-      Expression _arg2) {
-    super(_runtime);
-    this.arg1 = _arg1;
-    this.arg2 = _arg2;
+  public MultiplicationOperator(BrewerRuntime runtimeArg, Expression argArg1,
+      Expression argArg2) {
+    super(runtimeArg);
+    this.arg1 = argArg1;
+    this.arg2 = argArg2;
   }
 
   @Override
-  public Double evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Double evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     return ((Double) arg1.evaluate() * (Double) arg2.evaluate());
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Double.class;
   }
 }

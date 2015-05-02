@@ -36,20 +36,20 @@ public class SetCommand extends Expression {
    * @param name The name of the specific variable to modify
    * @param val The new value of the variable
    */
-  public SetCommand(BrewerRuntime _runtime, String name, Expression val,
+  public SetCommand(BrewerRuntime runtimeArg, String name, Expression val,
       Class<?> type) {
-    super(_runtime);
+    super(runtimeArg);
     this.varname = name;
     this.value = val;
     this.vartype = type;
   }
 
   @Override
-  public Void evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Void evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
-    Map<String, Variable> vars = runtime.getVariables();
+    Map<String, Variable> vars = runtime().getVariables();
     Variable oldval = vars.get(varname);
     Object eval = value.evaluate();
     if (oldval == null) {
@@ -61,8 +61,8 @@ public class SetCommand extends Expression {
           "ERROR: Could not assign value of type " + vartype.getName()
               + " to variable " + varname + " of type"
               + oldval.getType().getName();
-      runtime.addLog(msg, true);
-      runtime.kill();
+      runtime().addLog(msg, true);
+      runtime().kill();
     }
 
     return null;
@@ -70,7 +70,7 @@ public class SetCommand extends Expression {
 
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return vartype;
   }
 }

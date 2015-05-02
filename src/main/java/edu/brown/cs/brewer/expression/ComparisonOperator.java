@@ -28,23 +28,23 @@ public class ComparisonOperator extends Expression {
   /**
    * Constructs a new comparison operator.
    *
-   * @param _runtime The containing runtime
-   * @param _arg1 The first argument
-   * @param _arg2 The second argument
-   * @param _cmp The comparison value (expected sign of compareTo(arg1, arg2) if
+   * @param runtimeArg The containing runtime
+   * @param argArg1 The first argument
+   * @param argArg2 The second argument
+   * @param cmpArg The comparison value (expected sign of compareTo(arg1, arg2) if
    *        this block returns true).
    */
-  public ComparisonOperator(final BrewerRuntime _runtime,
-      final Expression _arg1, final Expression _arg2, final int _cmp) {
-    super(_runtime);
-    this.arg1 = _arg1;
-    this.arg2 = _arg2;
-    this.cmp = _cmp;
+  public ComparisonOperator(final BrewerRuntime runtimeArg,
+      final Expression argArg1, final Expression argArg2, final int cmpArg) {
+    super(runtimeArg);
+    this.arg1 = argArg1;
+    this.arg2 = argArg2;
+    this.cmp = cmpArg;
   }
 
   @Override
-  public Object evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Object evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     if (cmp == 0) {
@@ -57,7 +57,7 @@ public class ComparisonOperator extends Expression {
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Boolean.class;
   }
 

@@ -15,29 +15,40 @@ public abstract class Expression {
   /**
    * The runtime encapsulating this expression.
    */
-  protected BrewerRuntime runtime;
+  private BrewerRuntime runtime;
 
   /**
    * Creates an expression, within the given runtime. (The program still needs
    * to be added to the runtime for it to be run from the BrewerRuntime object.)
    *
-   * @param _runtime The containing runtime.
+   * @param runtimeArg The containing runtime.
    */
-  public Expression(final BrewerRuntime _runtime) {
-    this.runtime = _runtime;
+  public Expression(final BrewerRuntime runtimeArg) {
+    this.runtime = runtimeArg;
   }
 
   /**
    * Evaluate the expression, and return a value of the appropriate type.
    *
    * @return The value produced when this expression is evaluated.
+   * @throws ProgramKilledException When the program is killed and this method
+   *         is still called.
    */
-  public abstract Object evaluate() throws ProgramKilledException;
+  public final abstract Object evaluate() throws ProgramKilledException;
 
   /**
    * Returns the type of value returned by evaluate().
    *
    * @return A Class object representign the type returned by evaluate()
    */
-  public abstract Class<?> getType();
+  public final abstract Class<?> getType();
+
+  /**
+   * Returns this expression's corresponding runtime.
+   *
+   * @return the runtime
+   */
+  protected final BrewerRuntime runtime() {
+    return runtime;
+  }
 }

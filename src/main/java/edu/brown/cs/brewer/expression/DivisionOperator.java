@@ -19,20 +19,20 @@ public class DivisionOperator extends Expression {
   /**
    * Constructs a division operation.
    *
-   * @param _runtime The containing runtime.
-   * @param _arg1 The first argument in division
-   * @param _arg2 The second argument in division
+   * @param runtimeArg The containing runtime.
+   * @param argArg1 The first argument in division
+   * @param argArg2 The second argument in division
    */
-  public DivisionOperator(final BrewerRuntime _runtime, final Expression _arg1,
-      final Expression _arg2) {
-    super(_runtime);
-    this.arg1 = _arg1;
-    this.arg2 = _arg2;
+  public DivisionOperator(final BrewerRuntime runtimeArg, final Expression argArg1,
+      final Expression argArg2) {
+    super(runtimeArg);
+    this.arg1 = argArg1;
+    this.arg2 = argArg2;
   }
 
   @Override
-  public Double evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Double evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     return ((Double) arg1.evaluate() / (Double) arg2.evaluate());
@@ -40,7 +40,7 @@ public class DivisionOperator extends Expression {
 
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Double.class;
   }
 }

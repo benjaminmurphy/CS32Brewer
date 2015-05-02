@@ -21,17 +21,17 @@ public class NotOperator extends Expression {
   /**
    * Creates a new Not operator.
    *
-   * @param _runtime The containing runtime
-   * @param _arg1 The argument passed to Not.
+   * @param runtimeArg The containing runtime
+   * @param argArg1 The argument passed to Not.
    */
-  public NotOperator(final BrewerRuntime _runtime, final Expression _arg1) {
-    super(_runtime);
-    this.arg1 = _arg1;
+  public NotOperator(final BrewerRuntime runtimeArg, final Expression argArg1) {
+    super(runtimeArg);
+    this.arg1 = argArg1;
   }
 
   @Override
-  public Boolean evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Boolean evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     return !(Boolean) arg1.evaluate();
@@ -39,7 +39,7 @@ public class NotOperator extends Expression {
 
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return Boolean.class;
   }
 }

@@ -23,28 +23,28 @@ public class GetCommand extends Expression {
   /**
    * Creates a new GetCommand for the given variable.
    *
-   * @param _runtime The containing runtime
+   * @param runtimeArg The containing runtime
    * @param name The name of the variable being accessed.
-   * @param _vartype The type of the variable
+   * @param vartypeArg The type of the variable
    */
-  public GetCommand(final BrewerRuntime _runtime, final String name,
-      final Class<?> _vartype) {
-    super(_runtime);
+  public GetCommand(final BrewerRuntime runtimeArg, final String name,
+      final Class<?> vartypeArg) {
+    super(runtimeArg);
     this.varname = name;
-    this.vartype = _vartype;
+    this.vartype = vartypeArg;
   }
 
   @Override
-  public Object evaluate() throws ProgramKilledException {
-    if (!runtime.isRunning()) {
+  public final Object evaluate() throws ProgramKilledException {
+    if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
-    Variable var = runtime.getVariables().get(varname);
+    Variable var = runtime().getVariables().get(varname);
     return vartype.cast(var.getValue());
   }
 
   @Override
-  public Class<?> getType() {
+  public final Class<?> getType() {
     return vartype;
   }
 }

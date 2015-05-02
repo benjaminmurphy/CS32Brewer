@@ -2,7 +2,7 @@ package edu.brown.cs.brewer;
 
 /**
  * Represents a log message, with a String message and a boolean indicating
- * whether or not this message is an error
+ * whether or not this message is an error.
  *
  * @author raphaelkargon
  *
@@ -20,29 +20,29 @@ public class Log {
   /**
    * @return the msg
    */
-  public String getMsg() {
+  public final String getMsg() {
     return msg;
   }
 
   /**
    * @return the isError
    */
-  public boolean isError() {
+  public final boolean isError() {
     return isError;
   }
 
   /**
-   * @param msg The log message
-   * @param isError Whether this message is an error
+   * @param msgArg The log message
+   * @param isErrorArg Whether this message is an error
    */
-  public Log(final String _msg, final boolean _isError) {
+  public Log(final String msgArg, final boolean isErrorArg) {
     super();
-    this.msg = _msg;
-    this.isError = _isError;
+    this.msg = msgArg;
+    this.isError = isErrorArg;
   }
 
   @Override
-  public String toString() {
+  public final String toString() {
     String out = "Log: ";
     if (isError) {
       out += "ERROR: ";

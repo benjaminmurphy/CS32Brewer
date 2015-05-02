@@ -37,7 +37,7 @@ public class Variable {
    *
    * @return The variable value.
    */
-  public Object getValue() {
+  public final Object getValue() {
     return value;
   }
 
@@ -46,7 +46,7 @@ public class Variable {
    *
    * @param newval The new variable value.
    */
-  public void setValue(final Object newval) {
+  public final void setValue(final Object newval) {
     this.value = type.cast(newval);
   }
 
@@ -55,17 +55,17 @@ public class Variable {
    *
    * @return The Class object representing the variable's type.
    */
-  public Class<?> getType() {
+  public final final Class<?> getType() {
     return type;
   }
 
   @Override
-  public boolean equals(final Object obj) {
+  public final boolean equals(final Object obj) {
     return value.equals(obj);
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return value.hashCode();
   }
 }
