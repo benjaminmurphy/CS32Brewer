@@ -68,7 +68,7 @@ public class Database {
   public void addProgram(String id, String program) throws SQLException {
     openConnection();
 
-    String query = "INSERT INTO programs VALUES (?,?);";
+    String query = "INSERT INTO program VALUES (?,?);";
     PreparedStatement ps;
 
     ps = conn.prepareStatement(query);

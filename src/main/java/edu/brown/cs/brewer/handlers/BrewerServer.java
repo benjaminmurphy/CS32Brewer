@@ -3,6 +3,7 @@ package edu.brown.cs.brewer.handlers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +69,9 @@ public class BrewerServer {
     portNum = port;
     runSparkServer();
 
-    url = String.format(url, portNum);
+    saves = new HashMap<String, Database>();
+
+    url = String.format(url, portNum, "%s");
   }
 
   /**
@@ -113,8 +116,7 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
       try {
         System.out.println(req.body());
         runtime = Parser.parseJSONProgram(req.body());
@@ -141,8 +143,7 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       if (runtime != null) {
         List<Log> logs = runtime.getLogs();
@@ -180,16 +181,14 @@ public class BrewerServer {
       if (runtime != null) {
         runtime.kill();
 
-        ImmutableMap.Builder<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>();
+        ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
         variables.put("status", "success");
 
         return gson.toJson(variables.build());
       }
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       variables.put("status", "failure");
 
@@ -214,8 +213,7 @@ public class BrewerServer {
 
       Database db = saves.get(dbId);
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
@@ -229,7 +227,7 @@ public class BrewerServer {
         // String programJSON = program[1];
 
         String programId = String.valueOf(db.getSize() + 1);
-        String programJSON = gson.fromJson(req.body(), String.class);
+        String programJSON = req.body();
 
         db.addProgram(programId, programJSON);
 
@@ -263,8 +261,7 @@ public class BrewerServer {
 
       Database db = saves.get(dbId);
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
@@ -306,8 +303,7 @@ public class BrewerServer {
 
       Database db = saves.get(dbId);
 
-      ImmutableMap.Builder<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>();
+      ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
