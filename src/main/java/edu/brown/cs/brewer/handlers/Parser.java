@@ -43,7 +43,7 @@ public class Parser {
    *         terms of the Brewer specification)
    * @throws ParseException If the string is not valid JSON
    */
-  public static BrewerRuntime parseJSONProgram(String json)
+  public static BrewerRuntime parseJSONProgram(final String json)
       throws BrewerParseException, ParseException {
     JSONParser parser = new JSONParser();
     JSONObject mainprog = (JSONObject) parser.parse(json);
@@ -68,47 +68,47 @@ public class Parser {
    * @return The Expression represented by the JSON object
    * @throws BrewerParseException If the json object is not proper Brewer Code
    */
-  private static Expression parseJSONExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static Expression parseJSONExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     if (obj == null) {
       throw new MissingElementException("An element in the JSON is missing.");
     }
     String exprType = (String) obj.get("type");
 
     switch (exprType) {
-      case "set": {
+      case "set":
         return parseSetExpression(obj, runtime);
-      }
-      case "var": {
+
+      case "var":
         return parseVarExpression(obj, runtime);
-      }
-      case "print": {
+
+      case "print":
         return parsePrintExpression(obj, runtime);
-      }
-      case "literal": {
+
+      case "literal":
         return parseLiteralExpression(obj, runtime);
-      }
-      case "comparison": {
+
+      case "comparison":
         return parseComparisonExpression(obj, runtime);
-      }
-      case "logic_operator": {
+
+      case "logic_operator":
         return parseLogicalExpression(obj, runtime);
-      }
-      case "numeric_operator": {
+
+      case "numeric_operator":
         return parseNumericalExpression(obj, runtime);
-      }
-      case "unary_operator": {
+
+      case "unary_operator":
         return parseUnaryExpression(obj, runtime);
-      }
-      case "while": {
+
+      case "while":
         return parseWhileExpression(obj, runtime);
-      }
-      case "if": {
+
+      case "if":
         return parseIfElseExpression(obj, runtime);
-      }
-      case "ifelse": {
+
+      case "ifelse":
         return parseIfElseExpression(obj, runtime);
-      }
+
       default:
         throw new SyntaxErrorException("Expression type \"" + exprType
             + "\" is not recognized.");
@@ -124,8 +124,8 @@ public class Parser {
    * @throws BrewerParseException If the JSONObject is not a proper set
    *         expression
    */
-  private static SetCommand parseSetExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static SetCommand parseSetExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     JSONObject variableObj = (JSONObject) obj.get("name");
     if (variableObj == null) {
       throw new MissingElementException("Set expression is missing a variable.");
@@ -152,8 +152,8 @@ public class Parser {
    * @throws BrewerParseException If the JSONObject is not a proper variable
    *         expression
    */
-  private static GetCommand parseVarExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static GetCommand parseVarExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     String var = (String) obj.get("name");
     if (var == null) {
       throw new MissingElementException("Var expression is missing a name.");
@@ -172,8 +172,8 @@ public class Parser {
    * @throws BrewerParseException If the JSONObject is not a proper print
    *         expression
    */
-  private static PrintExpression parsePrintExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static PrintExpression parsePrintExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     // Changed the parsing to get inner name.
     JSONObject innerObj = (JSONObject) obj.get("name");
     return new PrintExpression(runtime, parseJSONExpression(innerObj, runtime));
@@ -187,8 +187,8 @@ public class Parser {
    * @return A Literal value, as represented by the JSON
    * @throws BrewerParseException If the JSON is invalid brewer code
    */
-  private static Literal parseLiteralExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static Literal parseLiteralExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     String vartypename = (String) obj.get("class");
 
     switch (vartypename) {
@@ -216,8 +216,8 @@ public class Parser {
    *         GreaterThanOperator type, as represented by the JSON
    * @throws BrewerParseException If the JSON is invalid brewer code
    */
-  private static Expression parseComparisonExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static Expression parseComparisonExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
     Expression arg1 =
         parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
@@ -250,8 +250,8 @@ public class Parser {
    * @return An And or Or Operator, as represented by the JSON
    * @throws BrewerParseException If the JSON is invalid brewer code
    */
-  private static Expression parseLogicalExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static Expression parseLogicalExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
     Expression arg1 =
         parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
@@ -283,8 +283,8 @@ public class Parser {
    * @return An Expression representing an arithmetic operation
    * @throws BrewerParseException If the JSON is invalid brewer code
    */
-  private static Expression parseNumericalExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static Expression parseNumericalExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
     Expression arg1 =
         parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
@@ -323,8 +323,8 @@ public class Parser {
    * @return A unary expression (currently just "not")
    * @throws BrewerParseException if the JSON is invalid brewer code
    */
-  private static Expression parseUnaryExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static Expression parseUnaryExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     String opname = (String) obj.get("name");
     Expression arg1 =
         parseJSONExpression((JSONObject) obj.get("arg1"), runtime);
@@ -350,8 +350,8 @@ public class Parser {
    * @return A WhileCommand corresponding to the JSON
    * @throws BrewerParseException if the JSON is invalid brewer code
    */
-  private static WhileCommand parseWhileExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static WhileCommand parseWhileExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     Expression cond =
         parseJSONExpression((JSONObject) obj.get("condition"), runtime);
     Class<?> condtype = cond.getType();
@@ -375,8 +375,8 @@ public class Parser {
    * @return An IfElseCommand expression
    * @throws BrewerParseException if the JSON is invalid brewer code
    */
-  private static IfElseCommand parseIfElseExpression(JSONObject obj,
-      BrewerRuntime runtime) throws BrewerParseException {
+  private static IfElseCommand parseIfElseExpression(final JSONObject obj,
+      final BrewerRuntime runtime) throws BrewerParseException {
     Expression cond =
         parseJSONExpression((JSONObject) obj.get("condition"), runtime);
     Class<?> condtype = cond.getType();
