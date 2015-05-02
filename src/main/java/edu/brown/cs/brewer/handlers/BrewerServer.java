@@ -19,6 +19,13 @@ import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
+/**
+ * The server for the Brewer program. It accepts requests to run programs (given
+ * as JSON) and returns the outputs of logs.
+ *
+ * @author raphaelkargon
+ *
+ */
 public class BrewerServer {
 
   /**
@@ -36,11 +43,19 @@ public class BrewerServer {
    */
   private static Gson gson = new Gson();
 
+  /**
+   * This runs the server with a given port.
+   *
+   * @param port The port on which to host the server.
+   */
   public static void runServer(int port) {
     portNum = port;
     runSparkServer();
   }
 
+  /**
+   * Sets up the spark server.
+   */
   private static void runSparkServer() {
     Spark.setPort(portNum);
     Spark.externalStaticFileLocation("src/main/resources/static");
@@ -50,6 +65,12 @@ public class BrewerServer {
     Spark.post("/kill", new KillHandler());
   }
 
+  /**
+   * Servres the GUI to the client.
+   *
+   * @author raphaelkargon
+   *
+   */
   private static final class IndexHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response resp) {
@@ -57,6 +78,13 @@ public class BrewerServer {
     }
   }
 
+  /**
+   * Receives programs and runs them. The logs produced by the program are
+   * returned.
+   *
+   * @author raphaelkargon
+   *
+   */
   private static final class RunHandler implements Route {
 
     @Override
@@ -79,6 +107,12 @@ public class BrewerServer {
     }
   }
 
+  /**
+   * Returns the logs for a given program, and clears them.
+   *
+   * @author raphaelkargon
+   *
+   */
   private static final class LogHandler implements Route {
     @Override
     public Object handle(Request req, Response resp) {
@@ -96,11 +130,6 @@ public class BrewerServer {
           variables.put("running", false);
         }
 
-        // List<String> messages = new ArrayList<String>();
-        // for (Log l : logs) {
-        // messages.add(l.getMsg());
-        // }
-
         variables.put("status", "success");
         variables.put("messages", logs);
       }
@@ -114,6 +143,12 @@ public class BrewerServer {
     }
   }
 
+  /**
+   * Kills a program if it is already running.
+   *
+   * @author raphaelkargon
+   *
+   */
   private static final class KillHandler implements Route {
     @Override
     public Object handle(Request req, Response resp) {
