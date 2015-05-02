@@ -280,6 +280,7 @@
 <div id="buttonTab">
     <button id="runButton" onclick="runProgram()">Run</button>
     <button id="killButton" onclick="killProgram()">Kill</button>
+    <button id="saveButton" onclick="saveProgram()">Save</button>
     <button id="consoleButton" onclick="setConsole()">Console</button>
 </div>
 

@@ -18,6 +18,16 @@ var minWidth = 100;
 
 var variableList = [];
 
+$(document).ready(function() {
+    
+    var url = document.URL;
+    var pieces = url.split("/");
+    
+    if (pieces[pieces.length-1] !== "home") {
+        loadProgram(pieces[pieces.length-1]);
+    }
+});
+
 function makeVariable() {
     if (document.getElementById("newVarBox").style.display === "block") {
         document.getElementById("newVarBox").style.display = "none"
@@ -360,6 +370,36 @@ function log(msg, isError) {
     lineNumber += 1;
 
     consoleBox.appendChild(line);
+}
+
+function loadProgram(id) {
+    
+    var req = {
+        program: id
+    }
+    
+    $.post("/retrieve", JSON.stringify(req), function(response) {
+        response = JSON.parse(response);
+        
+        console.log(response.code);
+    });
+}
+
+function saveProgram() {
+    
+    var req = compileMain();
+    
+    $.post("/save", JSON.stringify(req), function(response) {
+        response = JSON.parse(response);
+        
+        if (response.status === "failed") {
+            console.log("Save failed.")
+        } else {
+            console.log("Save completed.");
+            
+            window.location.replace(window.location.href.replace("[A-Za-z0-9]+$", response.program));
+        }
+    });
 }
 
 function compileMain() {

@@ -381,6 +381,7 @@ select {
     position: absolute;
     width: calc(26.66% - 56.66px);
     text-align: center;
+    color: white;
 }
 
 #main1-title {
@@ -398,6 +399,10 @@ select {
 #instructions, #about {
     float: right;
     margin-right: 20px;
+}
+
+#instructions {
+    display: none;
 }
 
 #aboutDiv {
