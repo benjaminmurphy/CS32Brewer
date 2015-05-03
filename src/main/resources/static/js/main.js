@@ -407,13 +407,19 @@ function saveProgram() {
 function compileMain() {
     var request = {main : []};
     for (var idx = 0; idx < playground1.children.length; idx++) {
-        request.main.push(playground1.children[idx].compile());
+        var elt = playground1.children[idx].compile();
+        elt.playground = 1;
+        request.main.push(elt);
     }
     for (var idx = 0; idx < playground2.children.length; idx++) {
-        request.main.push(playground2.children[idx].compile());
+        var elt = playground2.children[idx].compile();
+        elt.playground = 2;
+        request.main.push(elt);    
     }
     for (var idx = 0; idx < playground3.children.length; idx++) {
-        request.main.push(playground3.children[idx].compile());
+        var elt = playground3.children[idx].compile();
+        elt.playground = 3;
+        request.main.push(elt);    
     }
     return request;
 }
@@ -567,8 +573,20 @@ function makeProgram(jsonObj) {
     while (playground1.firstChild) {
         playground1.removeChild(playground1.firstChild);
     }
+    while (playground2.firstChild) {
+        playground2.removeChild(playground2.firstChild);
+    }
+    while (playground3.firstChild) {
+        playground3.removeChild(playground3.firstChild);
+    }
     jsonObj.main.forEach(function(element) {
-        makeProgramHelp(playground1, element);
+        if (element.playground == 1) {
+            makeProgramHelp(playground1, element);
+        } else if (element.playground == 2) {
+            makeProgramHelp(playground2, element);
+        } else if (element.playground == 3) {
+            makeProgramHelp(playground3, element);
+        }
     });
 }
 
