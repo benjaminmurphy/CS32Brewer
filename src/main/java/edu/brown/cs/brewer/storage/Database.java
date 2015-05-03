@@ -10,12 +10,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Database class for saving and reloading Brewer programs
+ * @author Shi
+ *
+ */
 public class Database {
 
   private String dbPath;
   private Connection conn;
 
   // TODO reform constructor as needed
+  /**
+   * Constructor for the Database class.
+   * @param dbPath Path for the database
+   * @throws SQLException If the schema is incorrect
+   */
   public Database(String dbPath) throws SQLException {
     this.dbPath = dbPath;
     openConnection();
@@ -26,7 +36,7 @@ public class Database {
   /**
    * Open connection to database.
    */
-  public void openConnection() {
+  private void openConnection() {
     // Set up a connection
     try {
       Class.forName("org.sqlite.JDBC");
