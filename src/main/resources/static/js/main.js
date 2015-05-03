@@ -44,7 +44,7 @@ function showAbout() {
     }
 }
 
-function addVariable() {
+function addVariableBox() {
     var box = document.getElementById("newVarBox");
     box.style.display = "none";
     var name = document.getElementById("newVarName").value;
@@ -52,13 +52,14 @@ function addVariable() {
         return;
     }
     var type = document.getElementById("typeSelect").value;
-    var inList = false;
-    for(var i = 0; i < variableList.length; i++) {
-        if (variableList[i].name == name) {
-            inList = true;
-        }
-    }
-    if (inList) {
+    
+    addVariable(name, type);
+
+    document.getElementById("newVarName").value = "";
+}
+
+function addVariable(name, type) {
+    if (isVariable(name)) {
         alert(name + " is already a variable!");
     } else {
         variableList.push({"name": name, "type": type});
@@ -70,7 +71,15 @@ function addVariable() {
             selects[i].appendChild(option);
         }
     }
-    document.getElementById("newVarName").value = "";
+}
+
+function isVariable(name) {
+    for(var i = 0; i < variableList.length; i++) {
+        if (variableList[i].name == name) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function getType(name) {
@@ -382,6 +391,7 @@ function loadProgram(id) {
         response = JSON.parse(response);
         
         console.log(response.code);
+        makeProgram(response);
     });
 }
 
@@ -561,130 +571,180 @@ HTMLDivElement.prototype.compile = function() {
     return block;
 }
 
-function loadProgram(jsonObj) {
-
-    loadProgramHelp(playground1, jsonObj);
-
+function makeProgram(jsonObj) {
+    jsonObj.main.forEach(function(element) {
+        makeProgramHelp(playground1, element);
+    });
 }
 
-function loadProgramHelp(parent, block) {
+function copyElementIntoLoc(loc, elementName){
+    var original = document.getElementById(elementName);
+    var copy = null;
 
+    if (menu.contains(original)) {
+        copy = original.cloneNode(true);
+        copy.id = "copy_" + copynum.toString();
+        copynum += 1;
+        copy.style.display = "none";
+        original.appendChild(copy);
+    } else {
+        console.log("ERROR: Found an element of ID" + elementName + "not in menu");
+        return null;
+    }
+
+    var target = loc;
+    var parent = element.parentNode;
+
+    if (target.classList.contains("droppable") && playgroundThatContains(target) !== null) {
+        copy.style.display = "block";
+        target.appendChild(copy);
+        copy.classList.add("shrinkable");
+        recursiveResize(copy);
+    } else if (playgroundThatContains(target) !== null) {
+        copy.style.display = "block";
+        playgroundThatContains(target).appendChild(copy);
+        copy.resize();
+    } else if (menu.contains(target)) {
+        event.preventDefault();
+        copy.parentNode.removeChild(copy);
+        console.log("ERROR: Put element: " + elementName + "into the menu");
+        return null;
+    }
+    if (parent && !menu.contains(parent) && parent !== null && parent.tagName === "DIV") {
+        recursiveResize(parent);
+    }
+    return copy;
+}
+
+function makeProgramHelp(parent, block) {
+    
+    if (!block.hasOwnProperty("type"))  {
+        return;
+    }
+
+    var element = null;
     if (block.type == "set") {
+        element = copyElementIntoLoc(parent, "set");
 
-        var firstDropZone = this.children[1];
-        var secondDropZone = this.children[3];
+        var firstDropZone = element.children[1];
+        var secondDropZone = element.children[3];
 
-        block.name = compile(firstDropZone.children[0]);
-        block.value = compile(secondDropZone.children[0]);
+        makeProgramHelp(firstDropZone, block.name);
+        makeProgramHelp(secondDropZone, block.value);
 
     } else if (block.type == "var") {
-
-        var name = this.children[1].value;
-        block.name = name;
-        block.class = getType(name);
+        element = copyElementIntoLoc(parent, "var");
+        var name = block.name;
+        if (!isVariable(name)) {
+            addVariable(name, block.class);
+        }
+        element.children[1].value = block.name;
 
     } else if (block.type == "literal") {
-
-        block.value = this.getValue();
-
-        if (this.classList.contains("nVal")) {
-            block.class = "number";
-        } else if (this.classList.contains("sVal")) {
-            block.class = "string";
-        } else {
-            block.class = "bool";
+        if (block.class == "number") {
+            element = copyElementIntoLoc(parent, "numberLiteral");
+            element.value = block.value;
+        } else if (block.class == "string") {
+            element = copyElementIntoLoc(parent, "stringLiteral");
+            element.value = black.value;
+        } else if (block.class == "bool") {
+            if (block.value == true) {
+                element = copyElementIntoLoc(parent, "trueLiteral");
+            } else if (block.value == false) {
+                element = copyElementIntoLoc(parent, "falseLiteral");
+            } else {
+                console.log("ERROR: Element value not boolean");
+            }
         }
 
-
     } else if (block.type == "print") {
+        element = copyElementIntoLoc(parent, "print");
         
-        var firstDropZone = this.children[1];
-        block.name = compile(firstDropZone.children[0]);
+        var firstDropZone = element.children[1];
+
+        makeProgramHelp(firstDropZone, block.name);
 
     } else if (block.type == "numeric_operator") {
+        element = copyElementIntoLoc(parent, "arithmetic");
 
-        var firstDropZone = this.children[1];
-        var operator = this.children[2];
-        var secondDropZone = this.children[3];
+        var firstDropZone = element.children[1];
+        var operator = element.children[2];
+        var secondDropZone = element.children[3];
 
-        block.arg1 = compile(firstDropZone.children[0]);
-        block.arg2 = compile(secondDropZone.children[0]);
+        makeProgramHelp(firstDropZone, block.arg1);
+        makeProgramHelp(secondDropZone, block.arg2);
 
-        block.name = operator.value;
+        operator.value = block.name;
 
     } else if (block.type == "while") {
+        element = copyElementIntoLoc(parent, "while");
 
-        var firstDropZone = this.children[1];
-        var secondDropZone = this.children[3];
+        var conditionZone = element.children[1];
+        var commandsZone = element.children[3];
 
-        block.condition = compile(firstDropZone.children[0]);
+        makeProgramHelp(conditionZone, block.condition);
 
-        block.commands = [];
-
-        for (var idx = 0; idx < secondDropZone.children.length; idx++) {
-            block.commands.push(compile(secondDropZone.children[idx]));
+        for (var idx = 0; idx < block.commands.length; idx++) {
+            makeProgramHelp(commandsZone, block.commands[idx]));
         }
 
     } else if (block.type == "if") {
-        
+        element = copyElementIntoLoc(parent, "if");
 
-        var condition = this.children[1];
-        var commands = this.children[3];
+        var conditionZone = element.children[1];
+        var commandsZone = element.children[3];
 
-        block.commands = [];
+        makeProgramHelp(conditionZone, block.condition);
 
-        block.condition = condition.children[0].compile();
-
-        for (var idx = 0; idx < commands.children.length; idx++) {
-            block.commands.push(compile(commands.children[idx]));
+        for (var idx = 0; idx < block.commands.length; idx++) {
+            makeProgramHelp(commandsZone, block.commands[idx]));
         }
 
     } else if (block.type == "ifelse") {
+        element = copyElementIntoLoc(parent, "ifElse");
 
-        var condition = this.children[1];
-        var ifCommands = this.children[3];
-        var elseCommands = this.children[5];
+        var conditionZone = element.children[1];
+        var ifCommandsZone = element.children[3];
+        var elseCommandsZone = element.children[5];
 
-        block.condition = condition.children[0].compile();
+        makeProgramHelp(conditionZone, block.condition);
 
-        block.commands = [];
-        block.else = [];
-        for (var idx = 0; idx < ifCommands.children.length; idx++) {
-            block.commands.push(compile(ifCommands.children[idx]));
+        for (var idx = 0; idx < block.commands.length; idx++) {
+            makeProgramHelp(ifCommandsZone, block.commands[idx]));
         }
 
-        block.else = [];
-        for (var idx = 0; idx < elseCommands.children.length; idx++) {
-            block.else.push(compile(elseCommands.children[idx]));
+        for (var idx = 0; idx < block.else.length; idx++) {
+            makeProgramHelp(elseCommandsZone, block.else[idx]));
         }
 
     } else if (block.type == "logic_operator") {
+        element = copyElementIntoLoc(parent, "andOr");
 
-        var firstDropZone = this.children[1];
-        var operator = this.children[2];
-        var secondDropZone = this.children[3];
+        var firstDropZone = element.children[1];
+        var operator = element.children[2];
+        var secondDropZone = element.children[3];
 
-        block.name = operator.value;
-        block.arg1 = compile(firstDropZone.children[0]);
-        block.arg2 = compile(secondDropZone.children[0]);
+        operator.value = block.name;
+        makeProgramHelp(firstDropZone, block.arg1);
+        makeProgramHelp(secondDropZone, block.arg2);
 
     } else if (block.type == "unary_operator") {
+        element = copyElementIntoLoc(parent, "not");
 
-        var firstDropZone = this.children[1];
+        var firstDropZone = element.children[1];
 
-        block.name = "not";
-        block.arg1 = compile(firstDropZone.children[0]);
+        makeProgramHelp(firstDropZone, block.arg1);
 
     } else if (block.type == "comparison") {
+        element = copyElementIntoLoc(parent, "equality");
 
-        var firstDropZone = this.children[1];
-        var operator = this.children[2];
-        var secondDropZone = this.children[3];
+        var firstDropZone = element.children[1];
+        var operator = element.children[2];
+        var secondDropZone = element.children[3];
 
-        block.arg1 = compile(firstDropZone.children[0]);
-        block.arg2 = compile(secondDropZone.children[0]);
-
-        block.name = operator.value;
+        operator.value = block.name;
+        makeProgramHelp(firstDropZone, block.arg1);
+        makeProgramHelp(secondDropZone, block.arg2);        
     }
 
 }

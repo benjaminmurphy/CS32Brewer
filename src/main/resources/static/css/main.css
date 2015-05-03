@@ -181,6 +181,10 @@ Author's custom styles
     bottom: 0.2em;
 }
 
+#aboutButton {
+    border-radius: 5px;
+}
+
 .varSelect {
     width: 100px;
     margin: 0;
