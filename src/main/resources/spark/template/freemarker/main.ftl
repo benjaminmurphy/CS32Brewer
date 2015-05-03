@@ -203,6 +203,7 @@
                         <option value="sub">-</option>
                         <option value="mul">*</option>
                         <option value="div">/</option>
+                        <option value="mod">%</option>
                     </select>
                     <div class="droppable single number">
                     </div>

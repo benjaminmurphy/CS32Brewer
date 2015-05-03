@@ -17,6 +17,7 @@ import edu.brown.cs.brewer.expression.Expression;
 import edu.brown.cs.brewer.expression.GetCommand;
 import edu.brown.cs.brewer.expression.IfElseCommand;
 import edu.brown.cs.brewer.expression.Literal;
+import edu.brown.cs.brewer.expression.ModuloOperator;
 import edu.brown.cs.brewer.expression.MultiplicationOperator;
 import edu.brown.cs.brewer.expression.NotOperator;
 import edu.brown.cs.brewer.expression.OrOperator;
@@ -309,6 +310,8 @@ public class Parser {
         return new MultiplicationOperator(runtime, arg1, arg2);
       case "div":
         return new DivisionOperator(runtime, arg1, arg2);
+      case "mod":
+        return new ModuloOperator(runtime, arg1, arg2);
       default:
         throw new SyntaxErrorException("Unrecognized numeric_operator \""
             + opname + "\".");
