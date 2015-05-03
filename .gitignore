@@ -7,3 +7,4 @@ pom.xml
 /databases/
 
 .mvn-classpath
+nohup.out
