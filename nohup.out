@@ -1,0 +1,137 @@
+Query: 
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.util.Scanner.nextLine(Scanner.java:1540)
+	at edu.brown.cs.brewer.Main.main(Main.java:51)
+== Spark has ignited ...
+>> Listening on 0.0.0.0:4567
+May 03, 2015 1:58:36 PM org.eclipse.jetty.server.Server doStart
+INFO: jetty-9.0.2.v20130417
+May 03, 2015 1:58:36 PM org.eclipse.jetty.server.AbstractConnector doStart
+INFO: Started ServerConnector@1be6f97f{HTTP/1.1}{0.0.0.0:4567}
+{"main":[{"type":"print","name":{"type":"literal","value":3,"class":"number"}}]}
+{"main":[{"type":"set","name":{"type":"var","name":"Boxes","class":"number"},"value":{"type":"literal","value":1,"class":"number"}},{"type":"ifelse","condition":{"type":"var","name":"Boxes","class":"number"},"commands":[{"type":"print","name":{"type":"literal","value":null,"class":"number"}}],"else":[{"type":"print","name":{"type":"literal","value":null,"class":"number"}}]},{"type":"literal","value":true,"class":"bool"}]}
+{"main":[{"type":"set","name":{"type":"var","name":"Boxes","class":"number"},"value":{"type":"literal","value":1,"class":"number"}},{"type":"ifelse","condition":{"type":"var","name":"Boxes","class":"number"},"commands":[{"type":"print","name":{"type":"literal","value":null,"class":"number"}}],"else":[{"type":"print","name":{"type":"literal","value":null,"class":"number"}}]}]}
+{"main":[{"type":"set","name":{"type":"var","name":"Boxes","class":"number"},"value":{"type":"literal","value":1,"class":"number"}},{"type":"ifelse","condition":{"type":"var","name":"Boxes","class":"number"},"commands":[{"type":"print","name":{"type":"literal","value":null,"class":"number"}}],"else":[{"type":"print","name":{"type":"literal","value":null,"class":"number"}}]}]}
+{"main":[{"type":"set","name":{"type":"var","name":"String","class":"string"},"value":{"type":"literal","value":null,"class":"number"}}]}
+May 03, 2015 2:50:20 PM spark.webserver.MatcherFilter doFilter
+SEVERE: 
+java.lang.NullPointerException
+	at edu.brown.cs.brewer.handlers.Parser.getDouble(Parser.java:533)
+	at edu.brown.cs.brewer.handlers.Parser.parseLiteralExpression(Parser.java:199)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:89)
+	at edu.brown.cs.brewer.handlers.Parser.parseSetExpression(Parser.java:136)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:80)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONProgram(Parser.java:56)
+	at edu.brown.cs.brewer.handlers.BrewerServer$RunHandler.handle(BrewerServer.java:121)
+	at spark.SparkBase$1.handle(SparkBase.java:174)
+	at spark.webserver.MatcherFilter.doFilter(MatcherFilter.java:144)
+	at spark.webserver.JettyHandler.doHandle(JettyHandler.java:54)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:179)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:136)
+	at org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:97)
+	at org.eclipse.jetty.server.Server.handle(Server.java:451)
+	at org.eclipse.jetty.server.HttpChannel.run(HttpChannel.java:252)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:266)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.run(AbstractConnection.java:240)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:596)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:527)
+	at java.lang.Thread.run(Thread.java:745)
+
+{"main":[{"type":"set","name":{"type":"var","name":"String","class":"string"},"value":{"type":"literal","value":null,"class":"number"}},{"type":"print","name":{"type":"var","name":"String","class":"string"}}]}
+May 03, 2015 2:50:41 PM spark.webserver.MatcherFilter doFilter
+SEVERE: 
+java.lang.NullPointerException
+	at edu.brown.cs.brewer.handlers.Parser.getDouble(Parser.java:533)
+	at edu.brown.cs.brewer.handlers.Parser.parseLiteralExpression(Parser.java:199)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:89)
+	at edu.brown.cs.brewer.handlers.Parser.parseSetExpression(Parser.java:136)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:80)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONProgram(Parser.java:56)
+	at edu.brown.cs.brewer.handlers.BrewerServer$RunHandler.handle(BrewerServer.java:121)
+	at spark.SparkBase$1.handle(SparkBase.java:174)
+	at spark.webserver.MatcherFilter.doFilter(MatcherFilter.java:144)
+	at spark.webserver.JettyHandler.doHandle(JettyHandler.java:54)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:179)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:136)
+	at org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:97)
+	at org.eclipse.jetty.server.Server.handle(Server.java:451)
+	at org.eclipse.jetty.server.HttpChannel.run(HttpChannel.java:252)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:266)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.run(AbstractConnection.java:240)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:596)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:527)
+	at java.lang.Thread.run(Thread.java:745)
+
+{"main":[{"type":"set","name":{"type":"var","name":"String","class":"string"},"value":{"type":"literal","value":null,"class":"number"}},{"type":"print","name":{"type":"var","name":"String","class":"string"}}]}
+May 03, 2015 2:50:55 PM spark.webserver.MatcherFilter doFilter
+SEVERE: 
+java.lang.NullPointerException
+	at edu.brown.cs.brewer.handlers.Parser.getDouble(Parser.java:533)
+	at edu.brown.cs.brewer.handlers.Parser.parseLiteralExpression(Parser.java:199)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:89)
+	at edu.brown.cs.brewer.handlers.Parser.parseSetExpression(Parser.java:136)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:80)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONProgram(Parser.java:56)
+	at edu.brown.cs.brewer.handlers.BrewerServer$RunHandler.handle(BrewerServer.java:121)
+	at spark.SparkBase$1.handle(SparkBase.java:174)
+	at spark.webserver.MatcherFilter.doFilter(MatcherFilter.java:144)
+	at spark.webserver.JettyHandler.doHandle(JettyHandler.java:54)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:179)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:136)
+	at org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:97)
+	at org.eclipse.jetty.server.Server.handle(Server.java:451)
+	at org.eclipse.jetty.server.HttpChannel.run(HttpChannel.java:252)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:266)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.run(AbstractConnection.java:240)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:596)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:527)
+	at java.lang.Thread.run(Thread.java:745)
+
+{"main":[{"type":"set","name":{"type":"var","name":"String","class":"string"},"value":{"type":"literal","value":null,"class":"number"}},{"type":"print","name":{"type":"var","name":"String","class":"string"}}]}
+May 03, 2015 2:54:06 PM spark.webserver.MatcherFilter doFilter
+SEVERE: 
+java.lang.NullPointerException
+	at edu.brown.cs.brewer.handlers.Parser.getDouble(Parser.java:533)
+	at edu.brown.cs.brewer.handlers.Parser.parseLiteralExpression(Parser.java:199)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:89)
+	at edu.brown.cs.brewer.handlers.Parser.parseSetExpression(Parser.java:136)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONExpression(Parser.java:80)
+	at edu.brown.cs.brewer.handlers.Parser.parseJSONProgram(Parser.java:56)
+	at edu.brown.cs.brewer.handlers.BrewerServer$RunHandler.handle(BrewerServer.java:121)
+	at spark.SparkBase$1.handle(SparkBase.java:174)
+	at spark.webserver.MatcherFilter.doFilter(MatcherFilter.java:144)
+	at spark.webserver.JettyHandler.doHandle(JettyHandler.java:54)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:179)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:136)
+	at org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:97)
+	at org.eclipse.jetty.server.Server.handle(Server.java:451)
+	at org.eclipse.jetty.server.HttpChannel.run(HttpChannel.java:252)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:266)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.run(AbstractConnection.java:240)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:596)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:527)
+	at java.lang.Thread.run(Thread.java:745)
+
+{"main":[{"type":"set","name":{"type":"var","name":"String","class":"string"},"value":{"type":"literal","value":"Today is","class":"string"}},{"type":"print","name":{"type":"var","name":"String","class":"string"}}]}
+== Spark has ignited ...
+>> Listening on 0.0.0.0:4567
+May 03, 2015 3:23:48 PM org.eclipse.jetty.server.Server doStart
+INFO: jetty-9.0.2.v20130417
+May 03, 2015 3:23:48 PM org.eclipse.jetty.server.AbstractConnector doStart
+INFO: Started ServerConnector@1be6f97f{HTTP/1.1}{0.0.0.0:4567}
+== Spark has ignited ...
+>> Listening on 0.0.0.0:80
+May 03, 2015 3:25:30 PM org.eclipse.jetty.server.Server doStart
+INFO: jetty-9.0.2.v20130417
+May 03, 2015 3:25:30 PM org.eclipse.jetty.server.AbstractConnector doStart
+INFO: Started ServerConnector@7680bdc7{HTTP/1.1}{0.0.0.0:80}
+== Spark has ignited ...
+>> Listening on 0.0.0.0:80
+May 03, 2015 3:27:07 PM org.eclipse.jetty.server.Server doStart
+INFO: jetty-9.0.2.v20130417
+May 03, 2015 3:27:07 PM org.eclipse.jetty.server.AbstractConnector doStart
+INFO: Started ServerConnector@7680bdc7{HTTP/1.1}{0.0.0.0:80}
