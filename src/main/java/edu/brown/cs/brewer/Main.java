@@ -1,5 +1,6 @@
 package edu.brown.cs.brewer;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import org.json.simple.parser.ParseException;
@@ -47,11 +48,13 @@ public final class Main {
       Scanner in = new Scanner(System.in);
       BrewerRuntime runtime;
       String query;
-      System.out.println("Query: ");
+      System.out.println("Query:");
       while ((query = in.nextLine()).trim().length() > 0) {
         try {
           runtime = Parser.parseJSONProgram(query);
           runtime.run();
+          System.out.println(Arrays.toString(runtime.getVariables().values()
+              .toArray()));
           for (Log l : runtime.getLogs()) {
             if (l.isError()) {
               System.out.print("ERROR: ");
@@ -63,7 +66,7 @@ public final class Main {
         } catch (ParseException | BrewerParseException e) {
           System.out.println("ERROR: " + e);
         }
-        System.out.println("Query: ");
+        System.out.println("Query:");
       }
       in.close();
     }

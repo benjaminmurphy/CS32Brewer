@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Brewer</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,9 +34,9 @@
         </div>
 
         <div id="aboutDiv">
-            <button class="button" type="button" onclick="showAbout()">Close</button>
+            <button class="button" type="button" id="aboutButton" onclick="showAbout()">Close</button>
             <p>Brewer &copy; 2015 Raphael Kargon, Ben Murphy, Noah Picard, Steven Shi<br>
-                For more information, contact benjamin_murphy@brown.edu.</p>
+                For more information, contact benhameeen_murfie@brown.edu.</p>
         </div>
 
         <div id="menu" ondrop="drop(event)" ondragover="allowDrop(event)">
