@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Brewer</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -203,6 +203,7 @@
                         <option value="sub">-</option>
                         <option value="mul">*</option>
                         <option value="div">/</option>
+                        <option value="mod">%</option>
                     </select>
                     <div class="droppable single number">
                     </div>

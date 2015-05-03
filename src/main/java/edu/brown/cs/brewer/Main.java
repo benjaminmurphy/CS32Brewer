@@ -23,7 +23,7 @@ public final class Main {
   /**
    * The default port number.
    */
-  private static final int DEFAULT_PORT = 4567;
+  private static final int DEFAULT_PORT = 80;
 
   /**
    * This runs the server.
