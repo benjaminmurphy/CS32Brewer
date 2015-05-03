@@ -606,6 +606,29 @@ public class ParserTests {
     }
   }
 
+  @Test
+  /**
+   * Simple modulo test
+   * print(5001 % 4);
+   */
+  public void modulo() {
+    String modulo = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"literal\",\"value\":5001,\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":4,\"class\":\"number\"},\"name\":\"mod\"}}]}";
+
+    double expected = (5001 % 4);
+    try {
+      br = Parser.parseJSONProgram(modulo);
+      br.run();
+
+      String outputLog = Arrays.toString(br.getLogs().toArray());
+      String expectedLog = String.format("[Log: MESSAGE: %.1f]", expected);
+
+      assertTrue(outputLog.equals(expectedLog));
+    } catch (BrewerParseException | ParseException e) {
+      fail("modulo test failed");
+      e.printStackTrace();
+    }
+  }
+
   // The following tests test order of commands.
   /**
    * Printing in while loop, subtraction first.
@@ -730,6 +753,31 @@ public class ParserTests {
     } catch (BrewerParseException | ParseException e) {
       e.printStackTrace();
       fail("preicision2 test failed");
+    }
+  }
+
+  /**
+   * a = 0;
+   * while (a < 51):
+   *    if ((a % 2) == 0):
+   *       print(a)
+   *    a = a + 1;
+   *    
+   */
+  @Test
+  public void printEven() {
+    String printEven = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"}},{\"type\":\"while\",\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":51,\"class\":\"number\"},\"name\":\"less\"},\"commands\":[{\"type\":\"if\",\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"}}],\"condition\":{\"type\":\"comparison\",\"arg1\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":2,\"class\":\"number\"},\"name\":\"mod\"},\"arg2\":{\"type\":\"literal\",\"value\":0,\"class\":\"number\"},\"name\":\"eq\"}},{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"value\":{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"number\"},\"arg2\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"},\"name\":\"add\"}}]}]}";
+    try {
+      br = Parser.parseJSONProgram(printEven);
+      br.run();
+
+      String outputLog = Arrays.toString(br.getLogs().toArray());
+      String expectedLog = "[Log: MESSAGE: 0.0, Log: MESSAGE: 2.0, Log: MESSAGE: 4.0, Log: MESSAGE: 6.0, Log: MESSAGE: 8.0, Log: MESSAGE: 10.0, Log: MESSAGE: 12.0, Log: MESSAGE: 14.0, Log: MESSAGE: 16.0, Log: MESSAGE: 18.0, Log: MESSAGE: 20.0, Log: MESSAGE: 22.0, Log: MESSAGE: 24.0, Log: MESSAGE: 26.0, Log: MESSAGE: 28.0, Log: MESSAGE: 30.0, Log: MESSAGE: 32.0, Log: MESSAGE: 34.0, Log: MESSAGE: 36.0, Log: MESSAGE: 38.0, Log: MESSAGE: 40.0, Log: MESSAGE: 42.0, Log: MESSAGE: 44.0, Log: MESSAGE: 46.0, Log: MESSAGE: 48.0, Log: MESSAGE: 50.0]";
+
+      assertTrue(outputLog.equals(expectedLog));
+    } catch (BrewerParseException | ParseException e) {
+      e.printStackTrace();
+      fail("printEven test failed");
     }
   }
 
