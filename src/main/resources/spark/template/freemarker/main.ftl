@@ -64,7 +64,7 @@
                             <option value="string">string</option>
                             <option value="bool">bool</option>
                         </select>
-                        <button class="button" type="button" id="addVar" onclick="addVariable()">
+                        <button class="button" type="button" id="addVar" onclick="addVariableBox()">
                             Add
                         </button>
                 </div>
