@@ -42,13 +42,14 @@ function addVariableBox() {
         return;
     }
     var type = document.getElementById("typeSelect").value;
-    
+    console.log(name);
     addVariable(name, type);
 
     document.getElementById("newVarName").value = "";
 }
 
 function addVariable(name, type) {
+    console.log(name);
     if (isVariable(name)) {
         alert(name + " is already a variable!");
     } else {
@@ -376,10 +377,13 @@ function loadProgramFromUrl() {
     var id = document.getElementById("prog_id").value;
     
     $.post("/getSave/"+id, function(response) {
-        response = JSON.parse(response);
+
+        var response = JSON.parse(response);
+        var r = JSON.parse(response.program);
         
-        console.log(response.program);
-        makeProgram(response);
+        console.log(r);
+        console.log(r["main"]);
+        makeProgram(r);
     });
 }
 
@@ -395,7 +399,7 @@ function saveProgram() {
         } else {
             console.log("Save completed.");
             console.log(response);
-            window.location = response.programUrl;
+            alert(response.programUrl);
         }
     });
 }
@@ -560,6 +564,9 @@ HTMLDivElement.prototype.compile = function() {
 }
 
 function makeProgram(jsonObj) {
+    while (playground1.firstChild) {
+        playground1.removeChild(playground1.firstChild);
+    }
     jsonObj.main.forEach(function(element) {
         makeProgramHelp(playground1, element);
     });
@@ -581,7 +588,7 @@ function copyElementIntoLoc(loc, elementName){
     }
 
     var target = loc;
-    var parent = element.parentNode;
+    var parent = copy.parentNode;
 
     if (target.classList.contains("droppable") && playgroundThatContains(target) !== null) {
         copy.style.display = "block";
@@ -631,10 +638,10 @@ function makeProgramHelp(parent, block) {
     } else if (block.type == "literal") {
         if (block.class == "number") {
             element = copyElementIntoLoc(parent, "numberLiteral");
-            element.value = block.value;
+            element.children[0].value = block.value;
         } else if (block.class == "string") {
             element = copyElementIntoLoc(parent, "stringLiteral");
-            element.value = black.value;
+            element.children[0].value = block.value;
         } else if (block.class == "bool") {
             if (block.value == true) {
                 element = copyElementIntoLoc(parent, "trueLiteral");
@@ -673,7 +680,7 @@ function makeProgramHelp(parent, block) {
         makeProgramHelp(conditionZone, block.condition);
 
         for (var idx = 0; idx < block.commands.length; idx++) {
-            makeProgramHelp(commandsZone, block.commands[idx]));
+            makeProgramHelp(commandsZone, block.commands[idx]);
         }
 
     } else if (block.type == "if") {
@@ -685,7 +692,7 @@ function makeProgramHelp(parent, block) {
         makeProgramHelp(conditionZone, block.condition);
 
         for (var idx = 0; idx < block.commands.length; idx++) {
-            makeProgramHelp(commandsZone, block.commands[idx]));
+            makeProgramHelp(commandsZone, block.commands[idx]);
         }
 
     } else if (block.type == "ifelse") {
@@ -698,11 +705,11 @@ function makeProgramHelp(parent, block) {
         makeProgramHelp(conditionZone, block.condition);
 
         for (var idx = 0; idx < block.commands.length; idx++) {
-            makeProgramHelp(ifCommandsZone, block.commands[idx]));
+            makeProgramHelp(ifCommandsZone, block.commands[idx]);
         }
 
         for (var idx = 0; idx < block.else.length; idx++) {
-            makeProgramHelp(elseCommandsZone, block.else[idx]));
+            makeProgramHelp(elseCommandsZone, block.else[idx]);
         }
 
     } else if (block.type == "logic_operator") {
