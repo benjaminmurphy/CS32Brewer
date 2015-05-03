@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Brewer</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,6 +26,11 @@
             <h2 id="main3-title">main (cont.)</h2>
             <h2 id="instructions">Instructions</h2>
             <h2 id="about" onclick="showAbout()">About</h2>
+            
+            
+            <input type="text" id="prog_id">
+            <button onclick="loadProgramFromUrl()">Go</button>
+            
         </div>
 
         <div id="aboutDiv">
@@ -198,6 +203,7 @@
                         <option value="sub">-</option>
                         <option value="mul">*</option>
                         <option value="div">/</option>
+                        <option value="mod">%</option>
                     </select>
                     <div class="droppable single number">
                     </div>

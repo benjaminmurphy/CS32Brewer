@@ -17,6 +17,7 @@ import edu.brown.cs.brewer.expression.Expression;
 import edu.brown.cs.brewer.expression.GetCommand;
 import edu.brown.cs.brewer.expression.IfElseCommand;
 import edu.brown.cs.brewer.expression.Literal;
+import edu.brown.cs.brewer.expression.ModuloOperator;
 import edu.brown.cs.brewer.expression.MultiplicationOperator;
 import edu.brown.cs.brewer.expression.NotOperator;
 import edu.brown.cs.brewer.expression.OrOperator;
@@ -27,7 +28,7 @@ import edu.brown.cs.brewer.expression.WhileCommand;
 
 /**
  * A class that parses JSON strings into Brewer programs (returned as
- * BrewerRuntime objects containing the given program)
+ * BrewerRuntime objects containing the given program).
  *
  * @author raphaelkargon
  *
@@ -263,7 +264,7 @@ public class Parser {
         || !Boolean.class.isAssignableFrom(arg2type)) {
       throw new TypeErrorException("Either argument 1 of type \"" + arg1type
           + "\" or argument 2 of type \"" + arg2type
-          + "\" of logicoperatorArg \"" + opname + "\"is not of type Boolean.");
+          + "\" of logic_operator \"" + opname + "\"is not of type Boolean.");
     }
     switch (opname) {
       case "and":
@@ -271,7 +272,7 @@ public class Parser {
       case "or":
         return new OrOperator(runtime, arg1, arg2);
       default:
-        throw new SyntaxErrorException("Unrecognized logicoperatorArg");
+        throw new SyntaxErrorException("Unrecognized logic_operator");
     }
   }
 
@@ -296,7 +297,7 @@ public class Parser {
         || !Double.class.isAssignableFrom(arg2type)) {
       throw new TypeErrorException("Either argument 1 of type \"" + arg1type
           + "\" or argument 2 of type \"" + arg2type
-          + "\" of numericoperatorArg of type \"" + opname
+          + "\" of numeric_operator of type \"" + opname
           + "\" is not of type Double.");
     }
 
@@ -309,8 +310,10 @@ public class Parser {
         return new MultiplicationOperator(runtime, arg1, arg2);
       case "div":
         return new DivisionOperator(runtime, arg1, arg2);
+      case "mod":
+        return new ModuloOperator(runtime, arg1, arg2);
       default:
-        throw new SyntaxErrorException("Unrecognized numericoperatorArg \""
+        throw new SyntaxErrorException("Unrecognized numeric_operator \""
             + opname + "\".");
     }
   }
@@ -337,7 +340,7 @@ public class Parser {
       case "not":
         return new NotOperator(runtime, arg1);
       default:
-        throw new SyntaxErrorException("Unrecognized unaryoperatorArg \""
+        throw new SyntaxErrorException("Unrecognized unary_operator \""
             + opname + "\".");
     }
   }
@@ -522,7 +525,7 @@ public class Parser {
   }
 
   /**
-   * Returns a double from a JSONObject
+   * Returns a double from a JSONObject.
    *
    * @param item The JSON object
    * @param key The key that stores the value

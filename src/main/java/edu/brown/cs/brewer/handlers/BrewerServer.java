@@ -3,6 +3,7 @@ package edu.brown.cs.brewer.handlers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,10 @@ public class BrewerServer {
 
   // TODO This could be passed in as an argument to the constructor so the save
   // folder could be changed easily.
+
   private static String savesPath = "databases/";
+  private final static String dbId = "saves";
+  private static String url = "localhost:%d/getSave/:%s";
 
   /**
    * The map of saves for sessions.
@@ -64,6 +68,10 @@ public class BrewerServer {
   public static void runServer(int port) {
     portNum = port;
     runSparkServer();
+
+    saves = new HashMap<String, Database>();
+
+    url = String.format(url, portNum, "%s");
   }
 
   /**
@@ -77,12 +85,13 @@ public class BrewerServer {
     Spark.post("/logs", new LogHandler());
     Spark.post("/kill", new KillHandler());
     Spark.post("/save", new SaveHandler());
-    Spark.post("/getSave", new GetSaveHandler());
+
+    Spark.post("/getSave/:id", new GetSaveHandler());
     Spark.post("/getSaves", new GetSavesHandler());
   }
 
   /**
-   * Servres the GUI to the client.
+   * Servers the GUI to the client.
    *
    * @author raphaelkargon
    *
@@ -189,6 +198,7 @@ public class BrewerServer {
 
   /**
    * Saves a program to the database.
+   * 
    * @author Shi
    *
    */
@@ -196,8 +206,10 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      String dbId = gson.fromJson(req.queryParams("sessionId"),
-        String.class);
+      // // Multiple users version
+      // String dbId = gson.fromJson(req.queryParams("sessionId"),
+      // String.class);
+
       Database db = saves.get(dbId);
 
       ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
@@ -209,24 +221,32 @@ public class BrewerServer {
           saves.put(dbId, db);
         }
 
-        String[] program = gson.fromJson(req.body(), String[].class);
-        String programId = program[0];
-        String programJSON = program[1];
+        // String[] program = gson.fromJson(req.body(), String[].class);
+        // String programId = program[0];
+        // String programJSON = program[1];
+
+        String programId = String.valueOf(db.getSize() + 1);
+        String programJSON = req.body();
 
         db.addProgram(programId, programJSON);
+
+        // Returning program save url
+        String programUrl = String.format(url, programId);
+        variables.put("programUrl", programUrl);
 
       } catch (SQLException e) {
         variables.put("status", "save failed");
         return gson.toJson(variables.build());
       }
 
-      variables.put("status", "saved");
+      variables.put("status", "save success");
       return gson.toJson(variables.build());
     }
   }
 
   /**
    * Gets a program save from the database.
+   * 
    * @author Shi
    *
    */
@@ -234,25 +254,29 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      String dbId = gson.fromJson(req.queryParams("sessionId"),
-        String.class);
+      // // Multiple Users Version
+      // String dbId = gson.fromJson(req.queryParams("sessionId"),
+      // String.class);
+
       Database db = saves.get(dbId);
 
       ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
-          variables.put("status", "no current saves");
+          // No saves are available
+          variables.put("status", "failure");
           variables.put("program", null);
           return gson.toJson(variables.build());
         } else {
 
-          String programId = gson.fromJson(req.body(), String.class);
+          String programId = req.params(":id");
           String program = db.getProgram(programId);
           variables.put("program", program);
         }
       } catch (SQLException e) {
-        variables.put("status", "could not get save");
+        // Could not get saves
+        variables.put("status", "failure");
         return gson.toJson(variables.build());
       }
 
@@ -263,6 +287,7 @@ public class BrewerServer {
 
   /**
    * Gets a program saves for a session from the database.
+   * 
    * @author Shi
    *
    */
@@ -270,15 +295,19 @@ public class BrewerServer {
     @Override
     public Object handle(Request req, Response resp) {
 
-      String dbId = gson.fromJson(req.queryParams("sessionId"),
-        String.class);
+      // Mainly for loading saved program names -- to be implemented in future.
+      // // Multiple Users Version
+      // String dbId = gson.fromJson(req.queryParams("sessionId"),
+      // String.class);
+
       Database db = saves.get(dbId);
 
       ImmutableMap.Builder<String, Object> variables = new ImmutableMap.Builder<String, Object>();
 
       try {
         if (db == null) {
-          variables.put("status", "no current saves");
+          // No current saves
+          variables.put("status", "failure");
           variables.put("programs", new ArrayList<String>());
           return gson.toJson(variables.build());
         } else {
@@ -287,7 +316,8 @@ public class BrewerServer {
           variables.put("programs", programIds);
         }
       } catch (SQLException e) {
-        variables.put("status", "could not get saves");
+        // Could not get saves
+        variables.put("status", "failure");
         return gson.toJson(variables.build());
       }
 

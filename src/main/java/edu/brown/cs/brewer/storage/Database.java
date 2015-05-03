@@ -68,7 +68,7 @@ public class Database {
   public void addProgram(String id, String program) throws SQLException {
     openConnection();
 
-    String query = "INSERT INTO programs VALUES (?,?);";
+    String query = "INSERT INTO program VALUES (?,?);";
     PreparedStatement ps;
 
     ps = conn.prepareStatement(query);
@@ -158,6 +158,28 @@ public class Database {
     close();
 
     return programIds;
+  }
+
+  /**
+   * Gets the size of the database
+   * @return Number of entries.
+   * @throws SQLException If schema incorrect.
+   */
+  public int getSize() throws SQLException {
+    openConnection();
+
+    String query = "SELECT COUNT(id) FROM program;";
+
+    PreparedStatement ps = conn.prepareStatement(query);
+    ResultSet rs = ps.executeQuery();
+
+    Integer size = null;
+    if (rs.next()) {
+      size = rs.getInt(1);
+    }
+    close();
+
+    return size;
   }
 
   /**
