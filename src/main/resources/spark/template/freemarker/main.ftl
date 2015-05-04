@@ -20,7 +20,8 @@
 <![endif]-->
 
         <div id="header">
-            <h1 id="title">Brewer</h1>
+            <!--<h1 id="title">Brewer</h1>-->
+            <img src="img/brewerlogo-small.png" id="title" style="height:50px">
             <h2 id="main1-title">main</h2>
             <h2 id="main2-title">main (cont.)</h2>
             <h2 id="main3-title">main (cont.)</h2>
