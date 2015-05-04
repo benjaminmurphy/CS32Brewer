@@ -631,7 +631,7 @@ function copyElementIntoLoc(loc, elementName){
 
 function makeProgramHelp(parent, block) {
     
-    if (!block.hasOwnProperty("type"))  {
+    if (block == null || !block.hasOwnProperty("type"))  {
         return;
     }
 
