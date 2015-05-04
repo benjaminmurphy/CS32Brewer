@@ -1,0 +1,2 @@
+{"main":[{"type":"set","name":{"type":"var","name":"numvar","class":"number"},"value":{"type":"unary_operator","name":"___LOL_WHAT_EVEN___","arg1":{"type":"literal","value":true,"class":"bool"}}}]}
+
