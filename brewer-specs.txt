@@ -1,0 +1,40 @@
+Each program is stored represented as an object with a "main" field, that points to an array of expression objects. 
+eg. {"main":[<PROGRAM EXPRESSIONS>, ...]}
+
+Each block (or expression) has a "type" field, which represents which type of expression it is. Furthermore, top-level blocks (that are not nested in another block) has a "playground" field that keeps track of the area of the screen in which they are located.
+
+The current supported data types are: number, string, and bool. 
+
+Block types:
+ - Literal - A block representing a literal value, such as a number or a string. The block's JSON string specifies the data type of the block as well as the actual value it holds. 
+ 	The specification is: {"type":"literal","value":<VALUE>,"class":<TYPE NAME>, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - Variable - A block representing a variable, with a given name and data type. 
+ 	The specification is: {"type":"var","name":<VAR NAME>,"class":<TYPE NAME>, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - Set - A block that sets the value of a variable to a given value. The block contains a Variable block in the first field, and an expression of the corresponding type in the second. 
+ 	The specification is: {"type":"set","name":<VAR BLOCK>,"value":<VALUE EXPRESSION>, "playground":<PLAYGROUND NUMBER>}
+
+ - Print - A block that prints the value of an expression. It has one field: the expression it is to print. 
+ 	The specification is: {"type":"print","name":<EXPRESSION TO PRINT>, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - Comparison - A block that takes two expressions (of the same type), and compares them, either for equality, less than, or greater than. 
+ 	The specification is: {"type":"comparison","arg1":<FIRST EXPRESSION>,"arg2":<SECOND EXPRESSION>, "name":<OP TYPE "eq" | "less" | "greater">, "playground":<PLAYGROUND NUMBER>}
+ 
+ - Logic Operator - A block that takes two boolean expression, and returns the logical AND or OR of the two. 
+ 	The specification is: {"type":"logic_operator", "name":<OP TYPE "and" | "or>, "arg1":<FIRST BOOLEAN EXPRESSION>, "arg2":<SECOND BOOLEAN EXPRESSION>, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - Unary Operator - A block that takes a single expression and performs some operation on it. Currently just a "not" block. 
+ 	The specification is: {"type":"unary_operator", "name":<OP TYPE "not">, "arg1":<INPUT EXPRESSION>, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - Numeric Operator - A block that takes two numerical expressions and performs some arithmetic on them. 
+ 	The specification is: {"type":"numeric_operator", "arg1":<FIRST NUMERICAL ARGUMENT>, "arg2":<SECOND NUMERICAL ARGUMENT>, "name":<OP TYPE "add" | "sub" | "mul" | "div">, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - If Expression - A block that evaluates a boolean conditional in order to determine whether to run sub-block of code. 
+ 	The specification is: {"type":"if","commands":[<EXPRESSIONS IF TRUE>, ...], "condition":<BOOLEAN EXPRESSION>, "playground":<PLAYGROUND NUMBER>}
+ 	
+ - If/Else Expression - A block that evaluates a boolean conditional in order to determine which of two sub-blocks of code to run. 
+ 	The specification is: {"type":"ifelse", "condition":<BOOLEAN EXPRESSION>, "commands":[<EXPRESSIONS IF TRUE>, ...], "else":[<EXPRESSIONS IF FALSE>, ...], "playground":<PLAYGROUND NUMBER>}
+ 	
+ - While Loop - A block that repeatedly evaluates a list of expressions, while the given conditional is false.
+ 	The specification is: {"type":"while", "condition":<BOOLEAN EXPRESSION>, "commands":[<EXPRESSIONS>, ...], "playground":<PLAYGROUND NUMBER>}
