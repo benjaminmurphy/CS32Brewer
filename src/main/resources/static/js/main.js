@@ -343,7 +343,8 @@ function getLogs() {
         }
     });
 }
-
+window.onunload = killProgram;
+window.onbeforeunload = killProgram;
 function killProgram() {
     $.post("/kill", function(response) {
         response = JSON.parse(response);
