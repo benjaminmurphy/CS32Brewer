@@ -101,7 +101,8 @@
         <tr>
 
             <td>
-                <div class="item literal nVal number" draggable="true" type="number" ondragstart="startDrag(event)" id="numberLiteral">
+                <div class="item literal nVal number" draggable="true" type="number" 
+                     onkeydown="isKeyValid(event)"ondragstart="startDrag(event)" id="numberLiteral">
                     <input class="litVal litValNumber" name="litVal" type="number" placeholder="Number">
                 </div>
             </td>

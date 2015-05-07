@@ -18,6 +18,14 @@ var minWidth = 100;
 
 var variableList = [];
 
+var allowableKeys = [8, 37, 38, 39, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 189, 190];
+
+function isKeyValid(event) {
+    if (allowableKeys.indexOf(event.which) == -1) {
+        event.preventDefault();
+    }
+}
+
 function makeVariable() {
     if (document.getElementById("newVarBox").style.display === "block") {
         document.getElementById("newVarBox").style.display = "none"
@@ -79,7 +87,7 @@ function getType(name) {
             return variableList[i].type;
         }
     }
-    alert("Type not found you doof");
+    alert("Type not found.");
     return null;
 }
 
@@ -188,6 +196,18 @@ function startDrag(event) {
         recursiveResize(parent);
     } else if (menu.contains(original)) {
         copy = original.cloneNode(true);
+        
+        if (original.classList.contains("var")) {
+            copy.children[1].value = original.children[1].value;
+        }
+        else if (original.classList.contains("arithmetic") ||
+                 original.classList.contains("andOr") ||
+                 original.classList.contains("equality")) {
+            copy.children[2].value = original.children[2].value;
+        } else if (original.classList.contains("nVal") ||
+                 original.classList.contains("sVal")) {
+            copy.children[0].value = original.children[0].value;
+        }
         copy.id = "copy_" + copynum.toString();
         copynum += 1;
         copy.style.display = "none";
@@ -207,7 +227,14 @@ function recursiveResize(element) {
 
 HTMLDivElement.prototype.getValue = function() {    
     if (this.classList.contains("nVal")) {
-        return parseFloat(this.getElementsByTagName("input")[0].value);
+        var r = parseFloat(this.getElementsByTagName("input")[0].value);
+        
+        if (isNaN(r)) {
+            alert("Please enter a valid number!");
+            return null;
+        }
+        
+        return r;
     } else if (this.classList.contains("sVal")) {
         return this.getElementsByTagName("input")[0].value;
     } else if (this.classList.contains("bVal")) {
@@ -279,8 +306,12 @@ function runProgram() {
     programRunning = true;
 
     var requestObj = compileMain();
-
-    console.log(requestObj);
+    
+    if (requestObj === null) {
+        console.log("Something went wrong while compiling.");
+        programRunning = false;
+        return;
+    }
 
     var request = JSON.stringify(requestObj);
 
@@ -406,34 +437,42 @@ function saveProgram() {
 }
 
 function compileMain() {
+    
+    var b = {v: true};
+    
     var request = {main : []};
     for (var idx = 0; idx < playground1.children.length; idx++) {
-        var elt = playground1.children[idx].compile();
+        var elt = playground1.children[idx].compile(b);
         elt.playground = 1;
         request.main.push(elt);
     }
     for (var idx = 0; idx < playground2.children.length; idx++) {
-        var elt = playground2.children[idx].compile();
+        var elt = playground2.children[idx].compile(b);
         elt.playground = 2;
         request.main.push(elt);    
     }
     for (var idx = 0; idx < playground3.children.length; idx++) {
-        var elt = playground3.children[idx].compile();
+        var elt = playground3.children[idx].compile(b);
         elt.playground = 3;
-        request.main.push(elt);    
+        request.main.push(elt);
     }
-    return request;
+    
+    if (b.v) {
+        return request;
+    } else {
+        return null;
+    }
 }
 
-function compile(element) {
+function compile(element, b) {
     if (element === null || element === undefined || element.tagName !== "DIV") {
         return null;
     } else {
-        return element.compile();
+        return element.compile(b);
     }
 }
 
-HTMLDivElement.prototype.compile = function() {
+HTMLDivElement.prototype.compile = function(b) {
 
     var block = {};
 
@@ -444,8 +483,8 @@ HTMLDivElement.prototype.compile = function() {
         var firstDropZone = this.children[1];
         var secondDropZone = this.children[3];
 
-        block.name = compile(firstDropZone.children[0]);
-        block.value = compile(secondDropZone.children[0]);
+        block.name = compile(firstDropZone.children[0], b);
+        block.value = compile(secondDropZone.children[0], b);
 
     } else if (this.classList.contains("var")) {
 
@@ -461,6 +500,10 @@ HTMLDivElement.prototype.compile = function() {
 
         if (this.classList.contains("nVal")) {
             block.class = "number";
+            
+            if (block.value === null) {
+                b.v = false;
+            }
         } else if (this.classList.contains("sVal")) {
             block.class = "string";
         } else {
@@ -472,7 +515,7 @@ HTMLDivElement.prototype.compile = function() {
         block.type = "print";
 
         var firstDropZone = this.children[1];
-        block.name = compile(firstDropZone.children[0]);
+        block.name = compile(firstDropZone.children[0], b);
 
     } else if (this.classList.contains("arithmetic")) {
         block.type = "numeric_operator";
@@ -481,8 +524,8 @@ HTMLDivElement.prototype.compile = function() {
         var operator = this.children[2];
         var secondDropZone = this.children[3];
 
-        block.arg1 = compile(firstDropZone.children[0]);
-        block.arg2 = compile(secondDropZone.children[0]);
+        block.arg1 = compile(firstDropZone.children[0], b);
+        block.arg2 = compile(secondDropZone.children[0], b);
 
         block.name = operator.value;
 
@@ -492,12 +535,12 @@ HTMLDivElement.prototype.compile = function() {
         var firstDropZone = this.children[1];
         var secondDropZone = this.children[3];
 
-        block.condition = compile(firstDropZone.children[0]);
+        block.condition = compile(firstDropZone.children[0], b);
 
         block.commands = [];
 
         for (var idx = 0; idx < secondDropZone.children.length; idx++) {
-            block.commands.push(compile(secondDropZone.children[idx]));
+            block.commands.push(compile(secondDropZone.children[idx], b));
         }
 
     } else if (this.classList.contains("if")) {
@@ -508,10 +551,10 @@ HTMLDivElement.prototype.compile = function() {
 
         block.commands = [];
 
-        block.condition = condition.children[0].compile();
+        block.condition = condition.children[0].compile(b);
 
         for (var idx = 0; idx < commands.children.length; idx++) {
-            block.commands.push(compile(commands.children[idx]));
+            block.commands.push(compile(commands.children[idx], b));
         }
 
     } else if (this.classList.contains("ifElse")) {
@@ -522,17 +565,17 @@ HTMLDivElement.prototype.compile = function() {
         var ifCommands = this.children[3];
         var elseCommands = this.children[5];
 
-        block.condition = condition.children[0].compile();
+        block.condition = condition.children[0].compile(b);
 
         block.commands = [];
         block.else = [];
         for (var idx = 0; idx < ifCommands.children.length; idx++) {
-            block.commands.push(compile(ifCommands.children[idx]));
+            block.commands.push(compile(ifCommands.children[idx], b));
         }
 
         block.else = [];
         for (var idx = 0; idx < elseCommands.children.length; idx++) {
-            block.else.push(compile(elseCommands.children[idx]));
+            block.else.push(compile(elseCommands.children[idx], b));
         }
 
     } else if (this.classList.contains("andOr")) {
@@ -543,8 +586,8 @@ HTMLDivElement.prototype.compile = function() {
         var secondDropZone = this.children[3];
 
         block.name = operator.value;
-        block.arg1 = compile(firstDropZone.children[0]);
-        block.arg2 = compile(secondDropZone.children[0]);
+        block.arg1 = compile(firstDropZone.children[0], b);
+        block.arg2 = compile(secondDropZone.children[0], b);
 
     } else if (this.classList.contains("not")) {
         block.type = "unary_operator";
@@ -552,7 +595,7 @@ HTMLDivElement.prototype.compile = function() {
         var firstDropZone = this.children[1];
 
         block.name = "not";
-        block.arg1 = compile(firstDropZone.children[0]);
+        block.arg1 = compile(firstDropZone.children[0], b);
 
     } else if (this.classList.contains("equality")) {
         block.type = "comparison";
@@ -561,8 +604,8 @@ HTMLDivElement.prototype.compile = function() {
         var operator = this.children[2];
         var secondDropZone = this.children[3];
 
-        block.arg1 = compile(firstDropZone.children[0]);
-        block.arg2 = compile(secondDropZone.children[0]);
+        block.arg1 = compile(firstDropZone.children[0], b);
+        block.arg2 = compile(secondDropZone.children[0], b);
 
         block.name = operator.value;
     }
@@ -762,8 +805,3 @@ function makeProgramHelp(parent, block) {
     }
 
 }
-
-
-
-
-
