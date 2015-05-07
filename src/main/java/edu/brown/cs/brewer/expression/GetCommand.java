@@ -28,7 +28,7 @@ public class GetCommand extends Expression {
    * @param vartypeArg The type of the variable
    */
   public GetCommand(final BrewerRuntime runtimeArg, final String name,
-      final Class<?> vartypeArg) {
+    final Class<?> vartypeArg) {
     super(runtimeArg);
     this.varname = name;
     this.vartype = vartypeArg;
@@ -40,7 +40,11 @@ public class GetCommand extends Expression {
       throw new ProgramKilledException();
     }
     Variable var = runtime().getVariables().get(varname);
-    return vartype.cast(var.getValue());
+    if (var == null) {
+      return vartype.cast(null);
+    } else {
+      return vartype.cast(var.getValue());
+    }
   }
 
   @Override

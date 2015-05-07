@@ -24,11 +24,11 @@ public class PrintExpression extends Expression {
    * @param runtimeArg The containing runtime
    * @param expArg The expression to be printed
    */
-  public PrintExpression(final BrewerRuntime runtimeArg, final Expression expArg) {
+  public PrintExpression(final BrewerRuntime runtimeArg,
+    final Expression expArg) {
     super(runtimeArg);
     this.exp = expArg;
   }
-
 
   @Override
   public final Void evaluate() throws ProgramKilledException {
@@ -39,7 +39,12 @@ public class PrintExpression extends Expression {
     if (Void.class.isAssignableFrom(exp.getType())) {
       runtime().addLog("Cannot print value of void expression.", true);
     } else {
-      runtime().addLog(exp.evaluate().toString(), false);
+      Object value = exp.evaluate();
+      if (value == null) {
+        runtime().addLog("undefined", false);
+      } else {
+        runtime().addLog(value.toString(), false);
+      }
     }
     return null;
   }
