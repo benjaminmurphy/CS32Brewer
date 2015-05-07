@@ -343,6 +343,7 @@ function getLogs() {
         }
     });
 }
+
 window.onunload = killProgram;
 window.onbeforeunload = killProgram;
 function killProgram() {
