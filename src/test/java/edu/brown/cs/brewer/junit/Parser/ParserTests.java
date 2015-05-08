@@ -854,6 +854,29 @@ public class ParserTests {
 
   @Test
   /**
+   * b = true;
+   * b*4;
+   */
+  public void mulNumBoolean() {
+    String mulNumBoolean = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"bool\"},\"value\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"playground\":1},{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":4,\"class\":\"number\"},\"name\":\"mul\",\"playground\":1}]}";
+    boolean exceptionCaught = false;
+    try {
+      br = Parser.parseJSONProgram(mulNumBoolean);
+      br.run();
+
+    } catch (BrewerParseException | ParseException e) {
+      String errorMessage = "Parser error: Type error: Either argument 1 of type \"class java.lang.Boolean\" or argument 2 of type \"class java.lang.Double\" of numeric_operator of type \"mul\" is not of type Double.";
+      if (e.getMessage().equals(errorMessage)) {
+        exceptionCaught = true;
+      } else {
+        fail("mulNumBoolean test failed");
+      }
+      assertTrue(exceptionCaught);
+    }
+  }
+
+  @Test
+  /**
    * "a" == 5;
    */
   public void compareNumToString() {
@@ -886,7 +909,7 @@ public class ParserTests {
       br.run();
 
       String outputLog = Arrays.toString(br.getLogs().toArray());
-      String expectedLog = "[Log: MESSAGE: undefined]";
+      String expectedLog = "[Log: ERROR: variable \"x\" is undefined]";
       assertTrue(outputLog.equals(expectedLog));
     } catch (BrewerParseException | ParseException e) {
       e.printStackTrace();
@@ -896,9 +919,23 @@ public class ParserTests {
 
   @Test
   /**
-   * 
+   * boolean a;
+   * if (a):
+   *    print(1)
    */
-  public void mulNumBoolean() {
+  public void undefinedCondition() {
+    String undefinedCondition = "{\"main\":[{\"type\":\"if\",\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}}],\"condition\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"bool\"},\"playground\":1}]}";
+    try {
+      br = Parser.parseJSONProgram(undefinedCondition);
+      br.run();
 
+      String outputLog = Arrays.toString(br.getLogs().toArray());
+      String expectedLog = "[Log: ERROR: variable \"a\" is undefined]";
+      assertTrue(outputLog.equals(expectedLog));
+    } catch (BrewerParseException | ParseException e) {
+      e.printStackTrace();
+      fail("undefinedCondition test failed");
+    }
   }
+
 }
