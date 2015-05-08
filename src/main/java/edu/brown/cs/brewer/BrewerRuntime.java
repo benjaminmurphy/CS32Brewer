@@ -65,6 +65,8 @@ public class BrewerRuntime implements Runnable {
         }
       } catch (ProgramKilledException e) {
         addLog("Program Killed.", true);
+      } catch (UndefinedVariableException e1) {
+        // Error Log added at evaluation to specify variable
       }
     }
     isRunning = false;
@@ -123,7 +125,7 @@ public class BrewerRuntime implements Runnable {
   }
 
   /**
-   * An exception thrown when the program is killed an an expression is
+   * An exception thrown when the program is killed and an expression is
    * evaluated. Used to stop program execution.
    *
    * @author raphaelkargon
@@ -135,6 +137,18 @@ public class BrewerRuntime implements Runnable {
      * Generated UID.
      */
     private static final long serialVersionUID = -8717793914226114346L;
+
+  }
+
+  /**
+   * An exception thrown when a variable is undefined.
+   */
+  public static class UndefinedVariableException extends Exception {
+
+    /**
+     * Generated UID.
+     */
+    private static final long serialVersionUID = -7567976769693274464L;
 
   }
 }

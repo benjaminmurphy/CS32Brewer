@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 
 /**
  * Represents an if/else statement.
@@ -55,7 +56,7 @@ public class IfElseCommand extends Expression {
   }
 
   @Override
-  public final Void evaluate() throws ProgramKilledException {
+  public final Void evaluate() throws ProgramKilledException, UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }

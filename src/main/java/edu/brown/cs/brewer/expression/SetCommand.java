@@ -4,6 +4,7 @@ import java.util.Map;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 import edu.brown.cs.brewer.Variable;
 
 /**
@@ -38,7 +39,7 @@ public class SetCommand extends Expression {
    * @param type The type of the variable
    */
   public SetCommand(final BrewerRuntime runtimeArg, final String name,
-      final Expression val, final Class<?> type) {
+    final Expression val, final Class<?> type) {
     super(runtimeArg);
     this.varname = name;
     this.value = val;
@@ -46,7 +47,8 @@ public class SetCommand extends Expression {
   }
 
   @Override
-  public final Void evaluate() throws ProgramKilledException {
+  public final Void evaluate() throws ProgramKilledException,
+    UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
@@ -58,17 +60,15 @@ public class SetCommand extends Expression {
     } else if (oldval.getType().isAssignableFrom(vartype)) {
       oldval.setValue(eval);
     } else {
-      String msg =
-          "ERROR: Could not assign value of type " + vartype.getName()
-              + " to variable " + varname + " of type"
-              + oldval.getType().getName();
+      String msg = "ERROR: Could not assign value of type "
+        + vartype.getName() + " to variable " + varname + " of type"
+        + oldval.getType().getName();
       runtime().addLog(msg, true);
       runtime().kill();
     }
 
     return null;
   }
-
 
   @Override
   public final Class<?> getType() {

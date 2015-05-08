@@ -2,6 +2,7 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 
 /**
  * Represents a single expression in a Brewer program, the basic unit of
@@ -33,8 +34,10 @@ public abstract class Expression {
    * @return The value produced when this expression is evaluated.
    * @throws ProgramKilledException When the program is killed and this method
    *         is still called.
+   * @throws UndefinedVariableException When the Expression is an undefined variable.
    */
-  public abstract Object evaluate() throws ProgramKilledException;
+  public abstract Object evaluate() throws ProgramKilledException,
+    UndefinedVariableException;
 
   /**
    * Returns the type of value returned by evaluate().
