@@ -1,31 +1,56 @@
+/*
+    Brewer - Front-End Code
+    by Benjamin Murphy and Noah Picard
+*/
+
+//Global Definitions
+
+//Number of block copies
 var copynum = 0;
 
+//Three columns for placing blocks
 var playground1 = document.getElementById("playground1");
 var playground2 = document.getElementById("playground2");
 var playground3 = document.getElementById("playground3");
 
-var functionground = document.getElementById("function");
+//Menu for choosing blocks
 var menu = document.getElementById("menu");
+
+//Console for printing program results
 var consoleBox = document.getElementById("console");
 
+//The current log line number
 var lineNumber = 0;
 
+//Whether or not a program is currently running
+var programRunning = false;
+
+//An instance for logging the server responses
 var logger = null;
 
+//Constants for resizing
 var itemPadding = 10;
 var minHeight = 40;
 var minWidth = 100;
 
+//List of variables used in the program
 var variableList = [];
 
+//Accepted keys in number literal entry
 var allowableKeys = [8, 37, 38, 39, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 189, 190];
 
+
+
+//User Interaction
+
+//Checks if a key is vaild for number entry
 function isKeyValid(event) {
     if (allowableKeys.indexOf(event.which) == -1) {
         event.preventDefault();
     }
 }
 
+//Opens the new variable box
 function makeVariable() {
     if (document.getElementById("newVarBox").style.display === "block") {
         document.getElementById("newVarBox").style.display = "none"
@@ -34,6 +59,7 @@ function makeVariable() {
     }
 }
 
+//Displays inforation about Brewer
 function showAbout() {
     if (document.getElementById("aboutDiv").style.display === "block") {
         document.getElementById("aboutDiv").style.display = "none"
@@ -42,6 +68,22 @@ function showAbout() {
     }
 }
 
+//Opens and closes the console window
+function setConsole() {
+    if (consoleBox.style.display == "none") {
+        consoleBox.style.display = "block";
+        playground.style.width = "calc(80% - 300px);";
+    } else {
+        consoleBox.style.display = "none";
+        playground.style.width = "calc(100% - 300px);";
+    }
+}
+
+
+
+//Program variable assignment
+
+//Makes a new variable from the new variable box
 function addVariableBox() {
     var box = document.getElementById("newVarBox");
     box.style.display = "none";
@@ -56,6 +98,7 @@ function addVariableBox() {
     document.getElementById("newVarName").value = "";
 }
 
+//Adds a new variable if the variable doesn't already exist
 function addVariable(name, type) {
     console.log(name);
     if (isVariable(name)) {
@@ -72,6 +115,7 @@ function addVariable(name, type) {
     }
 }
 
+//Checks if a variable name is already taken
 function isVariable(name) {
     for(var i = 0; i < variableList.length; i++) {
         if (variableList[i].name == name) {
@@ -81,6 +125,7 @@ function isVariable(name) {
     return false;
 }
 
+//Gets the type of a variable with given name
 function getType(name) {
     for(var i = 0; i < variableList.length; i++) {
         if (variableList[i].name == name) {
@@ -91,10 +136,16 @@ function getType(name) {
     return null;
 }
 
+
+
+//Dragging and dropping elements
+
+//Allows dropping on a given event
 function allowDrop(event) {
     event.preventDefault();
 }
 
+//Gets the playground that contains a given block
 function playgroundThatContains(target) {
     if (playground1.contains(target)) {
         return playground1;
@@ -107,8 +158,7 @@ function playgroundThatContains(target) {
     }
 }
 
-// Drop handler.
-
+//Handles a drop event by placing the dragged block in a parent element
 function drop(event) {
 
     var target = event.target;
@@ -184,8 +234,7 @@ function drop(event) {
     }
 }
 
-// Starting drag handler. Copies elements.
-
+//Handles dragging by either copying an element or dragging it from its parent
 function startDrag(event) {
     var original = document.getElementById(event.target.id);
     var parent = original.parentNode;
@@ -216,8 +265,7 @@ function startDrag(event) {
     }
 }
 
-// Grow or shrink all parent elements.
-
+//Grows or shrink all parent elements.
 function recursiveResize(element) {
     while (element.id !== "playground1" && element.id !== "playground2" && element.id !== "playground3" && element.id !== "menu") {
         element.resize();
@@ -225,27 +273,7 @@ function recursiveResize(element) {
     }
 }
 
-HTMLDivElement.prototype.getValue = function() {    
-    if (this.classList.contains("nVal")) {
-        var r = parseFloat(this.getElementsByTagName("input")[0].value);
-        
-        if (isNaN(r)) {
-            alert("Please enter a valid number!");
-            return null;
-        }
-        
-        return r;
-    } else if (this.classList.contains("sVal")) {
-        return this.getElementsByTagName("input")[0].value;
-    } else if (this.classList.contains("bVal")) {
-        if (this.classList.contains("true")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
-
+//Resizes an element based on the dimensions of its children
 HTMLDivElement.prototype.resize = function() {    
     var sumHeight = 0;
     var maxWidth = 0;
@@ -281,18 +309,12 @@ HTMLDivElement.prototype.resize = function() {
     this.style.width = Math.max(maxWidth, minWidth) + 'px';
 }
 
-function setConsole() {
-    if (consoleBox.style.display == "none") {
-        consoleBox.style.display = "block";
-        playground.style.width = "calc(80% - 300px);";
-    } else {
-        consoleBox.style.display = "none";
-        playground.style.width = "calc(100% - 300px);";
-    }
-}
 
-var programRunning = false;
 
+//Program Execution
+
+//Runs a program by compiling all blocks, sending the string to the server, and
+//logging the results from the server to the console
 function runProgram() {
     if (consoleBox.style.display == "none") {
         setConsole();
@@ -340,8 +362,31 @@ function runProgram() {
     })
 }
 
-function clearLogs() {
+//Gets the value of a given literal
+HTMLDivElement.prototype.getValue = function() {    
+    if (this.classList.contains("nVal")) {
+        var r = parseFloat(this.getElementsByTagName("input")[0].value);
+        
+        if (isNaN(r)) {
+            alert("Please enter a valid number!");
+            return null;
+        }
+        
+        return r;
+    } else if (this.classList.contains("sVal")) {
+        return this.getElementsByTagName("input")[0].value;
+    } else if (this.classList.contains("bVal")) {
+        if (this.classList.contains("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return null;
+}
 
+//Clears all logs
+function clearLogs() {
     var toRemove = [];
 
     for (var i = 0; i < consoleBox.children.length; i++) {
@@ -355,6 +400,7 @@ function clearLogs() {
     }
 }
 
+//Gets the logs from the server
 function getLogs() {
     $.post("/logs", function(response) {
         response = JSON.parse(response);
@@ -374,6 +420,8 @@ function getLogs() {
         }
     });
 }
+
+//Ends the execution of a program by sending a kill message to the server
 window.onunload = killProgram;
 window.onbeforeunload = killProgram;
 function killProgram() {
@@ -390,6 +438,7 @@ function killProgram() {
     });
 }
 
+//Adds a given message to the log
 function log(msg, isError) {
     var line = document.createElement("p");
     var text = document.createTextNode(lineNumber.toString() + ": " + msg);
@@ -404,21 +453,11 @@ function log(msg, isError) {
     consoleBox.appendChild(line);
 }
 
-function loadProgramFromUrl() {
-    
-    var id = document.getElementById("prog_id").value;
-    
-    $.post("/getSave/"+id, function(response) {
 
-        var response = JSON.parse(response);
-        var r = JSON.parse(response.program);
-        
-        console.log(r);
-        console.log(r["main"]);
-        makeProgram(r);
-    });
-}
 
+//Program Saving
+
+//Saves the current program as a string to the server database
 function saveProgram() {
     
     var req = compileMain();
@@ -436,6 +475,7 @@ function saveProgram() {
     });
 }
 
+//Compiles a program into a JSON object
 function compileMain() {
     
     var b = {v: true};
@@ -464,6 +504,7 @@ function compileMain() {
     }
 }
 
+//Decides whether an element should be compiled
 function compile(element, b) {
     if (element === null || element === undefined || element.tagName !== "DIV") {
         return null;
@@ -472,6 +513,7 @@ function compile(element, b) {
     }
 }
 
+//Compiles an element into a JSONobject
 HTMLDivElement.prototype.compile = function(b) {
 
     var block = {};
@@ -613,27 +655,27 @@ HTMLDivElement.prototype.compile = function(b) {
     return block;
 }
 
-function makeProgram(jsonObj) {
-    while (playground1.firstChild) {
-        playground1.removeChild(playground1.firstChild);
-    }
-    while (playground2.firstChild) {
-        playground2.removeChild(playground2.firstChild);
-    }
-    while (playground3.firstChild) {
-        playground3.removeChild(playground3.firstChild);
-    }
-    jsonObj.main.forEach(function(element) {
-        if (element.playground == 1) {
-            makeProgramHelp(playground1, element);
-        } else if (element.playground == 2) {
-            makeProgramHelp(playground2, element);
-        } else if (element.playground == 3) {
-            makeProgramHelp(playground3, element);
-        }
+
+
+//Program loading
+
+//Loads an existing program from the server and builds the block representation
+function loadProgramFromUrl() {
+    
+    var id = document.getElementById("prog_id").value;
+    
+    $.post("/getSave/"+id, function(response) {
+
+        var response = JSON.parse(response);
+        var r = JSON.parse(response.program);
+        
+        console.log(r);
+        console.log(r["main"]);
+        makeProgram(r);
     });
 }
 
+//Creates a copy of a block type in the parent element
 function copyElementIntoLoc(loc, elementName){
     var original = document.getElementById(elementName);
     var copy = null;
@@ -673,6 +715,29 @@ function copyElementIntoLoc(loc, elementName){
     return copy;
 }
 
+//Builds the blocks of a program from a given saved string
+function makeProgram(jsonObj) {
+    while (playground1.firstChild) {
+        playground1.removeChild(playground1.firstChild);
+    }
+    while (playground2.firstChild) {
+        playground2.removeChild(playground2.firstChild);
+    }
+    while (playground3.firstChild) {
+        playground3.removeChild(playground3.firstChild);
+    }
+    jsonObj.main.forEach(function(element) {
+        if (element.playground == 1) {
+            makeProgramHelp(playground1, element);
+        } else if (element.playground == 2) {
+            makeProgramHelp(playground2, element);
+        } else if (element.playground == 3) {
+            makeProgramHelp(playground3, element);
+        }
+    });
+}
+
+//Generates blocks based on saved the program string
 function makeProgramHelp(parent, block) {
     
     if (block == null || !block.hasOwnProperty("type"))  {
