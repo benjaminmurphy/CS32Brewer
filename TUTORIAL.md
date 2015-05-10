@@ -1,13 +1,13 @@
 #Brewer Tutorial
 
-1. ## Getting Started
+1. #### Getting Started
 
     Welcome to Brewer! With Brewer, you can watch your programs come to life! In your browser, you can see three main areas of the brewer app: the block menu on the left, the playground in the center, and the console on the right. 
 
     The Block Menu allows you to select different blocks to create your programs. By dragging various blocks from the menu to the Playground, you can build a virtually unlimited set of programs. Then, in the Console, you can run, stop, save, and load the programs you create. 
 
 
-2. ## Your First Program
+2. #### Your First Program
 
     Let’s create your first program! Go to the block menu, and drag a “Print Block” onto the main area in the center. This block takes an expression as an argument, and prints its value. In this case, our value will be the string “Hello!”. 
 
@@ -18,7 +18,7 @@
     Now, try replacing the “Hello!” with other literals, such as a number or a boolean.
 
 
-3. ## Variables
+3. #### Variables
 
     Brewer supports not only literal values, but also variables that can store values and change. Click the “Add Variable” button to add a new variable. Now, you can reference variables by dragging variable blocks to the main area, and using the dropdown box to select specific variables. 
 
@@ -27,13 +27,13 @@
     Try creating a program that sets a numerical variable to 20 and prints it out. 
 
 
-4. ## Manipulating Variables and Values
+4. #### Manipulating Variables and Values
     Several blocks can be used to manipulate the values of both literals and variables. For numerical values, one can use the Arithmetic block to do arithmetic operations on pairs of numbers. One can add, subtract, multiply, or divide numbers, as well as find the modulus. For Boolean values, one can use the binary logical operator block to AND or OR two values. One can also use the NOT block to flip a boolean value. For strings, numbers, or booleans, one can compare them using the comparison block. This checks for equality, less-than, or greater-than and returns a boolean value. 
 
     Try creating a program that computes whether the square of a number is even. 
 
 
-5. ## Program Flow
+5. #### Program Flow
 
     There are two ways of controlling program flow: If (and If/Else) statements, and While loops. An If statement takes a boolean expression in the first field, and if it is true, it evaluates the list of expressions in the second field. An If/Else statement is similar, but it executes a list of statements (in a third field) if the conditional evaluates to false. 
 
@@ -42,7 +42,7 @@
     Try creating a program that computes the factorial of a number.
 
 
-6. ## Using the Console
+6. #### Using the Console
 
     There are several things one can use the console for, other than simply running programs and viewing their output. What if a program had an infinite loop? For instance, you could create a program that, while 5 is less than 6, would set a variable to 1. This program would never finish looping, since 5 is always less than 6. However, if one creates an infinite loop, one can always stop execution with the “Kill” button. This tells the server to stop running the program, even if it is in a loop. 
 
@@ -50,6 +50,6 @@
 
     One can also hide and show the console by toggling the “Console” button.
 
-7. ## Explore!
+7. #### Explore!
 
     Now that you’ve covered all of the basics, see what you can make! Happy Brewing!
