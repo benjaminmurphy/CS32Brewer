@@ -2,6 +2,7 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 
 /**
  * An expression that divides two numerical arguments.
@@ -31,7 +32,7 @@ public class DivisionOperator extends Expression {
   }
 
   @Override
-  public final Double evaluate() throws ProgramKilledException {
+  public final Double evaluate() throws ProgramKilledException, UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }

@@ -2,6 +2,7 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 import edu.brown.cs.brewer.Variable;
 
 /**
@@ -24,14 +25,15 @@ public class PrintExpression extends Expression {
    * @param runtimeArg The containing runtime
    * @param expArg The expression to be printed
    */
-  public PrintExpression(final BrewerRuntime runtimeArg, final Expression expArg) {
+  public PrintExpression(final BrewerRuntime runtimeArg,
+    final Expression expArg) {
     super(runtimeArg);
     this.exp = expArg;
   }
 
-
   @Override
-  public final Void evaluate() throws ProgramKilledException {
+  public final Void evaluate() throws ProgramKilledException,
+    UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }

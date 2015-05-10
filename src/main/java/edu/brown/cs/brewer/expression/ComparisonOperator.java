@@ -2,6 +2,7 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 
 /**
  * Implements a comparison of two values. It follows the contract of Comparable,
@@ -43,7 +44,7 @@ public class ComparisonOperator extends Expression {
   }
 
   @Override
-  public final Object evaluate() throws ProgramKilledException {
+  public final Object evaluate() throws ProgramKilledException, UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 
 /**
  * An expression that represents a while loop.
@@ -30,14 +31,15 @@ public class WhileCommand extends Expression {
    * @param commandsArg The list of commands to be run.
    */
   public WhileCommand(BrewerRuntime runtimeArg, Expression conditionArg,
-      List<Expression> commandsArg) {
+    List<Expression> commandsArg) {
     super(runtimeArg);
     this.condition = conditionArg;
     this.commands = commandsArg;
   }
 
   @Override
-  public final Void evaluate() throws ProgramKilledException {
+  public final Void evaluate() throws ProgramKilledException,
+    UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }

@@ -2,6 +2,7 @@ package edu.brown.cs.brewer.expression;
 
 import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.BrewerRuntime.ProgramKilledException;
+import edu.brown.cs.brewer.BrewerRuntime.UndefinedVariableException;
 import edu.brown.cs.brewer.Variable;
 
 /**
@@ -28,19 +29,26 @@ public class GetCommand extends Expression {
    * @param vartypeArg The type of the variable
    */
   public GetCommand(final BrewerRuntime runtimeArg, final String name,
-      final Class<?> vartypeArg) {
+    final Class<?> vartypeArg) {
     super(runtimeArg);
     this.varname = name;
     this.vartype = vartypeArg;
   }
 
   @Override
-  public final Object evaluate() throws ProgramKilledException {
+  public final Object evaluate() throws ProgramKilledException,
+    UndefinedVariableException {
     if (!runtime().isRunning()) {
       throw new ProgramKilledException();
     }
     Variable var = runtime().getVariables().get(varname);
-    return vartype.cast(var.getValue());
+    if (var == null) {
+      runtime()
+        .addLog(String.format("variable \"%s\" is undefined", varname), true);
+      throw new UndefinedVariableException();
+    } else {
+      return vartype.cast(var.getValue());
+    }
   }
 
   @Override

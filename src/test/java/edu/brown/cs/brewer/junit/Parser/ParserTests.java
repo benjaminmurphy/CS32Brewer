@@ -16,6 +16,7 @@ import edu.brown.cs.brewer.BrewerRuntime;
 import edu.brown.cs.brewer.Variable;
 import edu.brown.cs.brewer.handlers.Parser;
 import edu.brown.cs.brewer.handlers.Parser.BrewerParseException;
+import edu.brown.cs.brewer.handlers.Parser.TypeErrorException;
 
 /**
  * The Junit test for the Parser.java class.
@@ -810,6 +811,130 @@ public class ParserTests {
     } catch (BrewerParseException | ParseException e) {
       e.printStackTrace();
       fail("factorial test failed");
+    }
+  }
+
+  // Error Testing and bad inputs
+  @Test
+  public void badJson() {
+    String badJson = "Not a Json String";
+    boolean exceptionCaught = false;
+    try {
+      br = Parser.parseJSONProgram(badJson);
+      br.run();
+
+    } catch (BrewerParseException | ParseException e) {
+      exceptionCaught = true;
+    }
+    assertTrue(exceptionCaught);
+  }
+
+  @Test
+  /**
+   * int a;
+   * a = "aString";
+   */
+  public void setNumToString() {
+    String setNumToString = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"x\",\"class\":\"number\"},\"value\":{\"type\":\"literal\",\"value\":\"aString\",\"class\":\"string\"},\"playground\":1}]}";
+    boolean exceptionCaught = false;
+    try {
+      br = Parser.parseJSONProgram(setNumToString);
+      br.run();
+
+    } catch (BrewerParseException | ParseException e) {
+      String errorMessage = "Parser error: Type error: Cannot assign expression of type \"class java.lang.String\" to variable of type \"class java.lang.Double\".";
+      if (e.getMessage().equals(errorMessage)) {
+        exceptionCaught = true;
+      } else {
+        fail("setNumToString test failed");
+      }
+    }
+    assertTrue(exceptionCaught);
+  }
+
+  @Test
+  /**
+   * b = true;
+   * b*4;
+   */
+  public void mulNumBoolean() {
+    String mulNumBoolean = "{\"main\":[{\"type\":\"set\",\"name\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"bool\"},\"value\":{\"type\":\"literal\",\"value\":true,\"class\":\"bool\"},\"playground\":1},{\"type\":\"numeric_operator\",\"arg1\":{\"type\":\"var\",\"name\":\"b\",\"class\":\"bool\"},\"arg2\":{\"type\":\"literal\",\"value\":4,\"class\":\"number\"},\"name\":\"mul\",\"playground\":1}]}";
+    boolean exceptionCaught = false;
+    try {
+      br = Parser.parseJSONProgram(mulNumBoolean);
+      br.run();
+
+    } catch (BrewerParseException | ParseException e) {
+      String errorMessage = "Parser error: Type error: Either argument 1 of type \"class java.lang.Boolean\" or argument 2 of type \"class java.lang.Double\" of numeric_operator of type \"mul\" is not of type Double.";
+      if (e.getMessage().equals(errorMessage)) {
+        exceptionCaught = true;
+      } else {
+        fail("mulNumBoolean test failed");
+      }
+      assertTrue(exceptionCaught);
+    }
+  }
+
+  @Test
+  /**
+   * "a" == 5;
+   */
+  public void compareNumToString() {
+    String compareNumToString = "{\"main\":[{\"type\":\"comparison\",\"arg1\":{\"type\":\"literal\",\"value\":\"a\",\"class\":\"string\"},\"arg2\":{\"type\":\"literal\",\"value\":5,\"class\":\"number\"},\"name\":\"eq\",\"playground\":1}]}";
+    boolean exceptionCaught = false;
+    try {
+      br = Parser.parseJSONProgram(compareNumToString);
+      br.run();
+
+    } catch (BrewerParseException | ParseException e) {
+      String errorMessage = "Parser error: Type error: The types \"(class java.lang.String, class java.lang.Double\" cannot be compared.";
+      if (e.getMessage().equals(errorMessage)) {
+        exceptionCaught = true;
+      } else {
+        fail("compareNumToString test failed");
+      }
+    }
+    assertTrue(exceptionCaught);
+  }
+
+  @Test
+  /**
+   * int x;
+   * print(x);
+   */
+  public void printUndefined() {
+    String printUndefined = "{\"main\":[{\"type\":\"print\",\"name\":{\"type\":\"var\",\"name\":\"x\",\"class\":\"number\"},\"playground\":1}]}";
+    try {
+      br = Parser.parseJSONProgram(printUndefined);
+      br.run();
+
+      String outputLog = Arrays.toString(br.getLogs().toArray());
+      String expectedLog = "[Log: ERROR: variable \"x\" is undefined]";
+      assertTrue(outputLog.equals(expectedLog));
+    } catch (BrewerParseException | ParseException e) {
+      e.printStackTrace();
+      fail("printUndefined test failed");
+    }
+  }
+
+  @Test
+  /**
+   * boolean a;
+   * if (a):
+   *    print(1)
+   */
+  public void undefinedCondition() {
+    String undefinedCondition = "{\"main\":[{\"type\":\"if\",\"commands\":[{\"type\":\"print\",\"name\":{\"type\":\"literal\",\"value\":1,\"class\":\"number\"}}],\"condition\":{\"type\":\"var\",\"name\":\"a\",\"class\":\"bool\"},\"playground\":1}]}";
+    try {
+      br = Parser.parseJSONProgram(undefinedCondition);
+      br.run();
+
+      String outputLog = Arrays.toString(br.getLogs().toArray());
+      String expectedLog = "[Log: ERROR: variable \"a\" is undefined]";
+      assertTrue(outputLog.equals(expectedLog));
+    } catch (BrewerParseException | ParseException e) {
+      e.printStackTrace();
+      fail("undefinedCondition test failed");
     }
   }
 
