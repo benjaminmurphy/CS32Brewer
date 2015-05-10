@@ -6,7 +6,7 @@
 
     The Block Menu allows you to select different blocks to create your programs. By dragging various blocks from the menu to the Playground, you can build a virtually unlimited set of programs. Then, in the Console, you can run, stop, save, and load the programs you create. 
 
-    ![](tutorial-images/1-overview..png)
+    ![](tutorial-images/1-overview.png)
 
 2. #### Your First Program
 
@@ -18,7 +18,7 @@
 
     Now, try replacing the “Hello!” with other literals, such as a number or a boolean.
 
-    ![](tutorial-images/1-overview..png)
+    ![](tutorial-images/1-overview.png)
 
 3. #### Variables
 
@@ -28,14 +28,14 @@
 
     Try creating a program that sets a numerical variable to 20 and prints it out. 
 
-    ![](tutorial-images/1-overview..png)
+    ![](tutorial-images/1-overview.png)
 
 4. #### Manipulating Variables and Values
     Several blocks can be used to manipulate the values of both literals and variables. For numerical values, one can use the Arithmetic block to do arithmetic operations on pairs of numbers. One can add, subtract, multiply, or divide numbers, as well as find the modulus. For Boolean values, one can use the binary logical operator block to AND or OR two values. One can also use the NOT block to flip a boolean value. For strings, numbers, or booleans, one can compare them using the comparison block. This checks for equality, less-than, or greater-than and returns a boolean value. 
 
     Try creating a program that computes whether the square of a number is even. 
 
-    ![](tutorial-images/1-overview..png)
+    ![](tutorial-images/1-overview.png)
 
 5. #### Program Flow
 
@@ -45,7 +45,7 @@
 
     Try creating a program that computes the factorial of a number.
 
-    ![](tutorial-images/1-overview..png)
+    ![](tutorial-images/1-overview.png)
 
 6. #### Using the Console
 
