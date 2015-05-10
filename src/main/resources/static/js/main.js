@@ -43,7 +43,7 @@ var allowableKeys = [8, 37, 38, 39, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
 
 //User Interaction
 
-//Checks if a key is vaild for number entry
+//Checks if a key is valid for number entry
 function isKeyValid(event) {
     if (allowableKeys.indexOf(event.which) == -1) {
         event.preventDefault();
@@ -470,7 +470,7 @@ function saveProgram() {
         } else {
             console.log("Save completed.");
             console.log(response);
-            alert(response.programUrl);
+            alert("Program Identifier: " + response.programUrl.match(/[0-9]+$/)[0]);
         }
     });
 }
