@@ -135,6 +135,10 @@ Author's custom styles
     overflow-y: scroll;
 }
 
+body {
+    background: url("../img/bean-back.jpg") no-repeat;
+}
+
 #playground1, #playground2, #playground3 {
     width: calc(26.66% - 56.66px);
     height: 100%;
@@ -143,7 +147,7 @@ Author's custom styles
     padding-top: 60px;
     padding-left: 10px;
     box-sizing: border-box;
-    border-right: 2px solid black;
+    border-right: 1px solid rgba(127,127,127,0.5);
     overflow-y: scroll;
     overflow-x: hidden;
 }
