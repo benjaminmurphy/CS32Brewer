@@ -29,7 +29,7 @@ import edu.brown.cs.brewer.handlers.Parser.TypeErrorException;
  * @author Shi
  *
  */
-public class ParserTests {
+public class ParserTest {
   Gson GSON = new Gson();
   BrewerRuntime br;
 
