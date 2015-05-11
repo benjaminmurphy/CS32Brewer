@@ -288,7 +288,7 @@
     <button id="saveButton" onclick="saveProgram()">Save</button>
     <button id="consoleButton" onclick="setConsole()">Console</button>
     <br/>
-    <input type="text" id="prog_id">
+    <input type="text" id="prog_id" placeholder="Program Identifier">
     <button onclick="loadProgramFromUrl()">Load</button>
 </div>
 

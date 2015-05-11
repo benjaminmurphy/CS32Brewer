@@ -201,7 +201,7 @@ body {
 
 #buttonTab input {
     width: calc(75% - 4px);
-    padding: 0 0 0 2px;
+    padding: 5px 0 3px 3px;
     box-sizing: border-box;
     margin: 0 0 0 2px;
     height: 15px;
@@ -225,6 +225,7 @@ body {
     border-radius: 5px;
     width: 120px;
     background-color: #2980b9;
+    font-size: 14px;
 }
 
 .item {
@@ -432,7 +433,9 @@ select {
 
 #instructions, #about, #tutorial {
     float: right;
-    margin-right: 20px;
+    margin-right: 30px;
+    font-size: 20px;
+    
 }
 
 #tutorial a,
