@@ -9,7 +9,7 @@
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory --> 
-
+        
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <script src="js/modernizr.js"></script>
@@ -23,8 +23,8 @@
             <!--<h1 id="title">Brewer</h1>-->
             <img src="img/brewerlogo-small.png" id="title" style="height:45px; padding-top:4px">
             <h2 id="main1-title">main</h2>
-            <h2 id="main2-title">main (cont.)</h2>
-            <h2 id="main3-title">main (cont.)</h2>
+            <h2 id="main2-title">main...</h2>
+            <h2 id="main3-title">main...</h2>
             <h2 id="instructions">Instructions</h2>
             <h2 id="about" onclick="showAbout()">About</h2>
             <h2 id="tutorial"><a href="http://github.com/benjaminmurphy/CS32Brewer/blob/master/TUTORIAL.md" target="_blank">Tutorial</a></h2>

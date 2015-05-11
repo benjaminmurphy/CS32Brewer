@@ -95,8 +95,10 @@ Browser Upgrade Prompt
 Author's custom styles
 ========================================================================== */
 
+@import url(http://fonts.googleapis.com/css?family=Anonymous+Pro:400,700);
+
 * {
-    font-family: monospace;
+    font-family: "Anonymous Pro", "Courier New";
 }
 
 #header {
@@ -178,8 +180,31 @@ Author's custom styles
 
 #buttonTab {
     position: fixed;
-    right: 0.2em;
-    bottom: 0.2em;
+    right: 5px;
+    bottom: 5px;
+    width: calc(20% - 10px);
+    height: 40px;
+}
+
+#buttonTab button {
+    width: 25%;
+    padding: 0;
+    margin: 0;
+    float: right;
+    font-size: 12px;
+    height: 20px;
+}
+
+#buttonTab input {
+    width: calc(75% - 4px);
+    padding: 0 0 0 2px;
+    box-sizing: border-box;
+    margin: 0 0 0 2px;
+    height: 15px;
+    font-size: 12px;
+    border-radius: 2px;
+    border: 0px;
+    outline: none;
 }
 
 #aboutButton {
