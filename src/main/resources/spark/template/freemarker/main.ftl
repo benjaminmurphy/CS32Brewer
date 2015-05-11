@@ -27,6 +27,7 @@
             <h2 id="main3-title">main (cont.)</h2>
             <h2 id="instructions">Instructions</h2>
             <h2 id="about" onclick="showAbout()">About</h2>
+            <h2 id="tutorial"><a href="http://github.com/benjaminmurphy/CS32Brewer/blob/master/TUTORIAL.md" target="_blank">Tutorial</a></h2>
             
         </div>
 

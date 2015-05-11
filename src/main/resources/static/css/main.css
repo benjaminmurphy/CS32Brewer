@@ -401,9 +401,16 @@ select {
     left: calc(53.33% + 56.66px);
 }
 
-#instructions, #about {
+#instructions, #about, #tutorial {
     float: right;
     margin-right: 20px;
+}
+
+#tutorial a,
+#tutorial a:hover,
+#tutorial a:visited {
+    text-decoration: none;
+    color:#222222;
 }
 
 #instructions {
